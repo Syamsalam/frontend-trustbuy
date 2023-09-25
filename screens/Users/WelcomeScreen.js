@@ -43,7 +43,7 @@ export default function WelcomeScreen() {
                         Login
                 </Text>
              </TouchableOpacity>
-             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}
+             <TouchableOpacity onPress={() => navigation.navigate('Profil')}
               className="py-3 bg-blue-400 rounded-xl">
                 <Text 
                     className="text-xl font-bold text-center text-white"

@@ -43,7 +43,7 @@ export default function WelcomeJastip() {
                         Login
                 </Text>
              </TouchableOpacity>
-             <TouchableOpacity onPress={() => navigation.navigate('SignupJastip')}
+             <TouchableOpacity onPress={() => navigation.navigate('TitipanJastip')}
               className="py-3 bg-blue-400 rounded-xl">
                 <Text 
                     className="text-xl font-bold text-center text-white"
