@@ -18,8 +18,18 @@ import Proses from '../screens/Users/Proses';
 import Pengantaran from '../screens/Users/Pengantaran';
 import MessageScreen from '../screens/Users/MessageScreen';
 import Chat from '../screens/Users/Chat';
+import HomeJastip from '../screens/Jastip/HomeJastip';
+import MulaiJastip from '../screens/Jastip/MulaiJastip';
+import JastipPost from '../screens/Jastip/JastipPost';
+import UbahPost from '../screens/Jastip/UbahPost';
+import TitipanJastip from '../screens/Jastip/TitipanJastip';
+import MessagesJastip from '../screens/Jastip/MessagesJastip';
+import ProfilJastip from '../screens/Jastip/ProfilJastip';
 import FormTitipan from '../screens/Jastip/FormTitipan';
 import RiwayatJastip from '../screens/Jastip/RiwayatJastip';
+import WelcomeJastip from '../screens/Jastip/WelcomeJastip';
+import LoginJastip from '../screens/Jastip/LoginJastip';
+import SignupJastip from '../screens/Jastip/SignupJastip';
 
 
 const Stack = createNativeStackNavigator();
@@ -27,7 +37,7 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome" screenOptions={{}}>
+      <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{}}>
         <Stack.Screen name="FirstScreen" options={{ headerShown: false }} component={FirstScreen} />
         <Stack.Screen name="Home" options={{ headerShown: false }} component={BottomTabNavigator} />
         <Stack.Screen name="Welcome" options={{ headerShown: false }} component={WelcomeScreen} />
@@ -41,16 +51,16 @@ export default function AppNavigation() {
         <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />
         <Stack.Screen name="Proses" options={{ headerShown: true }} component={Proses} />
         <Stack.Screen name="Pengantaran" options={{ headerShown: true }} component={Pengantaran} />
+        <Stack.Screen name="HomeJastip" options={{ headerShown: false }} component={BottomTabNavigatorJastip} />
+        <Stack.Screen name="MulaiJastip" options={{ headerShown: false }} component={MulaiJastip} />
+        <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
+        <Stack.Screen name="UbahPost" options={{ headerShown: false }} component={UbahPost} />
         <Stack.Screen name="FormTitipan" options={{ headerShown: true }} component={FormTitipan} />
         <Stack.Screen name="RiwayatJastip" options={{ headerShown: true }} component={RiwayatJastip} />
-        <Stack.Screen
-      name="Chat"
-      component={Chat}
-      options={({ route }) => ({
-        title: "Akram",
-      })}
-    />
-    
+        <Stack.Screen name="WelcomeJastip" options={{ headerShown: false }} component={WelcomeJastip} />
+        <Stack.Screen name="LoginJastip" options={{ headerShown: false }} component={LoginJastip} />
+        <Stack.Screen name="SignupJastip" options={{ headerShown: false }} component={SignupJastip} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -58,14 +68,20 @@ export default function AppNavigation() {
 
 const MessageStack = ({ navigation }) => (
   <Stack.Navigator>
-     <Stack.Screen
+    <Stack.Screen
       name="Pesan"
       component={MessageScreen}
       options={{
         headerTitleAlign: 'center',
       }}
     />
-    
+    <Stack.Screen
+      name="Chat"
+      component={Chat}
+      options={({ route }) => ({
+        title: route.params.userName,
+      })}
+    />
   </Stack.Navigator>
 );
 

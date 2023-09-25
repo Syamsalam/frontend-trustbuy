@@ -19,7 +19,7 @@ export default function LoginScreen() {
           if(result.status == 200) {
             const token =result?.data?.data?.token;
             AsyncStorage.setItem('token',token).then(() => {
-              navigation.navigate('FirstScreen')
+              navigation.navigate('Home')
             })
           } else {
             <view>

@@ -3,7 +3,7 @@ import React from 'react'
 import { themeColors } from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
 
-export default function LoginScreen() {
+export default function LoginJastip() {
     const navigation = useNavigation()
   return (
     <View className="flex-1 bg-white " style={{backgroundColor: themeColors.bg}}>
@@ -32,7 +32,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
 
           <View className="form space-y-2">
-          <TouchableOpacity onPress={() => navigation.navigate('FirstScreen')}
+          <TouchableOpacity onPress={() => navigation.navigate('HomeJastip')}
             className="py-3 bg-blue-800 rounded-xl">
               <Text 
                   className="text-xl font-bold text-center text-white"
@@ -40,7 +40,7 @@ export default function LoginScreen() {
                       Login
               </Text>
            </TouchableOpacity>
-           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}
+           <TouchableOpacity onPress={() => navigation.navigate('SignupJastip')}
             className="py-3 bg-blue-400 rounded-xl">
               <Text 
                   className="text-xl font-bold text-center text-white"
