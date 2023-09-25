@@ -18,6 +18,13 @@ import Proses from '../screens/Users/Proses';
 import Pengantaran from '../screens/Users/Pengantaran';
 import MessageScreen from '../screens/Users/MessageScreen';
 import Chat from '../screens/Users/Chat';
+import HomeJastip from '../screens/Jastip/HomeJastip';
+import MulaiJastip from '../screens/Jastip/MulaiJastip';
+import JastipPost from '../screens/Jastip/JastipPost';
+import UbahPost from '../screens/Jastip/UbahPost';
+import TitipanJastip from '../screens/Jastip/TitipanJastip';
+import MessagesJastip from '../screens/Jastip/MessagesJastip';
+import ProfilJastip from '../screens/Jastip/ProfilJastip';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +46,10 @@ export default function AppNavigation() {
         <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />
         <Stack.Screen name="Proses" options={{ headerShown: true }} component={Proses} />
         <Stack.Screen name="Pengantaran" options={{ headerShown: true }} component={Pengantaran} />
+        <Stack.Screen name="HomeJastip" options={{ headerShown: false }} component={BottomTabNavigatorJastip} />
+        <Stack.Screen name="MulaiJastip" options={{ headerShown: false }} component={MulaiJastip} />
+        <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
+        <Stack.Screen name="UbahPost" options={{ headerShown: false }} component={UbahPost} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -62,6 +73,7 @@ const MessageStack = ({ navigation }) => (
     />
   </Stack.Navigator>
 );
+
 
 const Tab = createBottomTabNavigator();
 
@@ -155,3 +167,91 @@ const BottomTabNavigator = () => {
 };
 
 
+const BottomTabNavigatorJastip = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        style: {
+          height: 80,
+          backgroundColor: '#1138B7',
+          paddingVertical: 10,
+          elevation: 2,
+        },
+      }}
+    >
+      <Tab.Screen
+        name="HomeJastip"
+        component={HomeJastip}
+        options={{
+        tabBarHideOnKeyboard: true,
+          headerShown: false,
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require('../assets/home1.png')}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: color,
+              }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="TitipanJastip"
+        component={TitipanJastip}
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Titipan',
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require('../assets/titipan.png')}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: color,
+              }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Messages"
+        component={MessagesJastip}
+        options={{
+        tabBarHideOnKeyboard: true,
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require('../assets/chat.png')}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: color,
+              }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ProfilJastip"
+        component={ProfilJastip}
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Profil',
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require('../assets/profil.png')}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: color,
+              }}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};

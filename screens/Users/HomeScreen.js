@@ -59,7 +59,7 @@ export default function HomeScreen() {
 
         </View>
 
-        <View >
+        <View>
             <FlatList
             data={data}
             contentContainerStyle={{
