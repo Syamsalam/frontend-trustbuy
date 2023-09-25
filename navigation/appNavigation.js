@@ -26,7 +26,11 @@ import TitipanJastip from '../screens/Jastip/TitipanJastip';
 import MessagesJastip from '../screens/Jastip/MessagesJastip';
 import ChatJastip from '../screens/Jastip/ChatJastip';
 import ProfilJastip from '../screens/Jastip/ProfilJastip';
-
+import FormTitipan from '../screens/Jastip/FormTitipan';
+import RiwayatJastip from '../screens/Jastip/RiwayatJastip';
+import WelcomeJastip from '../screens/Jastip/WelcomeJastip';
+import LoginJastip from '../screens/Jastip/LoginJastip';
+import SignupJastip from '../screens/Jastip/SignupJastip';
 
 const Stack = createNativeStackNavigator();
 
