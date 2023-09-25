@@ -7,17 +7,6 @@ import { useNavigation } from '@react-navigation/native'
 
 export default function UbahPost() {
     const navigation = useNavigation()
-    const [waktu, setWaktu] = useState('');
-
-    const handleFocus = () => {
-        const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-
-        const formattedTime = `${hours}:${minutes}`;
-
-        setWaktu(formattedTime);
-    }
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -69,7 +58,7 @@ export default function UbahPost() {
                 borderTopRightRadius: 30,
                 height: 1000,
                 paddingHorizontal: 35,
-                top: 150,
+                top: 120,
             }}>
                    <View className="form space-y-3">
                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Judul Jastip</Text>
@@ -83,14 +72,12 @@ export default function UbahPost() {
                         placeholder="Gramedia Mall Pannakukang Makassar"
               
                       />
-                       <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu</Text>
+                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu</Text>
                       <TextInput 
                         className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                         placeholder="Waktu" 
-                        keyboardType="numeric"
-                        onFocus={handleFocus}
-                        value={waktu}
-                      />
+                    />
+
                       <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Deskripsi Jastip</Text>
                       <TextInput 
                         className="p-7 bg-gray-100 text-gray-200 rounded-2xl mb-1"

@@ -1,6 +1,5 @@
 import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch } from 'react-native'
 import React from 'react'
-import Card from '../../components/card'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
@@ -8,17 +7,6 @@ import { useNavigation } from '@react-navigation/native'
 
 export default function MulaiJastip() {
     const navigation = useNavigation()
-    const [waktu, setWaktu] = useState('');
-
-    const handleFocus = () => {
-        const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-
-        const formattedTime = `${hours}:${minutes}`;
-
-        setWaktu(formattedTime);
-    }
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -70,7 +58,7 @@ export default function MulaiJastip() {
                 borderTopRightRadius: 30,
                 height: 1000,
                 paddingHorizontal: 35,
-                top: 150,
+                top: 120,
             }}>
                    <View className="form space-y-3">
                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Judul Jastip</Text>
@@ -88,16 +76,22 @@ export default function MulaiJastip() {
                       <TextInput 
                         className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                         placeholder="Waktu" 
-                        keyboardType="numeric"
-                        onFocus={handleFocus}
-                        value={waktu}
+
                     />
                         
                       <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Deskripsi Jastip</Text>
+                      <View style={{
+                        backgroundColor: "#f5f5f5",
+                        width: '100%',
+                        height: '15%',
+                        borderRadius: 20,
+                        alignItems: 'flex-start'
+                      }}>
                       <TextInput 
-                        className="p-7 bg-gray-100 text-gray-200 rounded-2xl mb-1"
+                        className="p-1 text-black-200 rounded-2xl mb-1 h-24 "
                         placeholder="Menerima segala jenis buku dengan maksimal 3 buku"
                       />
+                      </View>
                 
                 <TouchableOpacity onPress={() => navigation.navigate('JastipPost')}
                 
@@ -107,7 +101,7 @@ export default function MulaiJastip() {
                         fontSize: 18,
                         fontWeight: 'bold',
                         textAlign: "center"
-                    }}>Mulai Jastip</Text>
+                    }}>Tambah Jastip</Text>
                 </TouchableOpacity>
 
                 </View>

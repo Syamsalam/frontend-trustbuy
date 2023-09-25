@@ -64,31 +64,39 @@ export default function JastipPost() {
             }}
             renderItem={({item}) => (
                 <Card>
-                <View className = "flex-col" style={{ width: 100, height: 100 , bottom: 20}}>
+                <View className = "flex-col" style={{ width: 100, height: 100 , bottom: 20, marginLeft: 20}}>
                 <View>
-                <View  style={{ position: 'absolute', left: 100, width: 230   }}>
-                <Text className ="text-sm font-bold pb-3">{item.title}</Text>
-                <Text className ="text-xs font-semibold pb-3">{item.deskripsi}</Text>
+                <View  style={{ width: 230   }}>
+                <Text className ="text-sm font-bold pb-2">{item.title}</Text>
+                <Text className ="text-xs font-semibold pb-2">{item.deskripsi}</Text>
                 <Text className ="text-xs font-semibold">{item.lokasi}</Text>
                 <Text className ="text-sm font-normal">{item.waktu}</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    top: '2%'
+                }}>
                 <TouchableOpacity 
-                 className="py-2 bg-blue-800 rounded-xl w-28" style={{top: 10, bottom: 40, marginLeft: -70 }}>
+                 className="py-2 bg-blue-800 rounded-xl w-28" style={{}}>
                 <Text 
                   className="text-sm font-bold text-center text-white">
                       Hapus
                 </Text>
                  </TouchableOpacity>
                  <TouchableOpacity onPress={() => navigation.navigate('UbahPost')}
-                 className="py-2 bg-blue-800 rounded-xl w-28" style={{top: -25, bottom: 40, marginLeft: 80 }}>
+                 className="py-2 bg-blue-800 rounded-xl w-28" style={{}}>
                 <Text 
                   className="text-sm font-bold text-center text-white">
                       Ubah
                 </Text>
                  </TouchableOpacity>
+                 </View>
                 </View>
                 </View>
                 </View>
                 </Card>
+                
                 
             )}
             keyExtractor={(item)=>item.key}
@@ -106,7 +114,7 @@ export default function JastipPost() {
                         fontSize: 18,
                         fontWeight: 'bold',
                         textAlign: "center"
-                    }}>Mulai Jastip</Text>
+                    }}>Lihat Titipan</Text>
                 </TouchableOpacity>
                 </View>   
     </View>
