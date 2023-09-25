@@ -18,6 +18,8 @@ import Proses from '../screens/Users/Proses';
 import Pengantaran from '../screens/Users/Pengantaran';
 import MessageScreen from '../screens/Users/MessageScreen';
 import Chat from '../screens/Users/Chat';
+import FormTitipan from '../screens/Jastip/FormTitipan';
+import RiwayatJastip from '../screens/Jastip/RiwayatJastip';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +41,16 @@ export default function AppNavigation() {
         <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />
         <Stack.Screen name="Proses" options={{ headerShown: true }} component={Proses} />
         <Stack.Screen name="Pengantaran" options={{ headerShown: true }} component={Pengantaran} />
+        <Stack.Screen name="FormTitipan" options={{ headerShown: true }} component={FormTitipan} />
+        <Stack.Screen name="RiwayatJastip" options={{ headerShown: true }} component={RiwayatJastip} />
+        <Stack.Screen
+      name="Chat"
+      component={Chat}
+      options={({ route }) => ({
+        title: "Akram",
+      })}
+    />
+    
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -46,20 +58,14 @@ export default function AppNavigation() {
 
 const MessageStack = ({ navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen
+     <Stack.Screen
       name="Pesan"
       component={MessageScreen}
       options={{
         headerTitleAlign: 'center',
       }}
     />
-    <Stack.Screen
-      name="Chat"
-      component={Chat}
-      options={({ route }) => ({
-        title: route.params.userName,
-      })}
-    />
+    
   </Stack.Navigator>
 );
 

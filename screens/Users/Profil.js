@@ -45,7 +45,7 @@ export default function Profil() {
             </View>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Edit')}>
-                <Image  source={require('../../assets/edit.png')} style ={{ left : 350, bottom : 30 }}></Image>
+                <Image  source={require('../../assets/edit.png')} style ={{ alignSelf:'flex-end', marginRight:20}}></Image>
             </TouchableOpacity>
 
         </View>
@@ -55,14 +55,14 @@ export default function Profil() {
             
         }} >
            
-            <Text className="text-black text-left  font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:380,}}>Jl. Kaliurang </Text>
-            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:380,}}>Laki-Laki</Text>
-            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:380,}}>02-07-2000</Text>
-            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:380,}}>akram27@gmail.com</Text>
+            <Text className="text-black text-left  font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:'auto',}}>Jl. Kaliurang </Text>
+            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:'auto',}}>Laki-Laki</Text>
+            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:'auto',}}>02-07-2000</Text>
+            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:'auto',}}>akram27@gmail.com</Text>
             <View>
-            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:380,}}>Riwayat transaksi</Text>
+            <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 " style ={{top:25, bottom:40, elevation:2, width:'auto',}}>Riwayat transaksi</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
-                <Image  source={require('../../assets/chevron-left.png')} style ={{ left : 350, bottom : 30 }}></Image>
+                <Image  source={require('../../assets/chevron-left.png')} style ={{alignSelf:'flex-end', bottom:20, right:30 }}></Image>
             </TouchableOpacity>
             </View>
         </View>
