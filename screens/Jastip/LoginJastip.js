@@ -2,39 +2,9 @@ import { View, Text,TouchableOpacity,TextInput, SafeAreaView } from 'react-nativ
 import React from 'react'
 import { themeColors } from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
-import { loginApi } from '../../api'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useState } from 'react'
 
 export default function LoginScreen() {
     const navigation = useNavigation()
-    const [data,setData] = useState({
-      email:"",
-      password: ""
-    })
-
-    const onSubmit = () => {
-      if(data != null) {
-        loginApi(data).then((result) => {
-          if(result.status == 200) {
-            const token =result?.data?.data?.token;
-            AsyncStorage.setItem('token',token).then(() => {
-              navigation.navigate('FirstScreen')
-            })
-          } else {
-            <view>
-              <Text>error</Text>
-            </view>
-          }
-        }).catch(err => {
-          <View>
-            <Text>{err}</Text>
-          </View>
-        }) 
-      }
-    }
-
-
   return (
     <View className="flex-1 bg-white " style={{backgroundColor: themeColors.bg}}>
     <SafeAreaView  className="flex justify-around my-10 ">
@@ -48,7 +18,6 @@ export default function LoginScreen() {
             <TextInput 
               className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
               placeholder="email"
-              onChangeText={(text) => setData({...data, email:text})}
                
             />
             <Text className="text-gray-700 ml-4">Password</Text>
@@ -56,7 +25,6 @@ export default function LoginScreen() {
               className="p-4 bg-gray-100 text-gray-700 rounded-2xl"
               secureTextEntry
               placeholder="password"
-              onChangeText={(text) => setData({...data,password:text})}
                
             />
             <TouchableOpacity className="flex items-center">
@@ -64,7 +32,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
 
           <View className="form space-y-2">
-          <TouchableOpacity onPress={onSubmit}
+          <TouchableOpacity onPress={() => navigation.navigate('FirstScreen')}
             className="py-3 bg-blue-800 rounded-xl">
               <Text 
                   className="text-xl font-bold text-center text-white"

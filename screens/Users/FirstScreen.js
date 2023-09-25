@@ -25,7 +25,7 @@ export default function FirstScreen() {
                 </Text>
              </TouchableOpacity>
              <Text className="text-white text-center font-bold ml-4 text-xl px-4 " >Or</Text>
-             <TouchableOpacity onPress={() => navigation.navigate('Home')}
+             <TouchableOpacity onPress={() => navigation.navigate('HomeJastip')}
               className="py-3 bg-blue-100 rounded-xl">
                 <Text 
                     className="text-xl font-bold text-center text-blue-800"

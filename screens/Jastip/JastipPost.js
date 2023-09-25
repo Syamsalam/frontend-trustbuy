@@ -1,0 +1,115 @@
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch } from 'react-native'
+import React from 'react'
+import Card from '../../components/card'
+import { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+
+
+export default function JastipPost() {
+    const navigation = useNavigation()
+    const [data, setData] = useState([
+        {key : '1', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku',lokasi: 'Gramedia Mall Panakukang',waktu:'17.48 - 17.59'}
+    ]);
+    return (
+        <View style={{
+            backgroundColor: '#fff',
+            flex: 1,
+        }}>
+            <View style={{
+                backgroundColor: '#1138B7',
+                height: 250,
+                borderBottomRightRadius: 50,
+                elevation: 10,
+                flexDirection: 'column',
+            }}>
+                <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
+                <View style={{
+                    flexDirection: 'row',
+                }}>
+                    <Image
+
+                        source={require('../../assets/profilpeople.jpg')}
+                        style={{
+                            width: 100,
+                            height: 100,
+                            left: 20,
+                            top: 60,
+                            borderRadius: 50,
+                        }}
+                    ></Image>
+                    <View style={{
+                        flexDirection: 'column',
+                        top: 20,
+                        left: 30,
+                        width: 200,
+                    }}>
+                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Syamsul Alam</Text>
+                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>75315946</Text>
+                    </View>
+                </View>
+                <View style={{
+                    flexDirection: 'column',
+                    top: 10,
+                    left: 20,
+                }}>
+                    <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Jastiper</Text>
+                </View>
+            </View> 
+
+            <View>
+            <FlatList
+            data={data}
+            contentContainerStyle={{
+                paddingVertical :20
+            }}
+            renderItem={({item}) => (
+                <Card>
+                <View className = "flex-col" style={{ width: 100, height: 100 , bottom: 20}}>
+                <View>
+                <View  style={{ position: 'absolute', left: 100, width: 230   }}>
+                <Text className ="text-sm font-bold pb-3">{item.title}</Text>
+                <Text className ="text-xs font-semibold pb-3">{item.deskripsi}</Text>
+                <Text className ="text-xs font-semibold">{item.lokasi}</Text>
+                <Text className ="text-sm font-normal">{item.waktu}</Text>
+                <TouchableOpacity 
+                 className="py-2 bg-blue-800 rounded-xl w-28" style={{top: 10, bottom: 40, marginLeft: -70 }}>
+                <Text 
+                  className="text-sm font-bold text-center text-white">
+                      Hapus
+                </Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity onPress={() => navigation.navigate('UbahPost')}
+                 className="py-2 bg-blue-800 rounded-xl w-28" style={{top: -25, bottom: 40, marginLeft: 80 }}>
+                <Text 
+                  className="text-sm font-bold text-center text-white">
+                      Ubah
+                </Text>
+                 </TouchableOpacity>
+                </View>
+                </View>
+                </View>
+                </Card>
+                
+            )}
+            keyExtractor={(item)=>item.key}
+            />
+            </View>                  
+            <View style={{
+                top: "35%",
+            }}>
+                
+                <TouchableOpacity onPress={() => navigation.navigate('Welcome')}
+                
+                    className="py-3 bg-white rounded-xl border border-blue-800 " style={{ backgroundColor: '#1138B7', top: 5, margin: 20 }}>
+                    <Text style={{
+                        color: 'white',
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        textAlign: "center"
+                    }}>Mulai Jastip</Text>
+                </TouchableOpacity>
+                </View>   
+    </View>
+
+    )
+}
