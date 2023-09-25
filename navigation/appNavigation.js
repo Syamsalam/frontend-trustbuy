@@ -24,8 +24,12 @@ import JastipPost from '../screens/Jastip/JastipPost';
 import UbahPost from '../screens/Jastip/UbahPost';
 import TitipanJastip from '../screens/Jastip/TitipanJastip';
 import MessagesJastip from '../screens/Jastip/MessagesJastip';
+import ChatJastip from '../screens/Jastip/ChatJastip';
 import ProfilJastip from '../screens/Jastip/ProfilJastip';
-
+import PembayaranJastip from '../screens/Jastip/PembayaranJastip';
+import ProsesJastip from '../screens/Jastip/ProsesJastip';
+import PengantaranJastip from '../screens/Jastip/PengantaranJastip';
+import EditProfilJastip from '../screens/Jastip/EditProfilJastip';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +54,13 @@ export default function AppNavigation() {
         <Stack.Screen name="MulaiJastip" options={{ headerShown: false }} component={MulaiJastip} />
         <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
         <Stack.Screen name="UbahPost" options={{ headerShown: false }} component={UbahPost} />
+        <Stack.Screen name="TitipanJastip" options={{ headerShown: false }} component={TitipanJastip} />
+        <Stack.Screen name="ProfilJastip" options={{ headerShown: false }} component={ProfilJastip} />
+        <Stack.Screen name="PembayaranJastip" options={{ headerShown: true }} component={PembayaranJastip} />
+        <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
+        <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
+        <Stack.Screen name="EditProfilJastip" options={{ headerShown: false }} component={EditProfilJastip} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -67,6 +78,25 @@ const MessageStack = ({ navigation }) => (
     <Stack.Screen
       name="Chat"
       component={Chat}
+      options={({ route }) => ({
+        title: route.params.userName,
+      })}
+    />
+  </Stack.Navigator>
+);
+
+const MessageStackJastip = ({ navigation }) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Pesan"
+      component={MessagesJastip}
+      options={{
+        headerTitleAlign: 'center',
+      }}
+    />
+    <Stack.Screen
+      name="ChatJastip"
+      component={ChatJastip}
       options={({ route }) => ({
         title: route.params.userName,
       })}
@@ -218,10 +248,11 @@ const BottomTabNavigatorJastip = () => {
       />
       <Tab.Screen
         name="Messages"
-        component={MessagesJastip}
+        component={MessageStackJastip}
         options={{
         tabBarHideOnKeyboard: true,
           headerShown: false,
+          headerTitleAlign: 'center',
           tabBarIcon: ({ color, size }) => (
             <Image
               source={require('../assets/chat.png')}
