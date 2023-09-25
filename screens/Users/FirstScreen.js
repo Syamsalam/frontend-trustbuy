@@ -16,7 +16,7 @@ export default function FirstScreen() {
       <View className="form space-y-4 px-10 " style ={{bottom : 200}}>
           <Text className="text-white text-center font-bold ml-4 text-xl px-4 ">Masuk Sebagai ?</Text>
             <View className="form space-y-4 pb-20">
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}
+            <TouchableOpacity onPress={() => navigation.navigate('Welcome')}
               className="py-3 bg-blue-100 rounded-xl">
                 <Text 
                     className="text-xl font-bold text-center text-blue-800"
@@ -25,7 +25,7 @@ export default function FirstScreen() {
                 </Text>
              </TouchableOpacity>
              <Text className="text-white text-center font-bold ml-4 text-xl px-4 " >Or</Text>
-             <TouchableOpacity onPress={() => navigation.navigate('HomeJastip')}
+             <TouchableOpacity onPress={() => navigation.navigate('WelcomeJastip')}
               className="py-3 bg-blue-100 rounded-xl">
                 <Text 
                     className="text-xl font-bold text-center text-blue-800"

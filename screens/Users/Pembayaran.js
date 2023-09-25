@@ -64,7 +64,7 @@ export default function Pembayaran() {
         alignItems:'center',
         marginTop:20,
         marginBottom:20,
-        marginHorizontal:1,
+        marginHorizontal:5,
         paddingVertical:10,
         paddingHorizontal:50,
       }}>

@@ -26,17 +26,14 @@ import TitipanJastip from '../screens/Jastip/TitipanJastip';
 import MessagesJastip from '../screens/Jastip/MessagesJastip';
 import ChatJastip from '../screens/Jastip/ChatJastip';
 import ProfilJastip from '../screens/Jastip/ProfilJastip';
-import PembayaranJastip from '../screens/Jastip/PembayaranJastip';
-import ProsesJastip from '../screens/Jastip/ProsesJastip';
-import PengantaranJastip from '../screens/Jastip/PengantaranJastip';
-import EditProfilJastip from '../screens/Jastip/EditProfilJastip';
+
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome" screenOptions={{}}>
+      <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{}}>
         <Stack.Screen name="FirstScreen" options={{ headerShown: false }} component={FirstScreen} />
         <Stack.Screen name="Home" options={{ headerShown: false }} component={BottomTabNavigator} />
         <Stack.Screen name="Welcome" options={{ headerShown: false }} component={WelcomeScreen} />
@@ -54,13 +51,6 @@ export default function AppNavigation() {
         <Stack.Screen name="MulaiJastip" options={{ headerShown: false }} component={MulaiJastip} />
         <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
         <Stack.Screen name="UbahPost" options={{ headerShown: false }} component={UbahPost} />
-        <Stack.Screen name="TitipanJastip" options={{ headerShown: false }} component={TitipanJastip} />
-        <Stack.Screen name="ProfilJastip" options={{ headerShown: false }} component={ProfilJastip} />
-        <Stack.Screen name="PembayaranJastip" options={{ headerShown: true }} component={PembayaranJastip} />
-        <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
-        <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
-        <Stack.Screen name="EditProfilJastip" options={{ headerShown: false }} component={EditProfilJastip} />
-        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -38,11 +38,10 @@ export default function CekTitipan() {
       }}>
         <View style={{
           backgroundColor: '#fff',
-          height: '30%',
+          height: '20%',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          height: 70,
-          width: 370,
+          width: '90%',
           alignSelf: 'center',
           alignItems: 'center',
           elevation: 5,
@@ -51,7 +50,7 @@ export default function CekTitipan() {
             fontSize: 18,
             color: '#000',
            marginLeft: 10,
-          }}>Buku Filosofi Teras</Text>
+          }}>Buku Filosofi Tera</Text>
           <Text style={{
             fontSize: 18,
             fontWeight: 'bold',
