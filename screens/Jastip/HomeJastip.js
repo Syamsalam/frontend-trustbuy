@@ -71,20 +71,23 @@ export default function HomeJastip() {
                     <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Jastiper</Text>
                 </View>
             </View>
-            <View style={{
-                alignSelf: "flex-start",
-                width:'100%'
-                
-            }}>
-
-                <TouchableOpacity onPress={() => navigation.navigate('MulaiJastip')}
-                    className="py-3 bg-white rounded-xl border border-blue-800 " style={{ backgroundColor: '#1138B7', top: 80, margin: 20 }}>
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                        textAlign: "center"
-                    }}>Mulai Jastip</Text>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('MulaiJastip')}
+                    style={{
+                        backgroundColor: '#1138B7',
+                        paddingVertical: 15,
+                        paddingHorizontal: 40,
+                        borderRadius: 30,
+                        borderWidth: 1,
+                        borderColor: '#fff',
+                        width: '80%',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
+                        Mulai Jastip
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>

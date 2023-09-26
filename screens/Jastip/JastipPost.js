@@ -10,6 +10,13 @@ export default function JastipPost() {
     const [data, setData] = useState([
         {key : '1', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku',lokasi: 'Gramedia Mall Panakukang',waktu:'17.48 - 17.59'}
     ]);
+
+    const handleDelete = (key) => {
+        // Filter item yang memiliki key yang tidak sama dengan key yang dihapus
+        const updatedData = data.filter(item => item.key !== key);
+        // Update daftar data
+        setData(updatedData);
+      };
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -56,54 +63,63 @@ export default function JastipPost() {
                 </View>
             </View> 
 
-            <View>
-            <FlatList
-            data={data}
-            contentContainerStyle={{
-                paddingVertical :20
-            }}
-            renderItem={({item}) => (
-                <Card>
-                <View className = "flex-col" style={{ width: 100, height: 100 , bottom: 20, marginLeft: 20}}>
-                <View>
-                <View  style={{ width: 230   }}>
-                <Text className ="text-sm font-bold pb-2">{item.title}</Text>
-                <Text className ="text-xs font-semibold pb-2">{item.deskripsi}</Text>
-                <Text className ="text-xs font-semibold">{item.lokasi}</Text>
-                <Text className ="text-sm font-normal">{item.waktu}</Text>
+             <View >
+                <FlatList
+                    data={data}
+                    contentContainerStyle={{
+                        paddingVertical: 20
+                    }}
+
+                    renderItem={({ item }) => (
+                        <Card>
+                            <View style={{ bottom: 20, flexDirection: "row", width :"100%",  }} >
+                                
+
+                                <View style={{ paddingLeft:20, width : "100%" }}>
+                                    <View>
+
+                                    <Text ellipsizeMode='tail'  className="text-sm font-bold pb-3 " style={{
+                                        
+                                    }} >{item.title}</Text>
+                                    <Text className="text-xs font-semibold pb-3">{item.deskripsi}</Text>
+                                    <Text className="text-xs font-semibold">{item.lokasi}</Text>
+                                    <Text className="text-sm font-normal">{item.waktu}</Text>
+                                    </View>
+                                    <View className ="space-x-5 " style={{
+                                        flexDirection:'row',
+                                        alignItems:'center',
+                                        marginTop:20,
+                                        
+                                    }}>
+                                        <TouchableOpacity onPress={() => handleDelete(item.key)}
+                                        
+                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                            <Text 
+                                                className="text-sm font-bold text-center text-white "
+                                            >
+                                                    Hapus
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => navigation.navigate('UbahPost')}
+                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                            <Text 
+                                                className="text-sm font-bold text-center text-white "
+                                            >
+                                                    Ubah
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+
+
+                        </Card>
+
+                    )}
+                    keyExtractor={(item) => item.key}
+                />
                 <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    top: '2%'
-                }}>
-                <TouchableOpacity 
-                 className="py-2 bg-blue-800 rounded-xl w-28" style={{}}>
-                <Text 
-                  className="text-sm font-bold text-center text-white">
-                      Hapus
-                </Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity onPress={() => navigation.navigate('UbahPost')}
-                 className="py-2 bg-blue-800 rounded-xl w-28" style={{}}>
-                <Text 
-                  className="text-sm font-bold text-center text-white">
-                      Ubah
-                </Text>
-                 </TouchableOpacity>
-                 </View>
-                </View>
-                </View>
-                </View>
-                </Card>
-                
-                
-            )}
-            keyExtractor={(item)=>item.key}
-            />
-            </View>                  
-            <View style={{
-                top: "35%",
+                top: "80%",
             }}>
                 
                 <TouchableOpacity onPress={() => navigation.navigate('Welcome')}
@@ -116,7 +132,8 @@ export default function JastipPost() {
                         textAlign: "center"
                     }}>Lihat Titipan</Text>
                 </TouchableOpacity>
-                </View>   
+            </View>
+    </View>
     </View>
 
     )
