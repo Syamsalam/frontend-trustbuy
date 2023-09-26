@@ -72,7 +72,9 @@ export default function HomeJastip() {
                 </View>
             </View>
             <View style={{
-                top: "50%",
+                alignSelf: "flex-start",
+                width:'100%'
+                
             }}>
 
                 <TouchableOpacity onPress={() => navigation.navigate('MulaiJastip')}

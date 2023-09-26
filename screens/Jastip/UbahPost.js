@@ -1,8 +1,8 @@
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import React from 'react'
-import Card from '../../components/card'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+
 
 
 export default function UbahPost() {
@@ -52,14 +52,20 @@ export default function UbahPost() {
                     <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Jastiper</Text>
                 </View>
             </View>
-            <View style={{
-                backgroundColor: "#C3D5EA",
-                borderTopLeftRadius: 30,
-                borderTopRightRadius: 30,
-                height: 1000,
-                paddingHorizontal: 35,
-                top: 120,
-            }}>
+            <ScrollView contentContainerStyle={{
+                paddingTop: 120,
+
+            }} >
+                <View style={{
+                    backgroundColor: "#C3D5EA",
+                    borderTopLeftRadius: 30,
+                    borderTopRightRadius: 30,
+                    
+                    paddingHorizontal: 35,
+                    
+                }}>
+            
+                
                    <View className="form space-y-3">
                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Judul Jastip</Text>
                       <TextInput
@@ -76,13 +82,30 @@ export default function UbahPost() {
                       <TextInput 
                         className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                         placeholder="Waktu" 
-                    />
 
-                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Deskripsi Jastip</Text>
+                    />
+                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu</Text>
                       <TextInput 
-                        className="p-7 bg-gray-100 text-gray-200 rounded-2xl mb-1"
+                        className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
+                        placeholder="Waktu" 
+
+                    />
+                        
+                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Deskripsi Jastip</Text>
+                      <View style={{
+                        backgroundColor: "#f5f5f5",
+                        width: '100%',
+                        height: '15%',
+                        borderRadius: 20,
+                        alignItems: 'flex-start'
+                      }}>
+                      <TextInput 
+                        className="p-1 text-black-200 rounded-2xl mb-1 h-24 "
+                        multiline
+                        
                         placeholder="Menerima segala jenis buku dengan maksimal 3 buku"
                       />
+                      </View>
                 
                 <TouchableOpacity onPress={() => navigation.navigate('JastipPost')}
                 
@@ -97,6 +120,7 @@ export default function UbahPost() {
 
                 </View>
                 </View>
+                </ScrollView>
                 
     </View>
 
