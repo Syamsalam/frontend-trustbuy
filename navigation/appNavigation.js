@@ -31,6 +31,9 @@ import RiwayatJastip from '../screens/Jastip/RiwayatJastip';
 import WelcomeJastip from '../screens/Jastip/WelcomeJastip';
 import LoginJastip from '../screens/Jastip/LoginJastip';
 import SignupJastip from '../screens/Jastip/SignupJastip';
+import PembayaranJastip from '../screens/Jastip/PembayaranJastip';
+import ProsesJastip from '../screens/Jastip/ProsesJastip';
+import PengantaranJastip from '../screens/Jastip/PengantaranJastip';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +64,9 @@ export default function AppNavigation() {
         <Stack.Screen name="LoginJastip" options={{ headerShown: false }} component={LoginJastip} />
         <Stack.Screen name="SignupJastip" options={{ headerShown: false }} component={SignupJastip} />
         <Stack.Screen name="TitipanJastip" options={{ headerShown: false }} component={TitipanJastip} />
+        <Stack.Screen name="PembayaranJastip" options={{ headerShown: true }} component={PembayaranJastip} />
+        <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
+        <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
 
       </Stack.Navigator>
     </NavigationContainer>
@@ -211,7 +217,7 @@ const BottomTabNavigatorJastip = () => {
       }}
     >
       <Tab.Screen
-        name="HomeJastip"
+        name="Home_Jastip"
         component={HomeJastip}
         options={{
         tabBarHideOnKeyboard: true,
