@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: `http://192.168.18.219:8000/api`,
+    baseURL: `http://10.3.100.131:8000/api`,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -23,4 +23,8 @@ export const registerJastpApi = (data) => {
 
 export const profileApi = (data) => {
     return apiClient.get('/profile', data)
+}
+
+export const postAktif = (data) => {
+    return apiClient.get('/user/get-post-aktif',data)
 }

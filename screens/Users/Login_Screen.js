@@ -21,10 +21,6 @@ export default function LoginScreen() {
             AsyncStorage.setItem('token',token).then(() => {
               navigation.navigate('Home')
             })
-          } else {
-            <view>
-              <Text>error</Text>
-            </view>
           }
         }).catch(err => {
           <View>

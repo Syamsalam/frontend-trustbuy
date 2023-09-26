@@ -7,10 +7,6 @@ export default function TitipanJastip() {
   const navigation = useNavigation();
   const arr = [
     {
-        image: require("../../assets/Mask.png"),
-        name: "Cek Titipan"
-    },
-    {
         image: require("../../assets/Wallet1.png"),
         name: "Pembayaran"
     },
@@ -30,36 +26,32 @@ export default function TitipanJastip() {
     // Add more items with showButtons as needed
   ]);
 
-  const handleItemPress = (item,name) => {
+  const handleItemPress = (item, name) => {
     switch (name) {
-      case "Cek Titipan":
-          navigation.navigate("CekTitipan")
-          break;
       case "Pembayaran":
-          navigation.navigate("Pembayaran")
-          break;
+        navigation.navigate("PembayaranJastip");
+        break;
       case "Proses":
-          navigation.navigate("Proses")
-          break;
+        navigation.navigate("ProsesJastip");
+        break;
       case "Pengantaran":
-          navigation.navigate("Pengantaran")
-          break;
+        navigation.navigate("PengantaranJastip");
+        break;
+      case "Tolak":
+        // Remove the card when "Tolak" is pressed
+        const updatedData = data.filter((dataItem) => dataItem.key !== item.key);
+        setData(updatedData);
+        break;
       default:
-          break;
-  }
-  if (name === "Tolak") {
-    // Remove the card when "Tolak" is pressed
-    const updatedData = data.filter((dataItem) => dataItem.key !== item.key);
-    setData(updatedData);
-  } else {
-    // Toggle the showButtons property when "Terima" or other actions are pressed
-    setData((prevData) =>
-      prevData.map((prevItem) =>
-        prevItem.key === item.key ? { ...prevItem, showButtons: !prevItem.showButtons } : prevItem
-      )
-    );
-  }
-};
+        // Toggle the showButtons property when "Terima" or other actions are pressed
+        setData((prevData) =>
+          prevData.map((prevItem) =>
+            prevItem.key === item.key ? { ...prevItem, showButtons: !prevItem.showButtons } : prevItem
+          )
+        );
+        break;
+    }
+  };
 
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
@@ -117,16 +109,26 @@ export default function TitipanJastip() {
                             }}>
                                 
                                 {
-                                    arr.map((el, ind) => <TouchableOpacity  key={el.name+"ind-"+ind} style={{
-                                        alignItems: "center",
-                                        marginHorizontal : 4,
-                                        top: -7
-                                    }}
-                                    onPress={() => handleItemPress(el.name)}>
-                                        <Image source={el.image}  />
+                                    arr.map((el, ind) => (
+                                      <TouchableOpacity
+                                        key={el.name + "ind-" + ind}
+                                        style={{
+                                          alignItems: "center",
+                                          marginHorizontal: 4,
+                                          top: -7,
+                                        }}
+                                        onPress={() => handleItemPress(el, el.name)}
+                                      >
+                                        <Image source={el.image} />
                                         <Text className="text-blue-800 text-sm">{el.name}</Text>
-                                    </TouchableOpacity>)
-                                }
+                                      </TouchableOpacity>
+                                    ))
+                                  }
+
+
+
+
+
 
                             </View>
                         </View>
@@ -171,7 +173,7 @@ export default function TitipanJastip() {
                         <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full" style={{ paddingVertical: 5, paddingHorizontal: 10}}>Tolak</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={() => navigation.navigate('Chat', { userName: item.userName })}
+                        onPress={() => navigation.navigate('ChatJastip', { userName: item.userName })}
                         style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                         <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full" style={{ paddingVertical: 5, paddingHorizontal: 10}}>Chat</Text>
                       </TouchableOpacity>
