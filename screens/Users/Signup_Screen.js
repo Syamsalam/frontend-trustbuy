@@ -67,9 +67,7 @@ export default function SignUpScreen() {
               secureTextEntry
               placeholder="Enter password"
             />
-        </ScrollView>
-        <View>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginJastip')}
+            <TouchableOpacity onPress={() => navigation.navigate('LoginJastip')}
             className="py-3 bg-blue-800 rounded-xl">
               <Text 
                   className="text-xl font-bold text-center text-white"
@@ -77,7 +75,8 @@ export default function SignUpScreen() {
                       Register
               </Text>
            </TouchableOpacity>
-           </View>  
+        </ScrollView>
+         
     </View>
     </View>
   )

@@ -111,13 +111,12 @@ function RenderItem({ label, value }) {
   );
 }
 
-function RenderItemWithArrow({ label, onPress }) {
+function RenderItemWithArrow({ onPress }) {
   return (
     <View>
-      <RenderItem label={label} />
-      
       <TouchableOpacity onPress={onPress}>
-
+      <Text className="text-black text-left font-semibold ml-4 text-base bg-slate-50 w-auto h-16 mx-5 my-1 p-4 "
+      style={{ top: 25, bottom: 40, elevation: 2, width: 'auto' }}>Riwayat</Text>
         <Image
           source={require('../../assets/chevron-left.png')}
           style={{ alignSelf: 'flex-end', bottom: 20, right: 30 }}
