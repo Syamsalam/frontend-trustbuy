@@ -16,6 +16,13 @@ export default function ProfilJastip() {
     gambar: require('../../assets/profilpeople.jpg'),
   });
 
+  const onLogout = () => {
+    AsyncStorage.removeItem('token').then(() => {
+      console.log("logout ")
+      navigation.navigate('Welcome');
+    });
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -90,7 +97,7 @@ export default function ProfilJastip() {
         />
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Welcome')}
+        onPress={onLogout}
         className="py-3 bg-white rounded-xl border border-blue-800 "
         style={{ top: 30, margin: 30 }}
       >
