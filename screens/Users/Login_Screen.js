@@ -1,4 +1,4 @@
-import { View, Text,TouchableOpacity,TextInput, SafeAreaView } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView } from 'react-native'
 import React, { useEffect } from 'react'
 import { themeColors } from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
@@ -7,84 +7,91 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useState } from 'react'
 
 export default function LoginScreen() {
-    const navigation = useNavigation()
-    const [data,setData] = useState({
-      email:"",
-      password: ""
-    })
-    
+  const navigation = useNavigation()
+  const [data, setData] = useState({
+    email: "",
+    password: ""
+  })
 
-    const onSubmit = () => {
-      if(data != null) {
-        loginApi(data).then((result) => {
-          if(result.status == 200 && result.data.data.user.role_id == 2) {
-            const token =result?.data?.data?.token;
-            AsyncStorage.setItem('token',token).then(() => {
-              console.log('login')
-              navigation.navigate('Home')
-            })
-          } else if (result.data.data.user.role_id == 3) {
-            console.log("Silahkan login sebagai jastip")
-          }
-        }).catch(err => {
-          console.error(err.message)
-        }) 
+
+  const onSubmit = async () => {
+    try {
+      if (data != null) {
+        const result = await loginApi(data)
+        if (result.status == 200 && result.data.data.user.role_id == 2) {
+          const { user, token } = result?.data?.data;
+
+          await AsyncStorage.setItem('user', JSON.stringify(user))
+
+          await AsyncStorage.setItem('token', token).then(() => {
+            console.log('login')
+            navigation.navigate('Home')
+          })
+        } else if (result.data.data.user.role_id == 3) {
+          console.log("Silahkan login sebagai jastip")
+        }
+      }
+    } catch (err) {
+      if (err.response) {
+        console.error(err.response.data)
+        console.error(err.response.status)
       }
     }
+  }
 
 
   return (
-    <View className="flex-1 bg-white " style={{backgroundColor: themeColors.bg}}>
-    <SafeAreaView  className="flex justify-around my-10 ">
-    <Text className="text-white text-center justify-center font-bold ml-4 text-7xl" style ={{top:150}}>TrustBuy</Text>
-    </SafeAreaView>
-    <View 
-      style={{top: 180, borderTopRightRadius: 100 }} 
-      className="flex-1 bg-white px-10 pt-10">
-         <View className="form space-y-2">
-            <Text className="text-gray-700 ml-4">Email Address</Text>
-            <TextInput 
-              className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-              placeholder="email"
-              onChangeText={(text) => setData({...data, email:text})}
-               
-            />
-            <Text className="text-gray-700 ml-4">Password</Text>
-            <TextInput 
-              className="p-4 bg-gray-100 text-gray-700 rounded-2xl"
-              secureTextEntry
-              placeholder="password"
-              onChangeText={(text) => setData({...data,password:text})}
-               
-            />
-            <TouchableOpacity className="flex items-center">
-              <Text className="text-gray-700 mb-5 ">Forgot Password?</Text>
-            </TouchableOpacity>
+    <View className="flex-1 bg-white " style={{ backgroundColor: themeColors.bg }}>
+      <SafeAreaView className="flex justify-around my-10 ">
+        <Text className="text-white text-center justify-center font-bold ml-4 text-7xl" style={{ top: 150 }}>TrustBuy</Text>
+      </SafeAreaView>
+      <View
+        style={{ top: 180, borderTopRightRadius: 100 }}
+        className="flex-1 bg-white px-10 pt-10">
+        <View className="form space-y-2">
+          <Text className="text-gray-700 ml-4">Email Address</Text>
+          <TextInput
+            className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
+            placeholder="email"
+            onChangeText={(text) => setData({ ...data, email: text })}
+
+          />
+          <Text className="text-gray-700 ml-4">Password</Text>
+          <TextInput
+            className="p-4 bg-gray-100 text-gray-700 rounded-2xl"
+            secureTextEntry
+            placeholder="password"
+            onChangeText={(text) => setData({ ...data, password: text })}
+
+          />
+          <TouchableOpacity className="flex items-center">
+            <Text className="text-gray-700 mb-5 ">Forgot Password?</Text>
+          </TouchableOpacity>
 
           <View className="form space-y-2">
-          <TouchableOpacity onPress={onSubmit}
-            className="py-3 bg-blue-800 rounded-xl">
-              <Text 
-                  className="text-xl font-bold text-center text-white"
+            <TouchableOpacity onPress={onSubmit}
+              className="py-3 bg-blue-800 rounded-xl">
+              <Text
+                className="text-xl font-bold text-center text-white"
               >
-                      Login
+                Login
               </Text>
-           </TouchableOpacity>
-           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}
-            className="py-3 bg-blue-400 rounded-xl">
-              <Text 
-                  className="text-xl font-bold text-center text-white"
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}
+              className="py-3 bg-blue-400 rounded-xl">
+              <Text
+                className="text-xl font-bold text-center text-white"
               >
-                      Register
+                Register
               </Text>
-           </TouchableOpacity>
-           </View>
-          
+            </TouchableOpacity>
+          </View>
+
         </View>
-        
-        
+
+
+      </View>
     </View>
-    </View>
-  
+
   )
 }

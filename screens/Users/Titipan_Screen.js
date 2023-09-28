@@ -1,6 +1,11 @@
-import { View, Text, Image, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView,Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { profileApi } from '../../api';
+import { useState } from 'react';
+import { Image as Img } from 'expo-image';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const arr = [
     {
@@ -23,6 +28,7 @@ const arr = [
 
 export default function TitipanScreen() {
     const navigation = useNavigation()
+    const [profile,setProfile] = useState()
     const handleItemPress = (name) => {
         switch (name) {
             case "Cek Titipan":
@@ -41,11 +47,32 @@ export default function TitipanScreen() {
                 break;
         }
     }
+
+    useFocusEffect(useCallback(() => {
+        async function fetchData() {
+            try {
+                const user = JSON.parse(await AsyncStorage.getItem('user'))
+                const request = await profileApi(user)
+                if(request.status == 200) {
+                    // console.log(request?.data?.data)
+                    setProfile(request.data.data)
+                }
+            } catch (err) {
+                if(err.response) {
+                    console.log(err.response.data)
+                }
+            }
+        }
+
+        fetchData()
+    },[]))
+    
     return (
         <SafeAreaView style={{
             backgroundColor: '#fff',
             flex: 1,
         }}>
+            {profile && (
             <View style={{
                 backgroundColor: '#1138B7',
                 height: 250,
@@ -55,12 +82,13 @@ export default function TitipanScreen() {
             }}>
                 <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
 
+
                 <View style={{
                     flexDirection: 'row',
                 }}>
-                    <Image
-
-                        source={require('../../assets/profilpeople.jpg')}
+                    <Img
+                        placeholder={require('../../assets/profilpeople.jpg')}
+                        source={profile?.users.image?.image}
                         style={{
                             width: 100,
                             height: 100,
@@ -68,18 +96,19 @@ export default function TitipanScreen() {
                             top: 60,
                             borderRadius: 50,
                         }}
-                    ></Image>
+                    ></Img>
                     <View style={{
                         flexDirection: 'column',
                         top: 20,
                         left: 30,
                     }}>
-                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Akram</Text>
-                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>085476233451</Text>
+                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile.nama}</Text>
+                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile.nomor_telepon}</Text>
                     </View>
                 </View>
 
             </View>
+            )}
             <View>
 
                 <View className="rounded-xl bg-white  mx-5 my-2 w-500 h-44 " style={{
@@ -96,7 +125,7 @@ export default function TitipanScreen() {
                             marginVertical: 20
                         }}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                <Image source={require('../../assets/cube.png')} />
+                                <Image placeholder={require('../../assets/cube.png')} />
                                 <Text className="text-lg font-semibold">Titipan Saya</Text>
                             </View>
                             <View style={{

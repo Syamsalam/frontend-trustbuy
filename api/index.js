@@ -2,7 +2,7 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiClient = axios.create({
-    baseURL: `http://192.168.1.43:8000/api`,
+    baseURL: `http://192.168.254.198:8000/api`,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -14,7 +14,7 @@ apiClient.interceptors.request.use(
     async (config) => {
         // Ambil token dari AsyncStorage
         const userToken = await AsyncStorage.getItem('token');
-        console.log(userToken)
+        // console.log(userToken)
         // Jika token ada, tambahkan ke header permintaan
         if (userToken) {
             config.headers.Authorization = `Bearer ${userToken}`;
@@ -40,7 +40,11 @@ export const registerJastpApi = (data) => {
 }
 
 export const profileApi = (data) => {
-    return apiClient.get('/profile', data)
+    return apiClient.get('/user/profile',data)
+}
+
+export const detailProfile = (data) => {
+    return apiClient.get('/user/detail-profile',data)
 }
 
 export const postAktif = () => {
