@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profil() {
   const navigation = useNavigation();
@@ -15,6 +16,13 @@ export default function Profil() {
     waktu: '17.48 - 17.59',
     gambar: require('../../assets/profilpeople.jpg'),
   });
+
+  const onLogout = () => {
+    AsyncStorage.removeItem('token').then(() => {
+      console.log("logout ")
+      navigation.navigate('Welcome');
+    });
+  }
 
   return (
     <SafeAreaView
@@ -90,7 +98,7 @@ export default function Profil() {
         />
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Welcome')}
+        onPress={onLogout}
         className="py-3 bg-white rounded-xl border border-blue-800 "
         style={{ top: 30, margin: 30 }}
       >

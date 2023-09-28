@@ -1,38 +1,33 @@
 import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Dimension = Dimensions.get("window")
 
 export default function HomeScreen() {
     const navigation = useNavigation()
     const [data, setData] = useState()
-    const [token, setToken] = useState()
 
-
-
-    useFocusEffect(useCallback(() => {
-
-
-        async function fetchData() {
-
-
-            try {
-                const response = await postAktif(token)
-                const datas = response.data.data
-                 console.log(datas)
-                if (response.status == 200) {
-                    setData(response.data.data)
+        useEffect(() => {
+            async function fetchData() {
+                try {
+                    const response = await postAktif()
+                    console.log(response)
+                    if (response.status == 200) {
+                        setData(response.data.data)
+                        console.log(data)
+                    }
+                } catch (err) {
+                    console.log(err.message)
                 }
-            } catch (err) {
-                { err }
             }
-        }
-
-        fetchData()
-    }, []))
+            
+            fetchData()
+        },[])
+    
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -92,10 +87,10 @@ export default function HomeScreen() {
                                 <View style={{
                                     width : "30%"
                                 }}>
-                                    <Image source={item.gambar} style={{ width: 80, height: 80, borderRadius: 50, left: 5 }} />
+                                    <Image source={item.image} style={{ width: 80, height: 80, borderRadius: 50, left: 5 }} />
                                     <View className="items-center">
                                         <Text className="text-sm font-bold">{item.userName}</Text>
-                                        <Text className=" text-blue-500 text-xs font-light">{item.nomor}</Text>
+                                        <Text className=" text-blue-500 text-xs font-light">{item.nomor_telepon}</Text>
                                     </View>
                                 </View>
 

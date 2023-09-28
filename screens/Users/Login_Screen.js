@@ -1,5 +1,5 @@
 import { View, Text,TouchableOpacity,TextInput, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { themeColors } from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
 import { loginApi } from '../../api'
@@ -12,6 +12,7 @@ export default function LoginScreen() {
       email:"",
       password: ""
     })
+    
 
     const onSubmit = () => {
       if(data != null) {
@@ -19,13 +20,12 @@ export default function LoginScreen() {
           if(result.status == 200) {
             const token =result?.data?.data?.token;
             AsyncStorage.setItem('token',token).then(() => {
+              console.log('login')
               navigation.navigate('Home')
             })
           }
         }).catch(err => {
-          <View>
-            <Text>{err}</Text>
-          </View>
+          {err}
         }) 
       }
     }

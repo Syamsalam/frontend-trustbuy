@@ -15,6 +15,8 @@ export default function SignupJastip() {
         nomor_telepon: ""
       })
 
+      
+
         
   return (
     <View className="flex-1 bg-white " style={{backgroundColor: themeColors.bg}}>
