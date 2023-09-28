@@ -15,12 +15,14 @@ export default function LoginJastip() {
     const onSubmit = async () => {
       try {
         const result = await loginApi(data)
-        if(result.status == 200) {
+        if(result.status == 200 && result.data.data.user.role_id == 3) {
           const token =result?.data?.data?.token;
           AsyncStorage.setItem('token',token).then(() => {
             console.log('login')
             navigation.navigate('Home')
           })
+        } else if (result.data.data.user.role_id == 2) {
+          console.log("Silahkan login sebagai user")
         }
       } catch (err) {
         if(err.response) {
