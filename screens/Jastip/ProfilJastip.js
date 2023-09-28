@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfilJastip() {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ export default function ProfilJastip() {
   const onLogout = () => {
     AsyncStorage.removeItem('token').then(() => {
       console.log("logout ")
-      navigation.navigate('Welcome');
+      navigation.navigate('WelcomeJastip');
     });
   }
 

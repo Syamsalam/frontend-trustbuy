@@ -1,4 +1,5 @@
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiClient = axios.create({
     baseURL: `http://192.168.1.43:8000/api`,
@@ -8,6 +9,23 @@ const apiClient = axios.create({
         'Content-Type': 'application/json'
     }
 })
+
+apiClient.interceptors.request.use(
+    async (config) => {
+        // Ambil token dari AsyncStorage
+        const userToken = await AsyncStorage.getItem('token');
+        console.log(userToken)
+        // Jika token ada, tambahkan ke header permintaan
+        if (userToken) {
+            config.headers.Authorization = `Bearer ${userToken}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 export const loginApi = (data) => {
     return apiClient.post('/login', data)
@@ -25,6 +43,10 @@ export const profileApi = (data) => {
     return apiClient.get('/profile', data)
 }
 
-export const postAktif = (data) => {
-    return apiClient.get('/user/get-post-aktif',data)
+export const postAktif = (data,{headers}) => {
+    return apiClient.get('/user/get-post-aktif',data, headers)
+}
+
+export const createPost = (data) => {
+    return apiClient.post('/jastip/create-post',data)
 }
