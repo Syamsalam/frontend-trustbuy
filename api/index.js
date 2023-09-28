@@ -43,8 +43,8 @@ export const profileApi = (data) => {
     return apiClient.get('/profile', data)
 }
 
-export const postAktif = (data,{headers}) => {
-    return apiClient.get('/user/get-post-aktif',data, headers)
+export const postAktif = () => {
+    return apiClient.get('/user/get-post-aktif')
 }
 
 export const createPost = (data) => {
