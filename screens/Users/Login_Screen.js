@@ -17,15 +17,17 @@ export default function LoginScreen() {
     const onSubmit = () => {
       if(data != null) {
         loginApi(data).then((result) => {
-          if(result.status == 200) {
+          if(result.status == 200 && result.data.data.user.role_id == 2) {
             const token =result?.data?.data?.token;
             AsyncStorage.setItem('token',token).then(() => {
               console.log('login')
               navigation.navigate('Home')
             })
+          } else if (result.data.data.user.role_id == 3) {
+            console.log("Silahkan login sebagai jastip")
           }
         }).catch(err => {
-          {err}
+          console.error(err.message)
         }) 
       }
     }

@@ -1,10 +1,41 @@
 import { View, Text,TouchableOpacity,TextInput, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { themeColors } from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
+import { loginApi } from '../../api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function LoginJastip() {
     const navigation = useNavigation()
+    const [data,setData] = useState({
+      email: "",
+      password: ""
+    })
+
+    const onSubmit = async () => {
+      try {
+        const result = await loginApi(data)
+        if(result.status == 200 && result.data.data.user.role_id == 3) {
+          const {user,token} =result?.data?.data
+          await AsyncStorage.setItem('user',JSON.stringify(user)).then(() => {
+            AsyncStorage.setItem('token',token).then(() => {
+              console.log('login', user)
+              navigation.navigate('HomeJastip')
+            })
+          })
+        } else if (result.data.data.user.role_id == 2) {
+          console.log("Silahkan login sebagai user")
+        }
+      } catch (err) {
+        if(err.response) {
+          console.error(err.response.data)
+          console.error(err.response.status)
+        } else {
+          console.log(err.message)
+        }
+      }
+    }
+
   return (
     <View className="flex-1 bg-white " style={{backgroundColor: themeColors.bg}}>
     <SafeAreaView  className="flex justify-around my-10 ">
@@ -18,6 +49,7 @@ export default function LoginJastip() {
             <TextInput 
               className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
               placeholder="email"
+              onChange={(event) => setData({...data, email:event.nativeEvent.text}) }
                
             />
             <Text className="text-gray-700 ml-4">Password</Text>
@@ -25,6 +57,7 @@ export default function LoginJastip() {
               className="p-4 bg-gray-100 text-gray-700 rounded-2xl"
               secureTextEntry
               placeholder="password"
+              onChange={(event) => setData({...data, password:event.nativeEvent.text})}
                
             />
             <TouchableOpacity className="flex items-center">
@@ -32,7 +65,7 @@ export default function LoginJastip() {
             </TouchableOpacity>
 
           <View className="form space-y-2">
-          <TouchableOpacity onPress={() => navigation.navigate('HomeJastip')}
+          <TouchableOpacity onPress={onSubmit}
             className="py-3 bg-blue-800 rounded-xl">
               <Text 
                   className="text-xl font-bold text-center text-white"
