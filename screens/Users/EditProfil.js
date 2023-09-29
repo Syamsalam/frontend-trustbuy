@@ -3,15 +3,35 @@ import { SafeAreaView, View, Text, TouchableOpacity, ImageBackground, TextInput,
 import { BottomSheet } from 'react-native-btr';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { detailProfile, getPhoto, updateUser} from '../../api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Edit = () => {
+  const navigator = useNavigation()
   const [visible, setVisible] = useState(false);
-  const [image, setImage] = useState(null);
   const [data, setData] = useState();
 
   useFocusEffect(useCallback(() => {
+
+    async function fetchData() {
+      try {
+        const user = JSON.parse(await AsyncStorage.getItem('user'))
+        const request = await detailProfile(user)
+      //  console.log(request?.data?.data?.image) 
+        if(request.status == 200) {
+          setData(request.data.data)
+          setImage(request?.data?.data?.image)
+        }
+
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request)
+        }
+      }
+    }
+
     async function requestCam() {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -21,8 +41,10 @@ const Edit = () => {
       }
     }
 
+    fetchData()
     requestCam()
   }, []))
+
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -35,8 +57,15 @@ const Edit = () => {
       alert("silahkan pilih gambar terlebih dahulu")
       return;
     }
-    setImage(result.uri);
+    return  setData({
+      ...data, 
+      image: {
+        ...data.image,
+        image: result.assets[0].uri 
+      }
+    });
   }
+
 
   const takePhoto = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -50,20 +79,39 @@ const Edit = () => {
       alert("silahkan ambil gambar terlebih dahulu")
       return
     }
-    
-    return  setImage(result.assets[0].uri);
-      
-    
-
+  
+      return   setData({
+        ...data, 
+        image: {
+          ...data.image,
+          image: result.assets[0].uri 
+        }
+      });
 
   }
 
 
+  const onSave = async () => {
+    try{
+      const result = await updateUser(data)
+      if(result.status == 200) {
+        alert("berhasil update")
+        navigator.navigate("Home")
+      }
+    } catch (err) {
+      if(err.response) {
+        console.error(err.response.data)
+      } else {
+        console.log(err)
+      }
+    }
+  }
 
 
   const toggleBottomNavigationView = () => {
     setVisible(!visible);
   };
+
 
   return (
     <SafeAreaView>
@@ -75,8 +123,8 @@ const Edit = () => {
                 height: 100, width: 100, borderRadius: 15, justifyContent: 'center', alignItems: 'center',
                 borderColor: 'gray'
               }}>
-                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 15 }} />}
-                {!image && (
+                {data?.image?.image && <Image source={{ uri: data?.image?.image  }} style={{ width: 100, height: 100, borderRadius: 15 }} />}
+                {!data?.image?.image && (
                   <View
                     style={{
                       flex: 1,
@@ -96,23 +144,26 @@ const Edit = () => {
       <View style={{ marginHorizontal: 20, top: 200 }}>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Nama</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} placeholder="Akram" />
+          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} 
+          value={data?.user_details?.nama || ''}
+          onChangeText={(text) => setData({...data,user_details: {...data.user_details,nama:text}})}
+          
+          />
         </View>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>No. HP</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} placeholder="085476233451" />
+          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }}
+           value={data?.user_details?.nomor_telepon || ''}
+           keyboardType='numeric'
+           onChangeText={(text) => setData({...data,user_details: {...data.user_details,nomor_telepon:text}})}
+           />
         </View>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Alamat</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} placeholder="Jl. Kaliurang" />
-        </View>
-        <View style={{ marginTop: 32 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Jenis Kelamin</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} placeholder="Laki-Laki" />
-        </View>
-        <View style={{ marginTop: 32 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Tanggal Lahir</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} placeholder="02-07-2000" />
+          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} 
+          value={data?.user_details?.alamat || ''}
+          onChangeText={(text) => setData({...data,user_details: {...data.user_details,alamat:text}})}
+          />
         </View>
         <TouchableOpacity style={{
           marginTop: 25,
@@ -121,7 +172,10 @@ const Edit = () => {
           borderRadius: 10,
           alignItems: 'center',
           justifyContent: 'center'
-        }}>
+          }}
+          
+          onPress={onSave}
+        >
           <Text style={{
             color: 'white',
             fontSize: 18,
