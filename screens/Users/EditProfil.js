@@ -4,7 +4,7 @@ import { BottomSheet } from 'react-native-btr';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { detailProfile, getPhoto, updateUser} from '../../api';
+import { baseURL, detailProfile, postImage, updateUser} from '../../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -12,17 +12,19 @@ const Edit = () => {
   const navigator = useNavigation()
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState();
-
+  const [image,setImage] = useState(null)
   useFocusEffect(useCallback(() => {
 
     async function fetchData() {
       try {
         const user = JSON.parse(await AsyncStorage.getItem('user'))
         const request = await detailProfile(user)
-      //  console.log(request?.data?.data?.image) 
-        if(request.status == 200) {
+       console.log(request?.data?.data?.image?.image) 
+       setImage(baseURL+"/gambar/"+request.data?.data?.image?.image)
+      
+      if(request.status == 200) {
+        console.log(request.data.data)
           setData(request.data.data)
-          setImage(request?.data?.data?.image)
         }
 
       } catch (err) {
@@ -32,6 +34,7 @@ const Edit = () => {
       }
     }
 
+    
     async function requestCam() {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -57,13 +60,9 @@ const Edit = () => {
       alert("silahkan pilih gambar terlebih dahulu")
       return;
     }
-    return  setData({
-      ...data, 
-      image: {
-        ...data.image,
-        image: result.assets[0].uri 
-      }
-    });
+    
+    return setImage(result.assets[0].uri)
+    
   }
 
 
@@ -79,14 +78,7 @@ const Edit = () => {
       alert("silahkan ambil gambar terlebih dahulu")
       return
     }
-  
-      return   setData({
-        ...data, 
-        image: {
-          ...data.image,
-          image: result.assets[0].uri 
-        }
-      });
+      return   setImage(result.assets[0].uri)
 
   }
 
@@ -94,15 +86,21 @@ const Edit = () => {
   const onSave = async () => {
     try{
       const result = await updateUser(data)
-      if(result.status == 200) {
+
+      const resultImage = await postImage(image)
+      if(resultImage.status == false) {
+        alert("Error")
+      }
+
+      if(result.status == 200 && resultImage.status == 200) {
         alert("berhasil update")
         navigator.navigate("Home")
       }
     } catch (err) {
       if(err.response) {
-        console.error(err.response.data)
+        console.error(await err.response.data)
       } else {
-        console.log(err)
+        console.log(err.message)
       }
     }
   }
@@ -123,8 +121,8 @@ const Edit = () => {
                 height: 100, width: 100, borderRadius: 15, justifyContent: 'center', alignItems: 'center',
                 borderColor: 'gray'
               }}>
-                {data?.image?.image && <Image source={{ uri: data?.image?.image  }} style={{ width: 100, height: 100, borderRadius: 15 }} />}
-                {!data?.image?.image && (
+                {image != null&& <Image source={{uri : image}} style={{ width: 100, height: 100, borderRadius: 15 }} />}
+                {!image && (
                   <View
                     style={{
                       flex: 1,

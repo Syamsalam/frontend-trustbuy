@@ -7,9 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 
 export default function JastipPost() {
     const navigation = useNavigation()
-    const [data, setData] = useState([
-        {key : '1', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku',lokasi: 'Gramedia Mall Panakukang',waktu:'17.48 - 17.59'}
-    ]);
+    const [data, setData] = useState();
 
     const handleDelete = (key) => {
         // Filter item yang memiliki key yang tidak sama dengan key yang dihapus

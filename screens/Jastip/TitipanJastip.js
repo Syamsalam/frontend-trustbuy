@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Card from '../../components/card';
+import { baseURL, getPhoto } from '../../api';
+import {Image as Img} from 'expo-image'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TitipanJastip() {
   const navigation = useNavigation();
+  const [profile,setProfile] = useState()
   const arr = [
     {
         image: require("../../assets/Wallet1.png"),
@@ -19,12 +23,29 @@ export default function TitipanJastip() {
         name: "Pengantaran"
     },
   ]
-  const [data, setData] = useState([
-    { key: '1', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg'), showButtons: false },
-    {key: '2', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 ', lokasi: 'Toko New Agung Alat Tulis dan kantor', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg'), showButtons: false},
-    {key: '3', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg'), showButtons: false},
-    // Add more items with showButtons as needed
-  ]);
+  const [data, setData] = useState();
+
+  useFocusEffect(useCallback(() => {
+    async function useEffect() {
+      try {
+        const user = JSON.parse(await AsyncStorage.getItem('user'))
+
+        const result = await getPhoto(user)
+        if(result.status == 200) {
+          // console.log(result.data)
+          setProfile(result.data)
+        }
+      } catch(err) {
+        if(err.response) {
+          console.log(err.response.data)
+        } else {
+          console.log(err.message)
+        }
+      }
+    }
+
+    useEffect()
+  },[]))
 
   const handleItemPress = (item, name) => {
     switch (name) {
@@ -67,9 +88,10 @@ export default function TitipanJastip() {
           <View style={{
               flexDirection: 'row',
           }}>
-              <Image
+              <Img
 
-                  source={require('../../assets/profilpeople.jpg')}
+                  source={baseURL+"/gambar/"+ profile?.users?.image?.image}
+                  placeholder={require('../../assets/profilpeople.jpg')}
                   style={{
                       width: 100,
                       height: 100,
@@ -77,14 +99,14 @@ export default function TitipanJastip() {
                       top: 60,
                       borderRadius: 50,
                   }}
-              ></Image>
+              ></Img>
               <View style={{
                   flexDirection: 'column',
                   top: 20,
                   left: 30,
               }}>
-                  <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Syamsul Alam</Text>
-                  <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>75315946</Text>
+                  <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile?.nama}</Text>
+                  <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile?.nomor_telepon}</Text>
               </View>
           </View>
 

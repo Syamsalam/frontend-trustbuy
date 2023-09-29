@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback } from 'react';
 import { Image as Img } from 'expo-image';
-import { detailProfile } from '../../api';
+import { baseURL, detailProfile } from '../../api';
 
 export default function Profil() {
   const navigation = useNavigation();
@@ -61,7 +61,8 @@ export default function Profil() {
 
         <View style={{ flexDirection: 'row' }}>
           <Img
-            source={data?.image?.image}
+            source={baseURL+"/gambar/"+data?.image?.image }
+            placeholder={require('../../assets/profilpeople.jpg')}
             style={{
               width: 100,
               height: 100,

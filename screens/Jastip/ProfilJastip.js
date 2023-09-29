@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseURL, detailProfileJastip } from '../../api';
+import {Image as Img} from "expo-image"
 
 export default function ProfilJastip() {
   const navigation = useNavigation();
-  const [data, setData] = useState({
-    key: '1',
-    userName: 'Akram',
-    nomor: '089765432123',
-    alamat: 'Jln kaliurang',
-    jenisKelamin: 'Laki-laki',
-    tanggalLahir: '02-07-2000',
-    email: 'Akram27@gmail',
-    waktu: '17.48 - 17.59',
-    gambar: require('../../assets/profilpeople.jpg'),
-  });
+  const [data, setData] = useState();
+
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        const user = JSON.parse(await AsyncStorage.getItem('user'))
+        const result = await detailProfileJastip(user)
+        // console.log(result)
+        if(result.status == 200) {
+          console.log(result?.data)
+          setData(result?.data?.data)
+        }
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request.status)
+        } else {
+          console.log(err)
+        }
+      }
+    }
+
+    fetchData()
+  },[]))
+
 
   const onLogout = () => {
     AsyncStorage.removeItem('token').then(() => {
@@ -48,8 +63,9 @@ export default function ProfilJastip() {
         </Text>
 
         <View style={{ flexDirection: 'row' }}>
-          <Image
-            source={data.gambar}
+          <Img
+            source={baseURL+"/gambar/"+data?.image?.image}
+            placeholder={require('../../assets/profilpeople.jpg')}
             style={{
               width: 100,
               height: 100,
@@ -57,7 +73,7 @@ export default function ProfilJastip() {
               top: 60,
               borderRadius: 50,
             }}
-          ></Image>
+          ></Img>
           <View
             style={{
               flexDirection: 'column',
@@ -70,17 +86,17 @@ export default function ProfilJastip() {
               className="text-white text-start font-semibold ml-4 text-lg"
               style={{ top: 50, bottom: 40 }}
             >
-              {data.userName}
+              {data?.user_details?.nama}
             </Text>
             <Text
               className="text-white text-start font-light ml-4 text-lg"
               style={{ top: 50, bottom: 40 }}
             >
-              {data.nomor}
+              {data?.user_details?.nomor_telepon}
             </Text>
           </View>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Edit')}>
+        <TouchableOpacity onPress={() => navigation.navigate('EditJastip')}>
           <Image
             source={require('../../assets/edit.png')}
             style={{ alignSelf: 'flex-end', marginRight: 20 }}
@@ -88,10 +104,8 @@ export default function ProfilJastip() {
         </TouchableOpacity>
       </View>
       <View style={{ flexDirection: 'column' }}>
-        <RenderItem label="Alamat" value={data.alamat} />
-        <RenderItem label="Jenis Kelamin" value={data.jenisKelamin} />
-        <RenderItem label="Tanggal Lahir" value={data.tanggalLahir} />
-        <RenderItem label="Email" value={data.email} />
+        <RenderItem label="Alamat" value={data?.user_details?.alamat} />
+        <RenderItem label="Email" value={data?.email} />
         <RenderItemWithArrow
           label="Riwayat transaksi"
           onPress={() => navigation.navigate('Riwayat')}
