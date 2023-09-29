@@ -4,33 +4,47 @@ import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { createPost } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 
 
 
 export default function MulaiJastip() {
     const navigation = useNavigation()
-    const [data,setData] = useState({
+    const [data, setData] = useState({
         judul: "Tidak ada",
         deskripsi: "Tidak ada",
         lokasi: "Tidak ada"
     })
 
     const onSubmit = async () => {
-        try{
+        try {
             const result = await createPost(data)
-            if(result.status == 200) {
+            if (result.status == 200) {
                 console.log(result.message)
                 navigation.navigate('HomeJastip')
             } else {
                 console.log(result.message)
             }
         } catch (err) {
-            if(err.response) {
+            if (err.response) {
                 console.error(err.response.data)
             }
         }
     }
+
+    const [awalTime, setAwalTime] = useState(new Date());
+    const [akhirTime, setAkhirTime] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
+
+    const toggleDatePicker = () => {
+        setShowPicker(!showPicker);
+    };
+
+
+
+
+
+
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -84,73 +98,119 @@ export default function MulaiJastip() {
                     backgroundColor: "#C3D5EA",
                     borderTopLeftRadius: 30,
                     borderTopRightRadius: 30,
-                    
+
                     paddingHorizontal: 35,
-                    
+
                 }}>
-            
-                
-                   <View className="form space-y-3">
-                   <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Judul Jastip</Text>
-                      <TextInput
-                          className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                          placeholder='Masukan Judul Titipan'
-                          onChange={(value) => setData({...data,judul: value.nativeEvent.text})}
 
-                      />
-                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Lokasi</Text>
-                      <TextInput 
-                        className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                        placeholder="Lokasi Pemesanan"
-                        onChange={(event) => setData({...data,lokasi: event.nativeEvent.text})}
-                      />
-                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu Mulai</Text>
-                      <TextInput 
-                        className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                        placeholder="Waktu mulai" 
-                        onChange={(event) => setData({...data,waktu_mulai:event.nativeEvent.text})}
 
-                    />
-                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu Selesai</Text>
-                      <TextInput 
-                        className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                        placeholder="Waktu selesai" 
-                        onChange={(event) => setData({...data,waktu_akhir:event.nativeEvent.text})}
+                    <View className="form space-y-3">
+                        <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Judul Jastip</Text>
+                        <TextInput
+                            className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
+                            placeholder='Masukan Judul Titipan'
+                            onChange={(value) => setData({ ...data, judul: value.nativeEvent.text })}
 
-                    />
-                        
-                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Deskripsi Jastip</Text>
-                      <View style={{
-                        backgroundColor: "#f5f5f5",
-                        width: '100%',
-                        height: '15%',
-                        borderRadius: 20,
-                        alignItems: 'flex-start'
-                      }}>
-                      <TextInput 
-                        className="p-1 text-black-200 rounded-2xl mb-1 h-24 "
-                        multiline
-                        placeholder="Tambahkan deskripsi jenis titipan yang diterima"
-                        onChange={(event) => setData({...data,deskripsi: event.nativeEvent.text})}
-                      />
-                      </View>
-                
-                <TouchableOpacity onPress={onSubmit}
-                
-                    className="py-3 bg-white rounded-xl border border-blue-800 " style={{ backgroundColor: '#1138B7', top: 4, margin: 20 }}>
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                        textAlign: "center"
-                    }}>Tambah Jastip</Text>
-                </TouchableOpacity>
+                        />
+                        <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Lokasi</Text>
+                        <TextInput
+                            className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
+                            placeholder="Lokasi Pemesanan"
+                            onChange={(event) => setData({ ...data, lokasi: event.nativeEvent.text })}
 
+                        />
+                        {/* {showPicker && (
+                            <DateTimePicker
+                                mode='time'
+                                display='default'
+                                value={date}
+                                onChange={(ev, date) => {
+                                    setDate(date)
+                                }}
+                                locale='id-ID'
+                            />
+                        )} */}
+                        <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Waktu Mulai</Text>
+                        <TouchableOpacity className="p-2 bg-white rounded-2xl mb-1"
+                            style={{
+                                backgroundColor : '#f5f5f5'
+                            }}
+                            onPress={() => {
+                                DateTimePickerAndroid.open({
+                                    value: awalTime,
+                                    onChange : (ev, date) => {
+                                        setAwalTime(date)
+                                    },
+                                    mode: "time",
+                                    is24Hour: true,
+                                  });
+                            }}
+                        >
+                            <Text  style={{
+                                color :"gray"
+                            }}>{awalTime.toLocaleTimeString("id-ID", {
+                                hour12 : true,
+                                hour : "2-digit",
+                                minute : "2-digit"
+                            })}</Text>
+                        </TouchableOpacity>
+                        <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Waktu Selesai</Text>
+                        <TouchableOpacity className="p-2 bg-white rounded-2xl mb-1"
+                            style={{
+                                backgroundColor : '#f5f5f5'
+                            }}
+                            onPress={() => {
+                                DateTimePickerAndroid.open({
+                                    value: akhirTime,
+                                    onChange : (ev, date) => {
+                                        setAkhirTime(date)
+                                    },
+                                    mode: "time",
+                                    is24Hour: true,
+                                  });
+                            }}
+                        >
+                            <Text  style={{
+                                color :"gray"
+                            }}>{akhirTime.toLocaleTimeString("id-ID", {
+                                hour12 : true,
+                                hour : "2-digit",
+                                minute : "2-digit"
+                            })}</Text>
+                        </TouchableOpacity>
+
+                        <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Deskripsi Jastip</Text>
+                        <View style={{
+                            backgroundColor: "#f5f5f5",
+                            width: '100%',
+                            height: '15%',
+                            borderRadius: 20,
+                            alignItems: 'flex-start'
+                        }}>
+                            <TextInput
+                                className="p-1 text-black-200 rounded-2xl mb-1 h-24 "
+                                multiline
+                                placeholder="Tambahkan deskripsi jenis titipan yang diterima"
+                                onChange={(event) => setData({ ...data, deskripsi: event.nativeEvent.text })}
+                            />
+                        </View>
+
+                        <TouchableOpacity onPress={onSubmit}
+
+                            className="py-3 bg-white rounded-xl border border-blue-800 " style={{ backgroundColor: '#1138B7', top: 4, margin: 20 }}>
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                textAlign: "center"
+                            }}>Tambah Jastip</Text>
+                        </TouchableOpacity>
+
+                    </View>
                 </View>
-                </View>
-                </ScrollView>
-                
-    </View>
+            </ScrollView>
+
+        </View>
 
     )
 }
