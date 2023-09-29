@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView,Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { profileApi } from '../../api';
+import { baseURL, getPhoto } from '../../api';
 import { useState } from 'react';
 import { Image as Img } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,6 +29,7 @@ const arr = [
 export default function TitipanScreen() {
     const navigation = useNavigation()
     const [profile,setProfile] = useState()
+    const [data,useData] = useState()
     const handleItemPress = (name) => {
         switch (name) {
             case "Cek Titipan":
@@ -52,10 +53,10 @@ export default function TitipanScreen() {
         async function fetchData() {
             try {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
-                const request = await profileApi(user)
+                const request = await getPhoto(user)
                 if(request.status == 200) {
                     // console.log(request?.data?.data)
-                    setProfile(request.data.data)
+                    setProfile(request.data)
                 }
             } catch (err) {
                 if(err.response) {
@@ -88,7 +89,7 @@ export default function TitipanScreen() {
                 }}>
                     <Img
                         placeholder={require('../../assets/profilpeople.jpg')}
-                        source={profile?.users.image?.image}
+                        source={ baseURL+"/gambar/"+profile?.users.image?.image}
                         style={{
                             width: 100,
                             height: 100,

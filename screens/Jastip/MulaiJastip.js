@@ -1,8 +1,8 @@
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { createPost } from '../../api'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { createPost, getCommonProfile } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 
@@ -10,11 +10,32 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 
 export default function MulaiJastip() {
     const navigation = useNavigation()
+    const [jastip,setJastip] = useState()
     const [data,setData] = useState({
         judul: "Tidak ada",
         deskripsi: "Tidak ada",
-        lokasi: "Tidak ada"
+        lokasi: "Tidak ada",
+        waktu_mulai: "",
+        waktu_akhir: ""
     })
+
+    useFocusEffect(useCallback(() => {
+        async function fetchData() {
+            try{
+                const user = JSON.parse(await AsyncStorage('user'))
+                const response = await getCommonProfile(user)
+                if(response.status == 200) {
+                    setJastip(response.data.data)
+                }
+            }catch (err) {
+                if(err.response) {
+                    console.error(err.response.data)
+                }
+            }
+        }
+
+        fetchData()
+    },[]))
 
     const onSubmit = async () => {
         try{
@@ -64,8 +85,8 @@ export default function MulaiJastip() {
                         left: 30,
                         width: 200,
                     }}>
-                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Syamsul Alam</Text>
-                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>75315946</Text>
+                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{jastip?.user_profile?.nama}</Text>
+                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{jastip?.user_profile?.nomor_telepon}</Text>
                     </View>
                 </View>
                 <View style={{

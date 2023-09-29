@@ -4,7 +4,7 @@ import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { postAktif } from '../../api'
+import { baseURL, postAktif } from '../../api'
 import { useCallback } from 'react'
 import { Image } from 'expo-image';
 
@@ -16,8 +16,10 @@ export default function HomeScreen() {
     useFocusEffect(useCallback(() => {
         async function fetchData() {
             try {
-                const response = await postAktif()
+                const user = JSON.parse(await AsyncStorage.getItem('user'))
+                const response = await postAktif(user)
                 if (response.status == 200) {
+                    // console.log(response?.data?.data[0].waktu_mulai)
                     setData(response.data.data)
                 }
             } catch (err) {
@@ -90,12 +92,12 @@ export default function HomeScreen() {
                                 <View style={{
                                     width : "30%"
                                 }}>
-                                    <Image placeholder={require("../../assets/profilpeople.jpg")} source={item?.users?.image?.image} style={{ width: 80, height: 80, borderRadius: 50, left: 5 }} />
+                                    <Image placeholder={require("../../assets/profilpeople.jpg")} source={baseURL+"/gambar/"+item?.users?.image?.image} style={{ width: 80, height: 80, borderRadius: 50, left: 5 }} />
                                     <View className="items-center">
                                         <Text className="text-sm font-bold">{item.users?.user_details?.nama}</Text>
                                         <Text className=" text-blue-500 text-xs font-light">{item.users?.user_details?.nomor_telepon}</Text>
                                     </View>
-                                </View>
+                                </View> 
 
                                 <View style={{ marginHorizontal : "9%", width : "61%" }}>
                                     <View>
@@ -104,8 +106,9 @@ export default function HomeScreen() {
                                         
                                     }} >{item.judul}</Text>
                                     <Text className="text-xs font-semibold pb-3">{item.deskripsi}</Text>
-                                    <Text className="text-xs font-semibold">{item.users?.user_details?.lokasi}</Text>
-                                    <Text className="text-sm font-normal">{item.users?.user_details?.waktu_mulai}</Text>
+                                    <Text className="text-xs font-semibold">{item.lokasi}</Text>
+                                    <Text className="text-sm font-normal">{new Date(item.waktu_mulai).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
+                                    <Text className="text-sm font-normal">{new Date(item.waktu_akhir).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
                                     </View>
                                     <TouchableOpacity onPress={() => navigation.navigate('Chat', { userName: item.username })}
                                         className="py-1 w-20  bg-blue-800 rounded-xl" style={{

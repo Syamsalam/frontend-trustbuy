@@ -11,6 +11,7 @@ import SignUpScreen from '../screens/Users/Signup_Screen';
 import TitipanScreen from '../screens/Users/Titipan_Screen';
 import Profil from '../screens/Users/Profil';
 import Edit from '../screens/Users/EditProfil';
+import EditProfilJastip from '../screens/Jastip/EditProfilJastip';
 import Riwayat from '../screens/Users/Riwayat';
 import CekTitipan from '../screens/Users/CekTitipan';
 import Pembayaran from '../screens/Users/Pembayaran';
@@ -49,6 +50,7 @@ export default function AppNavigation() {
         <Stack.Screen name="TitipanScreen" options={{ headerShown: false }} component={TitipanScreen} />
         <Stack.Screen name="Profil" options={{ headerShown: false }} component={Profil} />
         <Stack.Screen name="Edit" options={{ headerShown: false }} component={Edit} />
+        <Stack.Screen name="EditJastip" options={{ headerShown: false }} component={EditProfilJastip} />
         <Stack.Screen name="Riwayat" options={{ headerShown: true }} component={Riwayat} />
         <Stack.Screen name="CekTitipan" options={{ headerShown: true }} component={CekTitipan} />
         <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />

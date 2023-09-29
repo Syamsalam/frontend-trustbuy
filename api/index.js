@@ -1,8 +1,10 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export const baseURL = "http://192.168.254.198:8000/api"
+
 const apiClient = axios.create({
-    baseURL: `http://10.3.101.246:8000/api`,
+    baseURL,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -40,11 +42,14 @@ export const registerJastpApi = (data) => {
 }
 
 export const profileApi = (data) => {
-    return apiClient.get('/user/photo-profile',data)
+    return apiClient.get('/user/profile',data)
 }
 
 export const detailProfile = (data) => {
     return apiClient.get('/user/detail-profile',data)
+}
+export const detailProfileJastip = (data) => {
+    return apiClient.get('/jastip/detail-profile',data)
 }
 
 export const postAktif = () => {
@@ -56,9 +61,45 @@ export const createPost = (data) => {
 }
 
 export const getPhoto = (data) => {
-    return apiClient.get('/user/photo-profile',data)
+    return apiClient.get('/common/photo-profile',data)
 }
 
 export const updateUser = (data) => {
     return apiClient.put('/user/update-user',data)
+}
+export const updateJastip = (data) => {
+    return apiClient.put('/jastip/update-user',data)
+}
+
+export const getCommonProfile = (data) => {
+    return apiClient.get('/common/profile',data)
+}
+
+export const postImage = async (data) => {
+    const name = data.split("/").at(-1)
+    const ext = name.split(".").at(-1)
+    const formData = new FormData()
+    formData.append("image", {
+        uri : data,
+        name : name,
+        type : "image/"+ext,
+        
+    })
+    console.log(data)
+    
+    const userToken = await AsyncStorage.getItem('token');
+    
+    return  await fetch(baseURL+'/common/upload-profile', {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "Authorization" :  `Bearer ${userToken}`
+        },
+        body : formData,
+        method : "POST",
+      });
+    // return axios.post(baseURL+'/common/upload-profile', formData, {
+    //     headers : {
+    //         "Content-Type" : "multi"
+    //     }
+    // })
 }

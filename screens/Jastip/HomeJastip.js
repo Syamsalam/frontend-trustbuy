@@ -1,13 +1,38 @@
 import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { baseURL, getPhoto } from '../../api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Image as Img } from 'expo-image'
 
 
 export default function HomeJastip() {
     const navigation = useNavigation()
     const [active, setActive] = useState(false)
+    const [data,setData] = useState()
+
+    useFocusEffect(useCallback(() => {
+        async function fetchData() {
+            try {
+                const user = JSON.parse(await AsyncStorage.getItem('user'))
+                const request = await getPhoto(user)
+                if(request.status == 200) {
+                    console.log(request?.data)
+                    setData(request?.data)
+                }
+            } catch(err) {
+                if(err.response) {
+                    console.log(err.response)
+                } else {
+                    console.error(err)
+                }
+            }
+        }
+        fetchData()
+    },[]))
+
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -24,9 +49,11 @@ export default function HomeJastip() {
                 <View style={{
                     flexDirection: 'row',
                 }}>
-                    <Image
 
-                        source={require('../../assets/profilpeople.jpg')}
+                    <Img
+
+                        source={baseURL+ "/gambar/"+ data?.users?.image?.image}
+                        placeholder={require("../../assets/profilpeople.jpg")}
                         style={{
                             width: 100,
                             height: 100,
@@ -34,7 +61,7 @@ export default function HomeJastip() {
                             top: 60,
                             borderRadius: 50,
                         }}
-                    ></Image>
+                    ></Img>
                     <View style={{
                         flexDirection: 'column',
                         top: 20,
@@ -46,7 +73,7 @@ export default function HomeJastip() {
                             justifyContent : "space-between",
                             alignItems : "center"
                         }}>
-                            <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Syamsul Alam</Text>
+                            <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{data?.nama}</Text>
                             <Switch style={{
                                 top : 70,
                                 left : 30,
@@ -60,7 +87,7 @@ export default function HomeJastip() {
                                 value={active}
                             />
                         </View>
-                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>75315946</Text>
+                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{data?.nomor_telepon}</Text>
                     </View>
                 </View>
                 <View style={{
