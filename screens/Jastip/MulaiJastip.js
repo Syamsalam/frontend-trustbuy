@@ -10,13 +10,9 @@ import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/d
 
 export default function MulaiJastip() {
     const navigation = useNavigation()
-<<<<<<< HEAD
 
     const [jastip,setJastip] = useState()
     const [data,setData] = useState({
-=======
-    const [data, setData] = useState({
->>>>>>> 400fa8190feea5e380c3e71a0ca946e492458e1f
         judul: "Tidak ada",
         deskripsi: "Tidak ada",
         lokasi: "Tidak ada",
