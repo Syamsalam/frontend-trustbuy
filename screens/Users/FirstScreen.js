@@ -3,6 +3,7 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {themeColors} from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
+import { Dimensions } from 'react-native'
 
 export default function FirstScreen() {
     const navigation = useNavigation()

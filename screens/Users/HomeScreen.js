@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, TextInput, Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, TextInput, Dimensions, ScrollView} from 'react-native'
 import React, { useEffect } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
@@ -77,7 +77,7 @@ export default function HomeScreen() {
 
             </View>
 
-            <View >
+            
                 <FlatList
                     data={data}
                     contentContainerStyle={{
@@ -128,7 +128,7 @@ export default function HomeScreen() {
                     )}
                     keyExtractor={(item) => item.id}
                 />
-            </View>
+            
         </View>
 
     )
