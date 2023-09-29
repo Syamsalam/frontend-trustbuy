@@ -16,7 +16,6 @@ export default function Profil() {
         const user = JSON.parse(await AsyncStorage.getItem('user'))
         const request = await detailProfile(user)
         if(request.status == 200) {
-          console.log(request.data.data)
           setData(request.data.data)
         }
       } catch (err) {
@@ -83,7 +82,7 @@ export default function Profil() {
               className="text-white text-start font-semibold ml-4 text-lg"
               style={{ top: 50, bottom: 40 }}
             >
-              {data?.username}
+              {data?.user_details?.nama}
             </Text>
             <Text
               className="text-white text-start font-light ml-4 text-lg"
@@ -95,7 +94,7 @@ export default function Profil() {
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Edit')}>
           <Image
-            place={require('../../assets/edit.png')}
+            source={require('../../assets/edit.png')}
             style={{ alignSelf: 'flex-end', marginRight: 20 }}
           ></Image>
         </TouchableOpacity>
