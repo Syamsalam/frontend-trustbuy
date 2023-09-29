@@ -2,7 +2,7 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiClient = axios.create({
-    baseURL: `http://192.168.8.101:8000/api`,
+    baseURL: `http://10.3.101.246:8000/api`,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -40,7 +40,7 @@ export const registerJastpApi = (data) => {
 }
 
 export const profileApi = (data) => {
-    return apiClient.get('/user/profile',data)
+    return apiClient.get('/user/photo-profile',data)
 }
 
 export const detailProfile = (data) => {
@@ -53,4 +53,12 @@ export const postAktif = () => {
 
 export const createPost = (data) => {
     return apiClient.post('/jastip/create-post',data)
+}
+
+export const getPhoto = (data) => {
+    return apiClient.get('/user/photo-profile',data)
+}
+
+export const updateUser = (data) => {
+    return apiClient.put('/user/update-user',data)
 }
