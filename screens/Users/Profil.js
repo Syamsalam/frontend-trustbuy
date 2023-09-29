@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback } from 'react';
+import { Image as Img } from 'expo-image';
+import { detailProfile } from '../../api';
 
 export default function Profil() {
   const navigation = useNavigation();
-  const [data, setData] = useState({
-    key: '1',
-    userName: 'Akram',
-    nomor: '089765432123',
-    alamat: 'Jln kaliurang',
-    jenisKelamin: 'Laki-laki',
-    tanggalLahir: '02-07-2000',
-    email: 'Akram27@gmail',
-    waktu: '17.48 - 17.59',
-    gambar: require('../../assets/profilpeople.jpg'),
-  });
+  const [data, setData] = useState();
+
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        const user = JSON.parse(await AsyncStorage.getItem('user'))
+        const request = await detailProfile(user)
+        if(request.status == 200) {
+          setData(request.data.data)
+        }
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request)
+        }
+      }
+    }
+
+    fetchData()
+  },[]))
 
   const onLogout = () => {
     AsyncStorage.removeItem('token').then(() => {
@@ -25,6 +36,7 @@ export default function Profil() {
   }
 
   return (
+    
     <SafeAreaView
       style={{
         backgroundColor: '#fff',
@@ -48,8 +60,8 @@ export default function Profil() {
         </Text>
 
         <View style={{ flexDirection: 'row' }}>
-          <Image
-            source={data.gambar}
+          <Img
+            source={data?.image?.image}
             style={{
               width: 100,
               height: 100,
@@ -57,7 +69,7 @@ export default function Profil() {
               top: 60,
               borderRadius: 50,
             }}
-          ></Image>
+          ></Img>
           <View
             style={{
               flexDirection: 'column',
@@ -70,13 +82,13 @@ export default function Profil() {
               className="text-white text-start font-semibold ml-4 text-lg"
               style={{ top: 50, bottom: 40 }}
             >
-              {data.userName}
+              {data?.user_details?.nama}
             </Text>
             <Text
               className="text-white text-start font-light ml-4 text-lg"
               style={{ top: 50, bottom: 40 }}
             >
-              {data.nomor}
+              {data?.user_details?.nomor_telepon}
             </Text>
           </View>
         </View>
@@ -87,16 +99,16 @@ export default function Profil() {
           ></Image>
         </TouchableOpacity>
       </View>
+      {data && (
       <View style={{ flexDirection: 'column' }}>
-        <RenderItem label="Alamat" value={data.alamat} />
-        <RenderItem label="Jenis Kelamin" value={data.jenisKelamin} />
-        <RenderItem label="Tanggal Lahir" value={data.tanggalLahir} />
-        <RenderItem label="Email" value={data.email} />
+        <RenderItem label="Alamat" value={data?.user_details?.alamat} />
+        <RenderItem label="Email" value={data?.email} />
         <RenderItemWithArrow
           label="Riwayat transaksi"
           onPress={() => navigation.navigate('Riwayat')}
         />
       </View>
+      )}
       <TouchableOpacity
         onPress={onLogout}
         className="py-3 bg-white rounded-xl border border-blue-800 "

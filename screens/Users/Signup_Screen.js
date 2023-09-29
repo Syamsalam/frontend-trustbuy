@@ -20,14 +20,14 @@ export default function SignUpScreen() {
     try{
       const result = await registerApi(data)
       if (result.status == 200) {
-        console.log(result.message)
+        // console.log(result.message)
         navigation.navigate('FirstScreen')
       } else {
         console.log(result.data)
       }
     } catch (err) {
       if(err.response) {
-        console.error(err.response.data)
+        // console.error(err.response.data)
         console.error(err.response.status)
       } else {
         console.log(err.message)

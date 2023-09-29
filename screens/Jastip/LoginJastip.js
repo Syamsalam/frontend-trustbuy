@@ -19,7 +19,7 @@ export default function LoginJastip() {
           const {user,token} =result?.data?.data
           await AsyncStorage.setItem('user',JSON.stringify(user)).then(() => {
             AsyncStorage.setItem('token',token).then(() => {
-              console.log('login', user)
+              console.log('login')
               navigation.navigate('HomeJastip')
             })
           })
