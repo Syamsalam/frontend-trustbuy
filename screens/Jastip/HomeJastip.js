@@ -19,7 +19,7 @@ export default function HomeJastip() {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
                 const request = await getPhoto(user)
                 if(request.status == 200) {
-                    console.log(request?.data)
+                    // console.log(request?.data)
                     setData(request?.data)
                 }
             } catch(err) {

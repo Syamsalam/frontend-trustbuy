@@ -16,7 +16,7 @@ export default function ProfilJastip() {
         const result = await detailProfileJastip(user)
         // console.log(result)
         if(result.status == 200) {
-          console.log(result?.data)
+          // console.log(result?.data)
           setData(result?.data?.data)
         }
       } catch (err) {

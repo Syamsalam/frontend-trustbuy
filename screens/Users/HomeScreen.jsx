@@ -16,8 +16,7 @@ export default function HomeScreen() {
     useFocusEffect(useCallback(() => {
         async function fetchData() {
             try {
-                const user = JSON.parse(await AsyncStorage.getItem('user'))
-                const response = await postAktif(user)
+                const response = await postAktif()
                 if (response.status == 200) {
                     // console.log(response?.data?.data[0].waktu_mulai)
                     setData(response.data.data)
