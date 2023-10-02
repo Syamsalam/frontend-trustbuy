@@ -28,14 +28,15 @@ export default function LoginScreen() {
             navigation.navigate('Home')
           })
         } else if (result.data.data.user.role_id == 3) {
-          console.log("Silahkan login sebagai jastip")
+          alert("Silahkan login sebagai jastip")
         }
       }
     } catch (err) {
       if (err.response) {
-        console.error(err.response.data)
-        console.error(err.response.status)
-      }
+        if (err.response.status == 400) {
+          alert("Silahkan isi email dan password terlebih dahulu")
+        }
+      } 
     }
   }
 

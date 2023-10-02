@@ -13,11 +13,11 @@ export default function MulaiJastip() {
 
     const [jastip,setJastip] = useState()
     const [data,setData] = useState({
-        judul: "Tidak ada",
-        deskripsi: "Tidak ada",
-        lokasi: "Tidak ada",
-        waktu_mulai: "",
-        waktu_akhir: ""
+        judul:'',
+        deskripsi:'',
+        lokasi:'',
+        waktu_mulai: undefined,
+        waktu_akhir: undefined
     })
 
     useFocusEffect(useCallback(() => {
@@ -40,7 +40,14 @@ export default function MulaiJastip() {
 
     const onSubmit = async () => {
         try {
-            const result = await createPost(data)
+            const updatedData = {
+                ...data,
+                waktu_mulai: awalTime,
+                waktu_akhir: akhirTime,
+            };
+
+            console.log(updatedData)
+            const result = await createPost(updatedData)
             if (result.status == 200) {
                 console.log(result.message)
                 navigation.navigate('HomeJastip')
@@ -50,6 +57,9 @@ export default function MulaiJastip() {
         } catch (err) {
             if (err.response) {
                 console.error(err.response.data)
+            } else {
+                console.log(data)
+                console.log(err.message)
             }
         }
     }
@@ -131,27 +141,16 @@ export default function MulaiJastip() {
                         <TextInput
                             className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                             placeholder='Masukan Judul Titipan'
-                            onChange={(value) => setData({ ...data, judul: value.nativeEvent.text })}
+                            onChangeText={(text) => setData({ ...data, judul: text })}
 
                         />
                         <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Lokasi</Text>
                         <TextInput
                             className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                             placeholder="Lokasi Pemesanan"
-                            onChange={(event) => setData({ ...data, lokasi: event.nativeEvent.text })}
+                            onChangeText={(text) => setData({ ...data, lokasi: text })}
 
                         />
-                        {/* {showPicker && (
-                            <DateTimePicker
-                                mode='time'
-                                display='default'
-                                value={date}
-                                onChange={(ev, date) => {
-                                    setDate(date)
-                                }}
-                                locale='id-ID'
-                            />
-                        )} */}
                         <Text className="text-black-700 ml-1" style={{ marginTop: 35, fontWeight: 'bold' }}>Waktu Mulai</Text>
                         <TouchableOpacity className="p-2 bg-white rounded-2xl mb-1"
                             style={{
@@ -163,10 +162,11 @@ export default function MulaiJastip() {
                                     onChange : (ev, date) => {
                                         setAwalTime(date)
                                     },
-                                    mode: "time",
-                                    is24Hour: true,
+                                    mode: "time"
                                   });
                             }}
+
+                            
                         >
                             <Text  style={{
                                 color :"gray"
@@ -191,6 +191,8 @@ export default function MulaiJastip() {
                                     is24Hour: true,
                                   });
                             }}
+
+                            
                         >
                             <Text  style={{
                                 color :"gray"
@@ -213,7 +215,7 @@ export default function MulaiJastip() {
                                 className="p-1 text-black-200 rounded-2xl mb-1 h-24 "
                                 multiline
                                 placeholder="Tambahkan deskripsi jenis titipan yang diterima"
-                                onChange={(event) => setData({ ...data, deskripsi: event.nativeEvent.text })}
+                                onChangeText={(text) => setData({ ...data, deskripsi: text })}
                             />
                         </View>
 

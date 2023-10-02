@@ -24,15 +24,14 @@ export default function LoginJastip() {
             })
           })
         } else if (result.data.data.user.role_id == 2) {
-          console.log("Silahkan login sebagai user")
+          alert("Silahkan login sebagai user")
         }
       } catch (err) {
-        if(err.response) {
-          console.error(err.response.data)
-          console.error(err.response.status)
-        } else {
-          console.log(err.message)
-        }
+        if (err.response) {
+          if (err.response.status == 400) {
+            alert("Silahkan isi email dan password terlebih dahulu")
+          }
+        } 
       }
     }
 
