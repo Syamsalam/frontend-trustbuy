@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function TitipanJastip() {
   const navigation = useNavigation();
   const [profile, setProfile] = useState()
+  const [refresh, setRefresh] = useState(false);
   let id_status = 0
   const arr = [
     {
@@ -53,18 +54,35 @@ export default function TitipanJastip() {
       }
     }
     useEffect()
-  }, []))
+    setRefresh(false)
+  }, [refresh]))
 
   const changeStatus = async (targetitemId, id_status) => {
 
-    const updatedData = await data.map((item) => {
-      if (item.id === targetitemId) {
-        item.status_id = id_status;
-      }
-      return item;
-    });
+    try {
+      const dataIndex = data.findIndex((item) => item.id === targetitemId);
 
-    await updateOrderStatus(updatedData).then(setData(updatedData))
+      if (dataIndex !== -1) {
+        // Buat salinan array data
+        const updatedData = [...data];
+  
+        // Perbarui properti status_id pada objek yang sesuai
+        updatedData[dataIndex].status_id = id_status;
+  
+        // Panggil setData dengan array yang telah diperbarui
+        setData(updatedData);
+  
+        // Panggil fungsi untuk mengirim perubahan ke backend
+        const result = await updateOrderStatus(updatedData[dataIndex]);
+
+        if (result.status == 200) {
+          setRefresh(true)
+
+        }
+     }
+    } catch (err) {
+      console.error(err)
+    }
 
   }
 
@@ -203,10 +221,10 @@ export default function TitipanJastip() {
                   }} >{item?.jastiper_post?.judul}</Text>
                   <Text className="text-xs font-semibold pb-3">{item?.jastiper_post?.deskripsi}</Text>
                   <Text className="text-xs font-semibold">{item?.jastiper_post?.lokasi}</Text>
-                  <Text className="text-sm font-normal">{item?.jastiper_post?.waktu_mulai}</Text>
-                  <Text className="text-sm font-normal">{item?.jastiper_post?.waktu_akhir}</Text>
+                  <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_mulai).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
+                  <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
                 </View>
-
+                
                 {item?.status_id == 3 ? (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
