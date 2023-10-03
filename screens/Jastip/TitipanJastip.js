@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Card from '../../components/card';
-import { baseURL, getPhoto, getOrderStatus, updateOrderStatus } from '../../api';
+import { baseURL, getPhoto, getOrderStatus, updateOrderStatus, deleteOrder } from '../../api';
 import { Image as Img } from 'expo-image'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TitipanJastip() {
   const navigation = useNavigation();
   const [profile, setProfile] = useState()
-  let id_status = 2
+  let id_status = 0
   const arr = [
     {
       image: require("../../assets/Wallet1.png"),
@@ -25,7 +25,7 @@ export default function TitipanJastip() {
     },
   ]
   const [data, setData] = useState();
-  
+
   // showButtons: false 
 
   useFocusEffect(useCallback(() => {
@@ -37,12 +37,12 @@ export default function TitipanJastip() {
         const titipPost = await getOrderStatus(user)
         if (result.status == 200 && titipPost.status == 200) {
           // console.log(titipPost?.data?.data)
-          const formattedData = titipPost?.data?.data.map((item) => ({
-            ...item,
-            showButtons: false,
-          }));
+          // const formattedData = titipPost?.data?.data.map((item) => ({
+          //   ...item,
+          //   showButtons: false,
+          // }));
           setProfile(result.data)
-          setData(formattedData)
+          setData(titipPost?.data?.data)
         }
       } catch (err) {
         if (err.response) {
@@ -55,18 +55,20 @@ export default function TitipanJastip() {
     useEffect()
   }, []))
 
-  const changeStatus = async (targetitemId) => {
-    const changeStatus = data.find((item) => item.id === targetitemId)
-    
-    if(changeStatus) {
-      changeStatus.status_id = 3;
-    }
+  const changeStatus = async (targetitemId, id_status) => {
 
-    await updateOrderStatus(changeStatus)
-  
+    const updatedData = await data.map((item) => {
+      if (item.id === targetitemId) {
+        item.status_id = id_status;
+      }
+      return item;
+    });
+
+    await updateOrderStatus(updatedData).then(setData(updatedData))
+
   }
 
-  const handleItemPress = (item, name) => {
+  const handleItemPress = async (item, name) => {
     switch (name) {
       case "Pembayaran":
         navigation.navigate("PembayaranJastip");
@@ -78,20 +80,22 @@ export default function TitipanJastip() {
         navigation.navigate("PengantaranJastip");
         break;
       case "Tolak":
-        // Remove the card when "Tolak" is pressed
+        // Remove the card when "Tolak" is presses
+       try {
+        // console.info(item)
+        await deleteOrder(item.id)
+
         const updatedData = data.filter((dataItem) => dataItem.id !== item.id);
         setData(updatedData);
+       } catch (err) {
+          console.error(err)
+       }
 
-        changeStatus(item.id)
-
+       
         break;
       default:
         // Toggle the showButtons property when "Terima" or other actions are pressed
-        setData((prevData) =>
-          prevData.map((prevItem) =>
-            prevItem.id === item.id ? { ...prevItem, showButtons: !prevItem.showButtons } : prevItem
-          )
-        );
+        changeStatus(item.id, 3)
         break;
     }
   };
@@ -185,7 +189,7 @@ export default function TitipanJastip() {
               }}>
                 <Img source={baseURL + "/gambar/" + item?.users?.image?.image}
                   placeholder={require('../../assets/profilpeople.jpg')}
-                  style={{ width: 80, height: 80, borderRadius: 50, left: 5 }} 
+                  style={{ width: 80, height: 80, borderRadius: 50, left: 5 }}
                 />
                 <View className="items-center">
                   <Text className="text-sm font-bold">{item?.users?.user_details?.nama}</Text>
@@ -203,27 +207,27 @@ export default function TitipanJastip() {
                   <Text className="text-sm font-normal">{item?.jastiper_post?.waktu_akhir}</Text>
                 </View>
 
-                {item.showButtons ? (
+                {item?.status_id == 3 ? (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
                       onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full" 
-                      style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
-                      
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
+
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => navigation.navigate('ChatJastip', { userName: item.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full" 
-                      style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
 
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => navigation.navigate('FormTitipan', { userName: item.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full" 
-                      style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
 
                     </TouchableOpacity>
                   </View>
@@ -232,15 +236,15 @@ export default function TitipanJastip() {
                     <TouchableOpacity
                       onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full" 
-                      style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
 
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleItemPress(item, "Terima")} // Pass "Terima" as the name
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full " 
-                      style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Terima</Text>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Terima</Text>
 
                     </TouchableOpacity>
                   </View>
@@ -252,7 +256,7 @@ export default function TitipanJastip() {
           </Card>
 
         )}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.id}
       />
 
     </SafeAreaView>
