@@ -235,14 +235,14 @@ export default function TitipanJastip() {
 
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { userName: item.userName })}
+                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
 
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('FormTitipan', { userName: item.userName })}
+                      onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>

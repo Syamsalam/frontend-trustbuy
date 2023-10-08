@@ -1,10 +1,55 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { getBiayaJastip, updateOrderStatus } from '../../api';
+import { useState } from 'react';
 
 export default function PembayaranJastip() {
   const navigation = useNavigation()
+  const route = useRoute()
+  const [data,setData] = useState()
+
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        const id = route.params.order_id
+        const result = await getBiayaJastip(id)
+        console.log("id order " + id)
+        console.log(result.data)
+        if(result.status == 200) {
+          // console.log(result?.data)
+          setData(result?.data?.data?.total_pembayaran)
+        }
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request.status)
+        } else {
+          console.log(err)
+        }
+      }
+    }
+
+    fetchData()
+  },[]))
+
+  //kalo dipake ini, card menghilang di titipanJastip.js
+  const onBayar = async () => {
+    try {
+      const id = route.params.order_id
+      const result = await updateOrderStatus(id,5)
+
+
+    } catch (err) {
+      if(err.response) {
+        console.error(err.response.data)
+      } else {
+        console.error(err)
+      }
+    }
+  }
+  
   return (
     <SafeAreaView
     style={{
@@ -56,7 +101,7 @@ export default function PembayaranJastip() {
             fontWeight: 'bold',
             color: '#000',
             marginRight:10,
-          }}>Rp 217.000</Text>
+          }}>{data}</Text>
       </View>
       <View style={{
         flexDirection:'row',
@@ -73,10 +118,10 @@ export default function PembayaranJastip() {
               <Text 
                   className="text-sm font-bold text-center text-white "
               >
-                      Chat Jastiper
+                      Chat Customer
               </Text>
            </TouchableOpacity>
-           <TouchableOpacity onPress={() => navigation.navigate('Proses')}
+           <TouchableOpacity onPress={() => navigation.navigate('ProsesJastip')}
             className="py-3 bg-blue-800 rounded-xl w-32 ">
               <Text 
                   className="text-sm font-bold text-center text-white "

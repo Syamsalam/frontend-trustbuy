@@ -1,10 +1,15 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 export default function Pembayaran() {
   const navigation = useNavigation()
+
+  useFocusEffect(useCallback(() => {
+    console.log("ok")
+  },[]))
   return (
     <SafeAreaView
     style={{

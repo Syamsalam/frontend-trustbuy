@@ -65,7 +65,7 @@ export default function ProsesJastip() {
               <Text 
                   className="text-sm font-bold text-center text-white "
               >
-                      Chat Jastiper
+                      Chat Customer
               </Text>
            </TouchableOpacity>
       </View>
