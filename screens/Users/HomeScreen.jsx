@@ -4,7 +4,7 @@ import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { baseURL, postAktif } from '../../api'
+import { baseURL, createOrder, postAktif } from '../../api'
 import { useCallback } from 'react'
 import { Image } from 'expo-image';
 
@@ -17,6 +17,8 @@ export default function HomeScreen() {
         async function fetchData() {
             try {
                 const response = await postAktif()
+                // console.log(response.data)
+                // console.log(user)
                 if (response.status == 200) {
                     // console.log(response?.data?.data[0].waktu_mulai)
                     setData(response.data.data)
@@ -30,6 +32,34 @@ export default function HomeScreen() {
 
         fetchData()
     }, []))
+
+    const onTitip = async (id,id_jastip) => {
+        try {
+            const user = await AsyncStorage.getItem('user')
+            let data = JSON.parse(user);
+            var date = new Date();
+
+            console.log(date)
+            const order ={
+                user_id : data.id,
+                jastip_id : id_jastip,
+                post_id : id,
+                order_date: date,
+                status_id: 2
+            }
+            const result = await createOrder({order})
+
+            if(result.status == 200) {
+                navigation.navigate("TitipanScreen")
+            }
+        } catch (err) {
+            if (err.response) {
+                console.error(err.response.data)
+            } else {
+                console.log(err)
+            }
+        }
+    }
         
     
     return (
@@ -109,7 +139,7 @@ export default function HomeScreen() {
                                     <Text className="text-sm font-normal">{new Date(item.waktu_mulai).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
                                     <Text className="text-sm font-normal">{new Date(item.waktu_akhir).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
                                     </View>
-                                    <TouchableOpacity onPress={() => navigation.navigate('Chat', { userName: item.username })}
+                                    <TouchableOpacity onPress={() => onTitip(item.id,item.user_id)}
                                         className="py-1 w-20  bg-blue-800 rounded-xl" style={{
                                             alignSelf: "flex-end",
                                             marginRight : "5%"

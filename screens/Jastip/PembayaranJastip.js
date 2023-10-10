@@ -5,6 +5,7 @@ import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/nativ
 import { useCallback } from 'react';
 import { getBiayaJastip, updateOrderStatus } from '../../api';
 import { useState } from 'react';
+import formatCurrency from '../../tools/currencyFormat';
 
 export default function PembayaranJastip() {
   const navigation = useNavigation()
@@ -101,7 +102,7 @@ export default function PembayaranJastip() {
             fontWeight: 'bold',
             color: '#000',
             marginRight:10,
-          }}>{data}</Text>
+          }}>{formatCurrency(data)}</Text>
       </View>
       <View style={{
         flexDirection:'row',

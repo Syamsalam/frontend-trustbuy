@@ -1,10 +1,10 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const baseURL = "http://192.168.8.101:8000/api"
+export const baseURL = "http://10.3.101.191:8000/api"
 
 const apiClient = axios.create({
-    baseURL: `http://192.168.8.101:8000/api`,
+    baseURL: `http://10.3.101.191:8000/api`,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -99,6 +99,9 @@ export const getBiayaJastip = (data) => {
     return apiClient.get(`/jastip/biaya-jastip/${data}`)
 }
 
+export const createOrder = (data) => {
+    return apiClient.post('/user/create-order', data)
+}
 
 export const postImage = async (data) => {
     const name = data.split("/").at(-1)

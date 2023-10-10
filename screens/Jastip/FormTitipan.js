@@ -4,6 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { addOrderItems, getBiayaJastip, getOrderItems } from '../../api';
+import formatCurrency from '../../tools/currencyFormat';
 
 export default function FormTitipan() {
   const navigation = useNavigation();
@@ -53,14 +54,7 @@ export default function FormTitipan() {
   //   fetchData()
   // }, []))
 
-  const formatCurrency = (value) => {
-    const formattedValue = new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(value);
-    return formattedValue;
-  };
+  
 
   const calculateTotal = () => {
     let totalHargaBarang = 0;
@@ -155,7 +149,7 @@ export default function FormTitipan() {
       const response = await addOrderItems(order);
       console.log(response.data);
       if(response.status == 200) {
-        navigation.navigate('PembayaranJastip',{order_id: route.params.order_id})
+        navigation.navigate('Pembayaran Jastip',{order_id: route.params.order_id})
       }
     } catch (err) {
       if (err.response) {
