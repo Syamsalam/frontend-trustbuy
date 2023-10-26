@@ -219,7 +219,7 @@ export default function MulaiJastip() {
                             />
                         </View>
 
-                        <TouchableOpacity onPress={onSubmit}
+                        <TouchableOpacity onPress={() => { onSubmit(); navigation.navigate('JastipPost');}}
 
                             className="py-3 bg-white rounded-xl border border-blue-800 " style={{ backgroundColor: '#1138B7', top: 4, margin: 20 }}>
                             <Text style={{
