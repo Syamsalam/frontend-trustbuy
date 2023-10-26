@@ -13,6 +13,21 @@ export default function HomeJastip() {
     const [active, setActive] = useState(false)
     const [data,setData] = useState()
 
+    const [post, setPost] = useState([
+        { key: '1', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '2', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 ', lokasi: 'Toko New Agung Alat Tulis dan kantor', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '3', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '4', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '5', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+    ]);
+
+    const handleDelete = (key) => {
+        // Filter item yang memiliki key yang tidak sama dengan key yang dihapus
+        const updatedData = post.filter(item => item.key !== key);
+        // Update daftar data
+        setPost(updatedData);
+      };
+
     useFocusEffect(useCallback(() => {
         async function fetchData() {
             try {
@@ -37,6 +52,7 @@ export default function HomeJastip() {
         <View style={{
             backgroundColor: '#fff',
             flex: 1,
+        
         }}>
             <View style={{
                 backgroundColor: '#1138B7',
@@ -98,7 +114,63 @@ export default function HomeJastip() {
                     <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Jastiper</Text>
                 </View>
             </View>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <FlatList
+                    data={post}
+                    contentContainerStyle={{
+                        paddingVertical: 20
+                    }}
+
+                    renderItem={({ item }) => (
+                        <Card>
+                            <View style={{ bottom: 20, flexDirection: "row", width :"100%",  }} >
+                                
+
+                                <View style={{ paddingLeft:20, width : "100%" }}>
+                                    <View>
+
+                                    <Text ellipsizeMode='tail'  className="text-sm font-bold pb-3 " style={{
+                                        
+                                    }} >{item.title}</Text>
+                                    <Text className="text-xs font-semibold pb-3">{item.deskripsi}</Text>
+                                    <Text className="text-xs font-semibold">{item.lokasi}</Text>
+                                    <Text className="text-sm font-normal">{item.waktu}</Text>
+                                    </View>
+                                    <View className ="space-x-5 " style={{
+                                        flexDirection:'row',
+                                        alignItems:'center',
+                                        marginTop:20,
+                                        
+                                    }}>
+                                        <TouchableOpacity onPress={() => handleDelete(item.key)}
+                                        
+                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                            <Text 
+                                                className="text-sm font-bold text-center text-white "
+                                            >
+                                                    Hapus
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => navigation.navigate('UbahPost')}
+                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                            <Text 
+                                                className="text-sm font-bold text-center text-white "
+                                            >
+                                                    Ubah
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </Card>
+                        
+                        
+
+                    )}
+                    
+                    keyExtractor={(item) => item.key}
+                    
+                />
+           
                 <TouchableOpacity
                     onPress={() => navigation.navigate('MulaiJastip')}
                     style={{
@@ -110,13 +182,14 @@ export default function HomeJastip() {
                         borderColor: '#fff',
                         width: '80%',
                         alignItems: 'center',
+                        alignSelf:'center'
                     }}
                 >
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
                         Mulai Jastip
                     </Text>
                 </TouchableOpacity>
-            </View>
+            
         </View>
 
     )
