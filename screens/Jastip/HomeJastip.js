@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { baseURL, getPhoto } from '../../api'
+import { baseURL, getProfile, getPostJastip } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 
@@ -11,34 +11,32 @@ import { Image as Img } from 'expo-image'
 export default function HomeJastip() {
     const navigation = useNavigation()
     const [active, setActive] = useState(false)
-    const [data,setData] = useState()
+    const [data, setData] = useState()
 
-    const [post, setPost] = useState([
-        { key: '1', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '2', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 ', lokasi: 'Toko New Agung Alat Tulis dan kantor', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '3', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '4', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '5', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-    ]);
+    const [post, setPost] = useState();
 
-    const handleDelete = (key) => {
-        // Filter item yang memiliki key yang tidak sama dengan key yang dihapus
-        const updatedData = post.filter(item => item.key !== key);
+    const handleDelete = (id) => {
+        // Filter item yang memiliki id yang tidak sama dengan id yang dihapus
+        const updatedData = post.filter(item => item.id !== id);
         // Update daftar data
         setPost(updatedData);
-      };
+    };
 
     useFocusEffect(useCallback(() => {
         async function fetchData() {
             try {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
-                const request = await getPhoto(user)
-                if(request.status == 200) {
+                const request = await getProfile(user)
+                const post = await getPostJastip()
+                // console.log(post.data.data)
+
+                if (request.status == 200 && post.status == 200) {
                     // console.log(request?.data)
                     setData(request?.data)
+                    setPost(post.data.data)
                 }
-            } catch(err) {
-                if(err.response) {
+            } catch (err) {
+                if (err.response) {
                     console.log(err.response)
                 } else {
                     console.error(err)
@@ -46,13 +44,13 @@ export default function HomeJastip() {
             }
         }
         fetchData()
-    },[]))
+    }, []))
 
     return (
         <View style={{
             backgroundColor: '#fff',
             flex: 1,
-        
+
         }}>
             <View style={{
                 backgroundColor: '#1138B7',
@@ -68,7 +66,7 @@ export default function HomeJastip() {
 
                     <Img
 
-                        source={baseURL+ "/gambar/"+ data?.users?.image?.image}
+                        source={baseURL + "/gambar/" + data?.users?.image?.image}
                         placeholder={require("../../assets/profilpeople.jpg")}
                         style={{
                             width: 100,
@@ -86,13 +84,13 @@ export default function HomeJastip() {
                     }}>
                         <View style={{
                             flexDirection: "row",
-                            justifyContent : "space-between",
-                            alignItems : "center"
+                            justifyContent: "space-between",
+                            alignItems: "center"
                         }}>
                             <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{data?.nama}</Text>
                             <Switch style={{
-                                top : 70,
-                                left : 30,
+                                top: 70,
+                                left: 30,
                             }}
                                 trackColor={{ false: '#767577', true: '#81b0ff' }}
                                 thumbColor={active ? '#C3D5EA' : '#f4f3f4'}
@@ -115,81 +113,82 @@ export default function HomeJastip() {
                 </View>
             </View>
             <FlatList
-                    data={post}
-                    contentContainerStyle={{
-                        paddingVertical: 20
-                    }}
+                data={post}
+                contentContainerStyle={{
+                    paddingVertical: 20
+                }}
 
-                    renderItem={({ item }) => (
-                        <Card>
-                            <View style={{ bottom: 20, flexDirection: "row", width :"100%",  }} >
-                                
+                renderItem={({ item }) => (
+                    <Card>
+                        <View style={{ bottom: 20, flexDirection: "row", width: "100%", }} >
 
-                                <View style={{ paddingLeft:20, width : "100%" }}>
-                                    <View>
 
-                                    <Text ellipsizeMode='tail'  className="text-sm font-bold pb-3 " style={{
-                                        
-                                    }} >{item.title}</Text>
+                            <View style={{ paddingLeft: 20, width: "100%" }}>
+                                <View>
+
+                                    <Text ellipsizeMode='tail' className="text-sm font-bold pb-3 " style={{
+
+                                    }} >{item.judul}</Text>
                                     <Text className="text-xs font-semibold pb-3">{item.deskripsi}</Text>
                                     <Text className="text-xs font-semibold">{item.lokasi}</Text>
-                                    <Text className="text-sm font-normal">{item.waktu}</Text>
-                                    </View>
-                                    <View className ="space-x-5 " style={{
-                                        flexDirection:'row',
-                                        alignItems:'center',
-                                        marginTop:20,
-                                        
-                                    }}>
-                                        <TouchableOpacity onPress={() => handleDelete(item.key)}
-                                        
-                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
-                                            <Text 
-                                                className="text-sm font-bold text-center text-white "
-                                            >
-                                                    Hapus
-                                            </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => navigation.navigate('UbahPost')}
-                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
-                                            <Text 
-                                                className="text-sm font-bold text-center text-white "
-                                            >
-                                                    Ubah
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                    <Text className="text-sm font-normal">{new Date(item.waktu_mulai).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
+                                    <Text className="text-sm font-normal">{new Date(item.waktu_akhir).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
+                                </View>
+                                <View className="space-x-5 " style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    marginTop: 20,
+
+                                }}>
+                                    <TouchableOpacity onPress={() => handleDelete(item.id)}
+
+                                        className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                        <Text
+                                            className="text-sm font-bold text-center text-white "
+                                        >
+                                            Hapus
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => navigation.navigate('UbahPost',{post_id: item.id})}
+                                        className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                        <Text
+                                            className="text-sm font-bold text-center text-white "
+                                        >
+                                            Ubah
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
-                        </Card>
-                        
-                        
+                        </View>
+                    </Card>
 
-                    )}
-                    
-                    keyExtractor={(item) => item.key}
-                    
-                />
-           
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('MulaiJastip')}
-                    style={{
-                        backgroundColor: '#1138B7',
-                        paddingVertical: 15,
-                        paddingHorizontal: 40,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        borderColor: '#fff',
-                        width: '80%',
-                        alignItems: 'center',
-                        alignSelf:'center'
-                    }}
-                >
-                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
-                        Mulai Jastip
-                    </Text>
-                </TouchableOpacity>
-            
+
+
+                )}
+
+                keyExtractor={(item) => item.id}
+
+            />
+
+            <TouchableOpacity
+                onPress={() => navigation.navigate('MulaiJastip')}
+                style={{
+                    backgroundColor: '#1138B7',
+                    paddingVertical: 15,
+                    paddingHorizontal: 40,
+                    borderRadius: 30,
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                    width: '80%',
+                    alignItems: 'center',
+                    alignSelf: 'center'
+                }}
+            >
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
+                    Mulai Jastip
+                </Text>
+            </TouchableOpacity>
+
         </View>
 
     )

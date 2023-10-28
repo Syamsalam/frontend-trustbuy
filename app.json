@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TrustBuy",
-    "slug": "TrustBuy",
+    "slug": "trustbuy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon1.png",
@@ -29,8 +29,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a2c351af-9150-4245-99dd-50358fd25bf1"
+        "projectId": "346bcf0a-1ba6-43e5-956b-83023a32e73f"
       }
-    }
+    },
+    "owner": "syamsulalam"
   }
 }

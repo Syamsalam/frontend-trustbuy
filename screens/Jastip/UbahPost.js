@@ -1,12 +1,54 @@
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
+import { baseURL, getJastipById, getProfile } from '../../api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Image as Img } from 'expo-image'
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 
 
 
 export default function UbahPost() {
     const navigation = useNavigation()
+    const route = useRoute()
+    const [data,setData] = useState()
+    const [profil,setProfil] = useState()
+    const [mulai,setMulai] = useState(new Date())
+    const [akhir,setAkhir] = useState(new Date())
+    
+    useFocusEffect(useCallback(() => {
+        async function fetchData() {
+            try{
+                const user = JSON.parse( await AsyncStorage.getItem('user'));
+                const id = route.params.post_id;
+                const post = await getJastipById(id);
+                const profile = await getProfile(user);
+                
+
+                if(profile.status == 200 ||post.status == 200) {
+                    setData(post.data.data)
+                    setProfil(profile.data)
+                    if(post?.data.data.waktu_mulai && post?.data.data.waktu_akhir) {
+                        const waktuM = new Date(post?.data.data.waktu_mulai)
+                        const waktuA = new Date(post?.data.data.waktu_mulai)
+
+                        setMulai(waktuM)
+                        setAkhir(waktuA)
+                    }
+                }
+            } catch(err) {
+                if(err.response) {
+                    console.log(err.response.data)
+                } else {
+                    console.log(err)
+                }
+            }
+        }
+        fetchData();
+    },[]))
+
+
     return (
         <View style={{
             backgroundColor: '#fff',
@@ -23,9 +65,9 @@ export default function UbahPost() {
                 <View style={{
                     flexDirection: 'row',
                 }}>
-                    <Image
+                    <Img
 
-                        source={require('../../assets/profilpeople.jpg')}
+                        source={baseURL + "/gambar/" + profil?.users?.image?.image}
                         style={{
                             width: 100,
                             height: 100,
@@ -33,15 +75,15 @@ export default function UbahPost() {
                             top: 60,
                             borderRadius: 50,
                         }}
-                    ></Image>
+                    ></Img>
                     <View style={{
                         flexDirection: 'column',
                         top: 20,
                         left: 30,
                         width: 200,
                     }}>
-                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Syamsul Alam</Text>
-                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>75315946</Text>
+                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profil?.nama}</Text>
+                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profil?.nomor_telepon}</Text>
                     </View>
                 </View>
                 <View style={{
@@ -49,7 +91,7 @@ export default function UbahPost() {
                     top: 10,
                     left: 20,
                 }}>
-                    <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Jastiper</Text>
+                    <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profil?.users?.username}</Text>
                 </View>
             </View>
             <ScrollView contentContainerStyle={{
@@ -69,27 +111,68 @@ export default function UbahPost() {
                    <View className="form space-y-3">
                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Judul Jastip</Text>
                       <TextInput
-                          className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                          placeholder='Titip segala jenis buku di Gramedia'
+                            className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
+                            placeholder='Titip segala jenis buku di Gramedia'
+                            value={data?.judul}
+                            onChangeText={(text) => setData({...data,judul:text})}
                       />
                       <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Lokasi</Text>
                       <TextInput 
                         className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                         placeholder="Gramedia Mall Pannakukang Makassar"
+                        value={data?.lokasi}
               
                       />
-                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu</Text>
-                      <TextInput 
-                        className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                        placeholder="Waktu" 
+                      <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu Mulai</Text>
+                      <TouchableOpacity className="p-2 bg-white rounded-2xl mb-1"
+                            style={{
+                                backgroundColor : '#f5f5f5'
+                            }}
+                            onPress={() => {
+                                DateTimePickerAndroid.open({
+                                    value: mulai,
+                                    onChange : (ev, date) => {
+                                        setMulai(date)
+                                    },
+                                    mode: "time"
+                                  });
+                            }}
 
-                    />
-                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu</Text>
-                      <TextInput 
-                        className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
-                        placeholder="Waktu" 
+                            
+                        >
+                            <Text  style={{
+                                color :"gray"
+                            }}>{mulai.toLocaleTimeString("id-ID", {
+                                hour12 : true,
+                                hour : "2-digit",
+                                minute : "2-digit"
+                            })}</Text>
+                        </TouchableOpacity>
+                    <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu Akhir</Text>
+                    <TouchableOpacity className="p-2 bg-white rounded-2xl mb-1"
+                            style={{
+                                backgroundColor : '#f5f5f5'
+                            }}
+                            onPress={() => {
+                                DateTimePickerAndroid.open({
+                                    value: akhir,
+                                    onChange : (ev, date) => {
+                                        setAkhir(date)
+                                    },
+                                    mode: "time"
+                                  });
+                            }}
 
-                    />
+                            
+                        >
+                            <Text  style={{
+                                color :"gray"
+                            }}>{akhir.toLocaleTimeString("id-ID", {
+                                hour12 : true,
+                                hour : "2-digit",
+                                minute : "2-digit"
+                            })}</Text>
+                        </TouchableOpacity>
                         
                       <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Deskripsi Jastip</Text>
                       <View style={{
@@ -104,6 +187,7 @@ export default function UbahPost() {
                         multiline
                         
                         placeholder="Menerima segala jenis buku dengan maksimal 3 buku"
+                        value={data?.deskripsi}
                       />
                       </View>
                 
