@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Card from '../../components/card';
-import { baseURL, getPhoto, getOrderStatus, updateOrderStatus, deleteOrder } from '../../api';
+import { baseURL, getOrderStatus, updateOrderStatus, deleteOrder, getProfile } from '../../api';
 import { Image as Img } from 'expo-image'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -33,7 +33,7 @@ export default function TitipanJastip() {
     async function useEffect() {
       try {
         const user = JSON.parse(await AsyncStorage.getItem('user'))
-        const result = await getPhoto(user)
+        const result = await getProfile(user)
 
         const titipPost = await getOrderStatus(user)
         if (result.status == 200 && titipPost.status == 200) {

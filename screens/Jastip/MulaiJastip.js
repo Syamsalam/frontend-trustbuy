@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { createPost, getCommonProfile } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 
 
 
