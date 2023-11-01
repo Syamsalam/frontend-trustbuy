@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'reac
 import React, { useCallback } from 'react'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
-import { baseURL, getJastipById, getProfile } from '../../api'
+import { baseURL, getJastipById, getProfile,updatePost } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
@@ -47,6 +47,33 @@ export default function UbahPost() {
         }
         fetchData();
     },[]))
+
+
+    const onSave = async() => {
+        try {
+            const updatedData = {
+                ...data,
+                waktu_mulai: mulai,
+                waktu_akhir: akhir,
+            };
+
+            // console.log(updatedData)
+            const result = await updatePost(updatedData)
+            if (result.status == 200) {
+                console.log(result.message)
+                navigation.navigate('HomeJastip')
+            } else {
+                console.log(result.message)
+            }
+        } catch (err) {
+            if (err.response) {
+                console.error(err.response.data)
+            } else {
+                // console.log(data)
+                console.log(err.message)
+            }
+        }
+    }
 
 
     return (
@@ -121,7 +148,7 @@ export default function UbahPost() {
                         className="p-2 bg-gray-100 text-gray-700 rounded-2xl mb-1"
                         placeholder="Gramedia Mall Pannakukang Makassar"
                         value={data?.lokasi}
-              
+                        onChangeText={(text) => setData({...data,lokasi:text})}
                       />
                       <Text className="text-black-700 ml-1" style={{marginTop: 35, fontWeight: 'bold'}}>Waktu Mulai</Text>
                       <TouchableOpacity className="p-2 bg-white rounded-2xl mb-1"
@@ -188,10 +215,11 @@ export default function UbahPost() {
                         
                         placeholder="Menerima segala jenis buku dengan maksimal 3 buku"
                         value={data?.deskripsi}
+                        onChangeText={(text) => setData({...data,deskripsi:text})}
                       />
                       </View>
                 
-                <TouchableOpacity onPress={() => navigation.navigate('JastipPost')}
+                <TouchableOpacity onPress={() => onSave()}
                 
                     className="py-3 bg-white rounded-xl border border-blue-800 " style={{ backgroundColor: '#1138B7', top: 4, margin: 20 }}>
                     <Text style={{

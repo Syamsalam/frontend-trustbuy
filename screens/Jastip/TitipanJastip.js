@@ -37,7 +37,7 @@ export default function TitipanJastip() {
 
         const titipPost = await getOrderStatus(user)
         if (result.status == 200 && titipPost.status == 200) {
-          // console.log(titipPost?.data?.data)
+          // console.log(titipPost?.data?.data[0])
           // const formattedData = titipPost?.data?.data.map((item) => ({
           //   ...item,
           //   showButtons: false,
@@ -65,13 +65,13 @@ export default function TitipanJastip() {
       if (dataIndex !== -1) {
         // Buat salinan array data
         const updatedData = [...data];
-  
+
         // Perbarui properti status_id pada objek yang sesuai
         updatedData[dataIndex].status_id = id_status;
-  
+
         // Panggil setData dengan array yang telah diperbarui
         setData(updatedData);
-  
+
         // Panggil fungsi untuk mengirim perubahan ke backend
         const result = await updateOrderStatus(updatedData[dataIndex]);
 
@@ -79,7 +79,7 @@ export default function TitipanJastip() {
           setRefresh(true)
 
         }
-     }
+      }
     } catch (err) {
       console.error(err)
     }
@@ -99,20 +99,25 @@ export default function TitipanJastip() {
         break;
       case "Tolak":
         // Remove the card when "Tolak" is presses
-       try {
-        // console.info(item)
-        await deleteOrder(item.id)
+        try {
+          // console.info(item)
+          await deleteOrder(item.id)
 
-        const updatedData = data.filter((dataItem) => dataItem.id !== item.id);
-        setData(updatedData);
-       } catch (err) {
+          const updatedData = data.filter((dataItem) => dataItem.id !== item.id);
+          setData(updatedData);
+        } catch (err) {
           console.error(err)
-       }
+        }
 
-       
+
         break;
+      case "Ubah Form":
+        navigation.navigate('FormTitipan', {
+          order_id: item.id
+        });
+      break;
       default:
-        // Toggle the showButtons property when "Terima" or other actions are pressed
+        
         changeStatus(item.id, 3)
         break;
     }
@@ -221,10 +226,10 @@ export default function TitipanJastip() {
                   }} >{item?.jastiper_post?.judul}</Text>
                   <Text className="text-xs font-semibold pb-3">{item?.jastiper_post?.deskripsi}</Text>
                   <Text className="text-xs font-semibold">{item?.jastiper_post?.lokasi}</Text>
-                  <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_mulai).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
-                  <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", {hour : "2-digit", minute : "2-digit", hour12 : true})}</Text>
+                  <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_mulai).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
+                  <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
                 </View>
-                
+
                 {item?.status_id == 3 ? (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
@@ -241,13 +246,32 @@ export default function TitipanJastip() {
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
 
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
-                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
 
-                    </TouchableOpacity>
+                    {item?.order_items?.length === 0 ? (
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
+                        style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                        <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                          style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
+
+                      </TouchableOpacity>
+                    ) : (
+                      <>
+                      <TouchableOpacity
+                        onPress={() => handleItemPress(item, "Ubah Form")}
+                        style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                        <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                          style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("Pembayaran Jastip",{order_id: item?.id})}
+                        style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                        <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                          style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
+                      </TouchableOpacity>
+                      </>
+                    )}
+
                   </View>
                 ) : (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>

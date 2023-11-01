@@ -18,41 +18,41 @@ export default function FormTitipan() {
   const [biayaOngkir, setBiayaOngkir] = useState('');
   const [biayaJasa, setBiayaJasa] = useState('');
 
-  // useFocusEffect(useCallback(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const order_id = route.params.order_id
-  //       const result = await getOrderItems(order_id)
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        const order_id = route.params.order_id
+        const result = await getOrderItems(order_id)
 
-  //       const biaya = await getBiayaJastip(order_id)
-  //       // console.log(biaya?.data?.data?.biaya_jastip)
-  //       if (result.status == 200 && biaya.status == 200) {
-  //         // console.log(result.data.data)
-  //         if(result.data.data.order_items.length > 0 ) {
-  //           const orderItems = result?.data.data.order_items.map((item, index) => ({
-  //             titipanLabel: `Titipan ${index + 1}`,
-  //             namaBarang: item.product_name,
-  //             hargaBarang: item.subtotal
-  //           }))
+        const biaya = await getBiayaJastip(order_id)
+        // console.log(biaya?.data?.data?.biaya_jastip)
+        if (result.status == 200 && biaya.status == 200) {
+          console.log(biaya?.data?.data?.biaya_jastip)
+          if(result?.data?.data?.order_items?.length > 0 ) {
+            const orderItems = result?.data.data.order_items.map((item, index) => ({
+              titipanLabel: `Titipan ${index + 1}`,
+              namaBarang: item.product_name,
+              hargaBarang: item.subtotal
+            }))
   
-  //           setInputFields(orderItems)
-  //         }
+            setInputFields(orderItems)
 
-  //         if(biaya.data != null) {
-  //           handleBiayaJasaChange(biaya?.data?.data?.biaya_jastip)
-  //           handleBiayaOngkirChange(biaya?.data?.data?.biaya_ongkir)
-  //         }
-  //       }
-  //     } catch (err) {
-  //       if (err.response) {
-  //         console.error(err.response.data);
-  //       } else {
-  //         console.error(err);
-  //       }
-  //     }
-  //   }
-  //   fetchData()
-  // }, []))
+            if(biaya.data != null) {
+              handleBiayaJasaChange(biaya?.data?.data?.biaya_jastip)
+              handleBiayaOngkirChange(biaya?.data?.data?.biaya_ongkir)
+            }
+          } 
+        }
+      } catch (err) {
+        if (err.response) {
+          console.error(err.response.data);
+        } else {
+          console.error(err);
+        }
+      }
+    }
+    fetchData()
+  }, []))
 
   
 
@@ -144,12 +144,11 @@ export default function FormTitipan() {
       payment: formatBiaya
     };
     
-
     try {
       const response = await addOrderItems(order);
       console.log(response.data);
       if(response.status == 200) {
-        navigation.navigate('Pembayaran Jastip',{order_id: route.params.order_id})
+        await navigation.navigate('Pembayaran Jastip',{order_id: route.params.order_id})
       }
     } catch (err) {
       if (err.response) {
@@ -159,7 +158,7 @@ export default function FormTitipan() {
       }
     }
   }
-
+ 
   return (
     <View className="flex-1  bg-gray-200">
       <View className="text-2xl mb-4 bg-white "></View>

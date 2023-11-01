@@ -66,7 +66,7 @@ export default function AppNavigation() {
         <Stack.Screen name="LoginJastip" options={{ headerShown: false }} component={LoginJastip} />
         <Stack.Screen name="SignupJastip" options={{ headerShown: false }} component={SignupJastip} />
         <Stack.Screen name="TitipanJastip" options={{ headerShown: false }} component={TitipanJastip} />
-        <Stack.Screen name="PembayaranJastip" options={{ headerShown: true }} component={PembayaranJastip} />
+        <Stack.Screen name="Pembayaran Jastip" options={{ headerShown: true }} component={PembayaranJastip} />
         <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
         <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
 

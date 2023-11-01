@@ -50,7 +50,7 @@ export default function MulaiJastip() {
             const result = await createPost(updatedData)
             if (result.status == 200) {
                 console.log(result.message)
-                navigation.navigate('JastipPost')
+                navigation.navigate('HomeJastip')
             } else {
                 console.log(result.message)
             }
