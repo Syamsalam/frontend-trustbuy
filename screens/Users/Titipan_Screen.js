@@ -1,11 +1,15 @@
-import { View, Text, SafeAreaView,Image, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView,Image, TouchableOpacity, FlatList, } from 'react-native'
 import React from 'react'
+import Card from '../../components/card'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { baseURL, getPhoto } from '../../api';
 import { useState } from 'react';
 import { Image as Img } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
 
 const arr = [
     {
@@ -30,19 +34,26 @@ export default function TitipanScreen() {
     const navigation = useNavigation()
     const [profile,setProfile] = useState()
     const [data,useData] = useState()
+    const [post, setPost] = useState([
+        { key: '1', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '2', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 ', lokasi: 'Toko New Agung Alat Tulis dan kantor', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '3', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '4', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+        { key: '5', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
+    ]);
     const handleItemPress = (name) => {
         switch (name) {
             case "Cek Titipan":
-                navigation.navigate("CekTitipan")
+                
                 break;
             case "Pembayaran":
-                navigation.navigate("Pembayaran")
+               
                 break;
             case "Proses":
-                navigation.navigate("Proses")
+                
                 break;
             case "Pengantaran":
-                navigation.navigate("Pengantaran")
+                
                 break;
             default:
                 break;
@@ -155,6 +166,62 @@ export default function TitipanScreen() {
 
                 </View>
             </View>
+            <FlatList
+                    data={post}
+                    contentContainerStyle={{
+                        paddingVertical: 20
+                    }}
+
+                    renderItem={({ item }) => (
+                        <Card>
+                            <View style={{ bottom: 20, flexDirection: "row", width :"100%",  }} >
+                                
+
+                                <View style={{ paddingLeft:20, width : "100%" }}>
+                                    <View>
+
+                                    <Text ellipsizeMode='tail'  className="text-sm font-bold pb-3 " style={{
+                                        
+                                    }} >{item.title}</Text>
+                                    <Text className="text-xs font-semibold pb-3">{item.deskripsi}</Text>
+                                    <Text className="text-xs font-semibold">{item.lokasi}</Text>
+                                    <Text className="text-sm font-normal">{item.waktu}</Text>
+                                    </View>
+                                    <View className ="space-x-5 " style={{
+                                        flexDirection:'row',
+                                        alignItems:'center',
+                                        marginTop:20,
+                                        
+                                    }}>
+                                        <TouchableOpacity onPress={() => navigation.navigate('Messages')}
+                                        
+                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                            <Text 
+                                                className="text-sm font-bold text-center text-white "
+                                            >
+                                                    Chat Jastiper
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => navigation.navigate('CekTitipan')}
+                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
+                                            <Text 
+                                                className="text-sm font-bold text-center text-white "
+                                            >
+                                                    Cek Titipan
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </Card>
+                        
+                        
+
+                    )}
+                    
+                    keyExtractor={(item) => item.key}
+                    
+                />
         </SafeAreaView>
     )
 }
