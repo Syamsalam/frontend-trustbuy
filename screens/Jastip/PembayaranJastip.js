@@ -11,17 +11,19 @@ export default function PembayaranJastip() {
   const navigation = useNavigation()
   const route = useRoute()
   const [data,setData] = useState()
+  const id = route.params.order_id
 
   useFocusEffect(useCallback(() => {
+
     async function fetchData() {
       try {
-        const id = route.params.order_id
+        
         const result = await getBiayaJastip(id)
-        console.log("id order " + id)
-        console.log(result.data)
+        // console.log("id order " + id)
+        // console.log(result.data)
         if(result.status == 200) {
           // console.log(result?.data)
-          setData(result?.data?.data?.total_pembayaran)
+          setData(result?.data?.data)
         }
       } catch (err) {
         if(err.request) {
@@ -38,8 +40,12 @@ export default function PembayaranJastip() {
   //kalo dipake ini, card menghilang di titipanJastip.js
   const onBayar = async () => {
     try {
-      const id = route.params.order_id
-      const result = await updateOrderStatus(id,5)
+      
+      let dataUpdate = {
+        id: Number(id),
+        status_id: 5
+      }
+      const result = await updateOrderStatus(dataUpdate)
 
 
     } catch (err) {
@@ -102,7 +108,7 @@ export default function PembayaranJastip() {
             fontWeight: 'bold',
             color: '#000',
             marginRight:10,
-          }}>{formatCurrency(data)}</Text>
+          }}>{formatCurrency(data?.total_pembayaran)}</Text>
       </View>
       <View style={{
         flexDirection:'row',
@@ -122,7 +128,7 @@ export default function PembayaranJastip() {
                       Chat Customer
               </Text>
            </TouchableOpacity>
-           <TouchableOpacity onPress={() => navigation.navigate('ProsesJastip')}
+           <TouchableOpacity onPress={() => navigation.navigate('PengantaranJastip',{order_id:id})}
             className="py-3 bg-blue-800 rounded-xl w-32 ">
               <Text 
                   className="text-sm font-bold text-center text-white "

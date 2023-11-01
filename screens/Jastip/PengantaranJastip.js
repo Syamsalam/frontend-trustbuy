@@ -1,8 +1,33 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { updateOrderStatus } from '../../api'
 
 export default function PengantaranJastip() {
+  const navigation = useNavigation()
+  const route = useRoute()
+
+  const receivebutton = async () => {
+    try {
+      const id = route.params.order_id
+      let updatedData = {
+        id: Number(id),
+        status_id: 6
+      }
+      const result = await updateOrderStatus(updatedData)
+      if (result.status == 200){
+        navigation.navigate("TitipanJastip")
+      }
+    } catch (err) {
+      if(err.response) {
+        console.error(err.response.data)
+      } else {
+        console.error(err)
+      }
+    }
+  }
+
   return (
     <SafeAreaView
     style={{
@@ -67,7 +92,9 @@ export default function PengantaranJastip() {
               </Text>
            </TouchableOpacity>
            <TouchableOpacity 
-            className="py-3 bg-blue-800 rounded-xl w-40 ">
+            className="py-3 bg-blue-800 rounded-xl w-40 "
+            onPress={() => receivebutton()}
+           >
               <Text 
                   className="text-sm font-bold text-center text-white "
               >

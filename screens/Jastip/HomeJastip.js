@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { baseURL, getProfile, getPostJastip } from '../../api'
+import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 
@@ -21,23 +21,30 @@ export default function HomeJastip() {
         // Update daftar data
         setPost(updatedData);
     };
-
+    
     useFocusEffect(useCallback(() => {
         async function fetchData() {
             try {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
                 const request = await getProfile(user)
                 const post = await getPostJastip()
+                const statusPost = await checkStatus()
                 // console.log(post.data.data)
 
-                if (request.status == 200 && post.status == 200) {
+                if (request.status == 200 && post.status == 200 && statusPost.status == 200) {
                     // console.log(request?.data)
                     setData(request?.data)
                     setPost(post.data.data)
+
+                    // console.log(statusPost?.data.data[0].aktif)
+                    if(statusPost?.data.data[0].aktif === "aktif") {
+                        setActive(true)
+                    }
+                    
                 }
             } catch (err) {
                 if (err.response) {
-                    console.log(err.response)
+                    console.log(err.response.data)
                 } else {
                     console.error(err)
                 }
@@ -45,6 +52,22 @@ export default function HomeJastip() {
         }
         fetchData()
     }, []))
+
+    const toggleStatus = async () => {
+        try {
+            const user = JSON.parse(await AsyncStorage.getItem('user'))        
+            const ActivationPost = await updateStatus(user)
+            if(ActivationPost.status == 200) {
+                setActive(el => !el)
+            }
+        } catch (err) {
+            if (err.response) {
+                console.log(err?.response?.data)
+            } else {
+                console.error(err)
+            }
+        }
+    }
 
     return (
         <View style={{
@@ -96,7 +119,8 @@ export default function HomeJastip() {
                                 thumbColor={active ? '#C3D5EA' : '#f4f3f4'}
                                 ios_backgroundColor="#3e3e3e"
                                 onValueChange={() => {
-                                    setActive(el => !el)
+
+                                    toggleStatus()
                                 }}
                                 value={active}
                             />

@@ -3,7 +3,7 @@ import React from 'react'
 import Card from '../../components/card'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { baseURL, getPhoto } from '../../api';
+import { baseURL, getOrderForUser, getProfile } from '../../api';
 import { useState } from 'react';
 import { Image as Img } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -34,13 +34,32 @@ export default function TitipanScreen() {
     const navigation = useNavigation()
     const [profile,setProfile] = useState()
     const [data,useData] = useState()
-    const [post, setPost] = useState([
-        { key: '1', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '2', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 ', lokasi: 'Toko New Agung Alat Tulis dan kantor', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '3', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '4', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-        { key: '5', userName: 'Akram', nomor: '089765432123', title: 'Titip Segala jenis buku di gramedia', deskripsi: 'Menerima segala jenis buku dengan maksimal 3 buku', lokasi: 'Gramedia Mall Panakukang', waktu: '17.48 - 17.59', gambar: require('../../assets/profilpeople.jpg') },
-    ]);
+    const [post, setPost] = useState();
+
+    useFocusEffect(useCallback(() => {
+        async function fetchData() {
+            try {
+                const user = JSON.parse(await AsyncStorage.getItem('user'))
+                const request = await getProfile(user)
+
+                const titipPost = await getOrderForUser();
+                if(request.status == 200 && request.status == 200) {
+                    // console.info(titipPost?.data?.data)
+                    setProfile(request.data)
+                    setPost(titipPost?.data?.data)
+                }
+            } catch (err) {
+                if(err.response) {
+                    console.error(err.response.data)
+                } else {
+                    console.error(err.message)
+                }
+            }
+        }
+
+        fetchData()
+    },[]))
+
     const handleItemPress = (name) => {
         switch (name) {
             case "Cek Titipan":
@@ -59,25 +78,6 @@ export default function TitipanScreen() {
                 break;
         }
     }
-
-    useFocusEffect(useCallback(() => {
-        async function fetchData() {
-            try {
-                const user = JSON.parse(await AsyncStorage.getItem('user'))
-                const request = await getPhoto(user)
-                if(request.status == 200) {
-                    // console.log(request?.data?.data)
-                    setProfile(request.data)
-                }
-            } catch (err) {
-                if(err.response) {
-                    console.log(err.response.data)
-                }
-            }
-        }
-
-        fetchData()
-    },[]))
     
     return (
         <SafeAreaView style={{
@@ -182,10 +182,10 @@ export default function TitipanScreen() {
 
                                     <Text ellipsizeMode='tail'  className="text-sm font-bold pb-3 " style={{
                                         
-                                    }} >{item.title}</Text>
-                                    <Text className="text-xs font-semibold pb-3">{item.deskripsi}</Text>
-                                    <Text className="text-xs font-semibold">{item.lokasi}</Text>
-                                    <Text className="text-sm font-normal">{item.waktu}</Text>
+                                    }} >{item?.jastiper_post?.judul}</Text>
+                                    <Text className="text-xs font-semibold pb-3">{item?.jastiper_post?.deskripsi}</Text>
+                                    <Text className="text-xs font-semibold">{item?.jastiper_post?.lokasi}</Text>
+                                    <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_mulai).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })} - {new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
                                     </View>
                                     <View className ="space-x-5 " style={{
                                         flexDirection:'row',
@@ -202,7 +202,7 @@ export default function TitipanScreen() {
                                                     Chat Jastiper
                                             </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => navigation.navigate('CekTitipan')}
+                                        <TouchableOpacity onPress={() => navigation.navigate('CekTitipan',{order_id:item.id})}
                                             className="py-3 bg-blue-800 rounded-xl w-32 ">
                                             <Text 
                                                 className="text-sm font-bold text-center text-white "
@@ -219,7 +219,7 @@ export default function TitipanScreen() {
 
                     )}
                     
-                    keyExtractor={(item) => item.key}
+                    keyExtractor={(item) => item.id}
                     
                 />
         </SafeAreaView>
