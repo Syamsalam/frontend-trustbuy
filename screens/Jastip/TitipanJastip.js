@@ -10,22 +10,8 @@ export default function TitipanJastip() {
   const navigation = useNavigation();
   const [profile, setProfile] = useState()
   const [refresh, setRefresh] = useState(false);
-  let id_status = 0
-  const arr = [
-    {
-      image: require("../../assets/Wallet1.png"),
-      name: "Pembayaran"
-    },
-    {
-      image: require("../../assets/shopping-bag.png"),
-      name: "Proses"
-    },
-    {
-      image: require("../../assets/car.png"),
-      name: "Pengantaran"
-    },
-  ]
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
+  const [active, SetActive] = useState(null);
 
   // showButtons: false 
 
@@ -37,7 +23,7 @@ export default function TitipanJastip() {
 
         const titipPost = await getOrderStatus(user)
         if (result.status == 200 && titipPost.status == 200) {
-          // console.log(titipPost?.data?.data[0])
+          console.log(titipPost?.data?.data[1])
           // const formattedData = titipPost?.data?.data.map((item) => ({
           //   ...item,
           //   showButtons: false,
@@ -56,6 +42,22 @@ export default function TitipanJastip() {
     useEffect()
     setRefresh(false)
   }, [refresh]))
+
+
+  const arr = [
+    {
+      image: require("../../assets/Wallet1.png"),
+      name: "Pembayaran"
+    },
+    {
+      image: require("../../assets/shopping-bag.png"),
+      name: "Diterima"
+    },
+    {
+      image: require("../../assets/car.png"),
+      name: "Pengantaran"
+    },
+  ]
 
   const changeStatus = async (targetitemId, id_status) => {
 
@@ -89,13 +91,13 @@ export default function TitipanJastip() {
   const handleItemPress = async (item, name) => {
     switch (name) {
       case "Pembayaran":
-        navigation.navigate("PembayaranJastip");
+        SetActive(4)
         break;
-      case "Proses":
-        navigation.navigate("ProsesJastip");
+      case "Diterima":
+        SetActive(3)
         break;
       case "Pengantaran":
-        navigation.navigate("PengantaranJastip");
+        SetActive(5)
         break;
       case "Tolak":
         // Remove the card when "Tolak" is presses
@@ -115,13 +117,21 @@ export default function TitipanJastip() {
         navigation.navigate('FormTitipan', {
           order_id: item.id
         });
-      break;
+        break;
       default:
-        
+
         changeStatus(item.id, 3)
         break;
     }
   };
+
+  const filteredData = Object.values(data).filter(item => {
+    if (active === null) {
+      return true;
+    }
+
+    return item.status_id === active;
+  });
 
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
@@ -202,7 +212,7 @@ export default function TitipanJastip() {
 
 
       <FlatList
-        data={data}
+        data={filteredData}
         contentContainerStyle={{ paddingVertical: 20 }}
         renderItem={({ item }) => (
           <Card>
@@ -230,67 +240,106 @@ export default function TitipanJastip() {
                   <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
                 </View>
 
-                {item?.status_id == 3 ? (
+                {item?.status_id == 3 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
                       onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
-
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
-
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
                     </TouchableOpacity>
 
-                    {item?.order_items?.length === 0 ? (
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
-                        style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                        <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                          style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
-
-                      </TouchableOpacity>
-                    ) : (
-                      <>
-                      <TouchableOpacity
-                        onPress={() => handleItemPress(item, "Ubah Form")}
-                        style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                        <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                          style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate("Pembayaran Jastip",{order_id: item?.id})}
-                        style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                        <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                          style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
-                      </TouchableOpacity>
-                      </>
-                    )}
-
                   </View>
-                ) : (
+                )}
+
+                {item?.status_id == 4 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
                       onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Ubah Form")}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("Pembayaran Jastip", { order_id: item?.id })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
 
+                {item?.status_id == 5 && (
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Ubah Form")}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("Pembayaran Jastip", { order_id: item?.id })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {item?.status_id == 2 && (
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleItemPress(item, "Terima")} // Pass "Terima" as the name
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Terima</Text>
-
                     </TouchableOpacity>
                   </View>
                 )}
+
+
               </View>
 
             </View>

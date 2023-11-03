@@ -13,9 +13,10 @@ export default function PengantaranJastip() {
       const id = route.params.order_id
       let updatedData = {
         id: Number(id),
-        status_id: 6
+        status_id: 8
       }
       const result = await updateOrderStatus(updatedData)
+      
       if (result.status == 200){
         navigation.navigate("TitipanJastip")
       }

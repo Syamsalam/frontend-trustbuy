@@ -43,7 +43,7 @@ export default function PembayaranJastip() {
       
       let dataUpdate = {
         id: Number(id),
-        status_id: 5
+        status_id: 6
       }
       const result = await updateOrderStatus(dataUpdate)
 
