@@ -22,7 +22,7 @@ export default function SignupJastip() {
         try {
           const request = await registerJastpApi(data)
           if(request.status == 200) {
-            navigation.navigate('LoginJastip')
+            navigation.navigate('Pengajuan')
           } else {
             console.log(request.message)
           }

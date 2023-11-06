@@ -35,6 +35,8 @@ import SignupJastip from '../screens/Jastip/SignupJastip';
 import PembayaranJastip from '../screens/Jastip/PembayaranJastip';
 import ProsesJastip from '../screens/Jastip/ProsesJastip';
 import PengantaranJastip from '../screens/Jastip/PengantaranJastip';
+import Pengajuan from '../screens/Jastip/Pengajuan';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +71,7 @@ export default function AppNavigation() {
         <Stack.Screen name="Pembayaran Jastip" options={{ headerShown: true }} component={PembayaranJastip} />
         <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
         <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
+        <Stack.Screen name="Pengajuan" options={{ headerShown: false }} component={Pengajuan} />
 
       </Stack.Navigator>
     </NavigationContainer>
