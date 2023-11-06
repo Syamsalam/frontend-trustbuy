@@ -43,7 +43,7 @@ export default function PembayaranJastip() {
       
       let dataUpdate = {
         id: Number(id),
-        status_id: 5
+        status_id: 6
       }
       const result = await updateOrderStatus(dataUpdate)
 
@@ -79,7 +79,7 @@ export default function PembayaranJastip() {
           fontWeight: 'bold',
           textAlign: 'center',
           color: '#000',
-        }}>Titipanku</Text>
+        }}>{data?.orders?.jastiper_post?.judul}</Text>
       </View>
       </View>
       <View style={{

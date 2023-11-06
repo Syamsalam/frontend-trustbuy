@@ -1,21 +1,47 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { updateOrderStatus } from '../../api'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
+import { updateOrderStatus, getOrderItems } from '../../api'
+import { useState } from 'react'
 
 export default function PengantaranJastip() {
   const navigation = useNavigation()
+  const [data,setData] = useState()
   const route = useRoute()
+  const id = route.params.order_id
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        
+        const result = await getOrderItems(id)
+        console.log("id order " + id)
+        console.log(result.data)
+        if(result.status == 200) {
+          // console.log(result?.data)
+          setData(result?.data?.data)
+        }
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request.status)
+        } else {
+          console.log(err)
+        }
+      }
+    }
+
+    fetchData()
+  },[]))
 
   const receivebutton = async () => {
     try {
-      const id = route.params.order_id
+      // const id = route.params.order_id
       let updatedData = {
         id: Number(id),
-        status_id: 6
+        status_id: 8
       }
       const result = await updateOrderStatus(updatedData)
+      
       if (result.status == 200){
         navigation.navigate("TitipanJastip")
       }
@@ -50,7 +76,7 @@ export default function PengantaranJastip() {
           fontWeight: 'bold',
           textAlign: 'center',
           color: '#000',
-        }}>Titipanku</Text>
+        }}>{data?.jastiper_post?.judul}</Text>
       </View>
       </View>
       <View style={{
