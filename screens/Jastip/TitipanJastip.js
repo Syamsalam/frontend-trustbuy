@@ -23,7 +23,7 @@ export default function TitipanJastip() {
 
         const titipPost = await getOrderStatus(user)
         if (result.status == 200 && titipPost.status == 200) {
-          console.log(titipPost?.data?.data[1])
+          // console.log(titipPost?.data?.data[1])
           // const formattedData = titipPost?.data?.data.map((item) => ({
           //   ...item,
           //   showButtons: false,
@@ -45,13 +45,14 @@ export default function TitipanJastip() {
 
 
   const arr = [
-    {
-      image: require("../../assets/Wallet1.png"),
-      name: "Pembayaran"
-    },
+    
     {
       image: require("../../assets/shopping-bag.png"),
       name: "Diterima"
+    },
+    {
+      image: require("../../assets/Wallet1.png"),
+      name: "Pembayaran"
     },
     {
       image: require("../../assets/car.png"),
@@ -266,12 +267,7 @@ export default function TitipanJastip() {
 
                 {item?.status_id == 4 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                    <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
-                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
-                    </TouchableOpacity>
+                    
                     <TouchableOpacity
                       onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
@@ -314,10 +310,10 @@ export default function TitipanJastip() {
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("Pembayaran Jastip", { order_id: item?.id })}
+                      onPress={() => navigation.navigate("PengantaranJastip", { order_id: item?.id })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pengantaran</Text>
                     </TouchableOpacity>
                   </View>
                 )}

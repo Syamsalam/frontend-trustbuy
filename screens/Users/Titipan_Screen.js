@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView,Image, TouchableOpacity, FlatList, } from 'react-native'
+import { View, Text, SafeAreaView, Image, TouchableOpacity, FlatList, } from 'react-native'
 import React from 'react'
 import Card from '../../components/card'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -32,8 +32,8 @@ const arr = [
 
 export default function TitipanScreen() {
     const navigation = useNavigation()
-    const [profile,setProfile] = useState()
-    const [data,useData] = useState()
+    const [profile, setProfile] = useState()
+    const [data, useData] = useState()
     const [post, setPost] = useState();
 
     useFocusEffect(useCallback(() => {
@@ -43,13 +43,13 @@ export default function TitipanScreen() {
                 const request = await getProfile(user)
 
                 const titipPost = await getOrderForUser();
-                if(request.status == 200 && request.status == 200) {
-                    // console.info(titipPost?.data?.data)
+                if (request.status == 200 && request.status == 200) {
+                    console.info(titipPost?.data?.data[0])
                     setProfile(request.data)
                     setPost(titipPost?.data?.data)
                 }
             } catch (err) {
-                if(err.response) {
+                if (err.response) {
                     console.error(err.response.data)
                 } else {
                     console.error(err.message)
@@ -58,68 +58,68 @@ export default function TitipanScreen() {
         }
 
         fetchData()
-    },[]))
+    }, []))
 
     const handleItemPress = (name) => {
         switch (name) {
             case "Cek Titipan":
-                
+
                 break;
             case "Pembayaran":
-               
+
                 break;
             case "Proses":
-                
+
                 break;
             case "Pengantaran":
-                
+
                 break;
             default:
                 break;
         }
     }
-    
+
     return (
         <SafeAreaView style={{
             backgroundColor: '#fff',
             flex: 1,
         }}>
             {profile && (
-            <View style={{
-                backgroundColor: '#1138B7',
-                height: 250,
-                borderBottomRightRadius: 50,
-                elevation: 10,
-                flexDirection: 'column',
-            }}>
-                <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
-
-
                 <View style={{
-                    flexDirection: 'row',
+                    backgroundColor: '#1138B7',
+                    height: 250,
+                    borderBottomRightRadius: 50,
+                    elevation: 10,
+                    flexDirection: 'column',
                 }}>
-                    <Img
-                        placeholder={require('../../assets/profilpeople.jpg')}
-                        source={ baseURL+"/gambar/"+profile?.users.image?.image}
-                        style={{
-                            width: 100,
-                            height: 100,
-                            left: 20,
-                            top: 60,
-                            borderRadius: 50,
-                        }}
-                    ></Img>
-                    <View style={{
-                        flexDirection: 'column',
-                        top: 20,
-                        left: 30,
-                    }}>
-                        <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile.nama}</Text>
-                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile.nomor_telepon}</Text>
-                    </View>
-                </View>
+                    <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
 
-            </View>
+
+                    <View style={{
+                        flexDirection: 'row',
+                    }}>
+                        <Img
+                            placeholder={require('../../assets/profilpeople.jpg')}
+                            source={baseURL + "/gambar/" + profile?.users.image?.image}
+                            style={{
+                                width: 100,
+                                height: 100,
+                                left: 20,
+                                top: 60,
+                                borderRadius: 50,
+                            }}
+                        ></Img>
+                        <View style={{
+                            flexDirection: 'column',
+                            top: 20,
+                            left: 30,
+                        }}>
+                            <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile.nama}</Text>
+                            <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{profile.nomor_telepon}</Text>
+                        </View>
+                    </View>
+
+                </View>
             )}
             <View>
 
@@ -129,8 +129,8 @@ export default function TitipanScreen() {
                 }}>
                     <View style={{
                         flexDirection: 'row',
-                        justifyContent : "space-around",
-                        columnGap : 20
+                        justifyContent: "space-around",
+                        columnGap: 20
                     }}>
                         <View style={{
                             marginHorizontal: 20,
@@ -144,14 +144,14 @@ export default function TitipanScreen() {
                                 marginTop: 20,
                                 flexDirection: "row"
                             }}>
-                                
+
                                 {
-                                    arr.map((el, ind) => <TouchableOpacity  key={el.name+"ind-"+ind} style={{
+                                    arr.map((el, ind) => <TouchableOpacity key={el.name + "ind-" + ind} style={{
                                         alignItems: "center",
-                                        marginHorizontal : 4
+                                        marginHorizontal: 4
                                     }}
-                                    onPress={() => handleItemPress(el.name)}>
-                                        <Image source={el.image}  />
+                                        onPress={() => handleItemPress(el.name)}>
+                                        <Image source={el.image} />
                                         <Text className="text-blue-800 text-sm">{el.name}</Text>
                                     </TouchableOpacity>)
                                 }
@@ -167,61 +167,118 @@ export default function TitipanScreen() {
                 </View>
             </View>
             <FlatList
-                    data={post}
-                    contentContainerStyle={{
-                        paddingVertical: 20
-                    }}
+                data={post}
+                contentContainerStyle={{
+                    paddingVertical: 20
+                }}
 
-                    renderItem={({ item }) => (
-                        <Card>
-                            <View style={{ bottom: 20, flexDirection: "row", width :"100%",  }} >
-                                
+                renderItem={({ item }) => (
+                    <Card>
+                        <View style={{ bottom: 20, flexDirection: "row", width: "100%", }} >
 
-                                <View style={{ paddingLeft:20, width : "100%" }}>
-                                    <View>
 
-                                    <Text ellipsizeMode='tail'  className="text-sm font-bold pb-3 " style={{
-                                        
+                            <View style={{ paddingLeft: 20, width: "100%" }}>
+                                <View>
+
+                                    <Text ellipsizeMode='tail' className="text-sm font-bold pb-3 " style={{
+
                                     }} >{item?.jastiper_post?.judul}</Text>
                                     <Text className="text-xs font-semibold pb-3">{item?.jastiper_post?.deskripsi}</Text>
                                     <Text className="text-xs font-semibold">{item?.jastiper_post?.lokasi}</Text>
                                     <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_mulai).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })} - {new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
-                                    </View>
-                                    <View className ="space-x-5 " style={{
-                                        flexDirection:'row',
-                                        alignItems:'center',
-                                        marginTop:20,
-                                        
-                                    }}>
-                                        <TouchableOpacity onPress={() => navigation.navigate('Messages')}
-                                        
-                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
-                                            <Text 
-                                                className="text-sm font-bold text-center text-white "
-                                            >
-                                                    Chat Jastiper
-                                            </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => navigation.navigate('CekTitipan',{order_id:item.id})}
-                                            className="py-3 bg-blue-800 rounded-xl w-32 ">
-                                            <Text 
-                                                className="text-sm font-bold text-center text-white "
-                                            >
-                                                    Cek Titipan
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                </View>
+                                <View className="space-x-5 " style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    marginTop: 20,
+
+                                }}>
+                                    {item?.status_id == 3 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
+                                            </TouchableOpacity>
+
+                                        </View>
+                                    )}
+
+                                    {item?.status_id == 4 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => handleItemPress(item, "Ubah Form")}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate("Pembayaran Jastip", { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+
+                                    {item?.status_id == 5 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => handleItemPress(item, "Ubah Form")}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate("PengantaranJastip", { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pengantaran</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+
+                                    {item?.status_id == 2 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => handleItemPress(item, "Terima")} // Pass "Terima" as the name
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
                                 </View>
                             </View>
-                        </Card>
-                        
-                        
+                        </View>
+                    </Card>
 
-                    )}
-                    
-                    keyExtractor={(item) => item.id}
-                    
-                />
+
+
+                )}
+
+                keyExtractor={(item) => item.id}
+
+            />
         </SafeAreaView>
     )
 }

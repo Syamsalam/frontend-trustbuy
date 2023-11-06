@@ -79,7 +79,7 @@ export default function PembayaranJastip() {
           fontWeight: 'bold',
           textAlign: 'center',
           color: '#000',
-        }}>Titipanku</Text>
+        }}>{data?.orders?.jastiper_post?.judul}</Text>
       </View>
       </View>
       <View style={{

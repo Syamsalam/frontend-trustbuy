@@ -1,7 +1,7 @@
 import { View, Text,TouchableOpacity,TextInput, SafeAreaView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { themeColors } from '../../theme/index'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { loginApi } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -11,6 +11,26 @@ export default function LoginJastip() {
       email: "",
       password: ""
     })
+
+    useFocusEffect(useCallback(() => {
+      async function fetchData() {
+        try {
+          const user = await AsyncStorage.getItem('user')
+          const token = await AsyncStorage.getItem('token')
+          
+          if(user != null && token != null) {
+            navigation.navigate('HomeJastip')
+          }
+        } catch (err) {
+          if(err.response) {
+            console.error(err.response.data)
+          } else {
+            console.error(err)
+          } 
+        }
+      }
+      fetchData()
+    },[]))
 
     const onSubmit = async () => {
       try {
