@@ -176,6 +176,18 @@ export default function TitipanScreen() {
                     <Card>
                         <View style={{ bottom: 20, flexDirection: "row", width: "100%", }} >
 
+                            <View style={{
+                                width: "30%"
+                            }}>
+                                <Img source={baseURL + "/gambar/" + item?.users_orders_jastip_idTousers?.image?.image}
+                                    placeholder={require('../../assets/profilpeople.jpg')}
+                                    style={{ width: 80, height: 80, borderRadius: 50, left: 5 }}
+                                />
+                                <View className="items-center">
+                                    <Text className="text-sm font-bold">{item?.users_orders_jastip_idTousers?.user_details?.nama}</Text>
+                                    <Text className=" text-blue-500 text-xs font-light">{item?.users_orders_jastip_idTousers?.user_details?.nomor_telepon}</Text>
+                                </View>
+                            </View>
 
                             <View style={{ paddingLeft: 20, width: "100%" }}>
                                 <View>
