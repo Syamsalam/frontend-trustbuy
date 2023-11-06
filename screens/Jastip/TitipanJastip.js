@@ -292,22 +292,10 @@ export default function TitipanJastip() {
                 {item?.status_id == 5 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
-                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
                       onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Ubah Form")}
-                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => navigation.navigate("PengantaranJastip", { order_id: item?.id })}

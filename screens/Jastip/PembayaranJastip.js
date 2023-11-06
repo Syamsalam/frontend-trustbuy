@@ -128,7 +128,7 @@ export default function PembayaranJastip() {
                       Chat Customer
               </Text>
            </TouchableOpacity>
-           <TouchableOpacity onPress={() => navigation.navigate('PengantaranJastip',{order_id:id})}
+           <TouchableOpacity onPress={() => navigation.navigate('ProsesJastip',{order_id:id})}
             className="py-3 bg-blue-800 rounded-xl w-32 ">
               <Text 
                   className="text-sm font-bold text-center text-white "
