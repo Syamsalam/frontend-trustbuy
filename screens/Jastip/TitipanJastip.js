@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Card from '../../components/card';
-import { baseURL, getOrderStatus, updateOrderStatus, deleteOrder, getProfile } from '../../api';
+import { baseURL, getOrderStatus, updateOrderStatus, deleteOrder, getProfile, updateVerify } from '../../api';
 import { Image as Img } from 'expo-image'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -45,7 +45,6 @@ export default function TitipanJastip() {
 
 
   const arr = [
-    
     {
       image: require("../../assets/shopping-bag.png"),
       name: "Diterima"
@@ -66,21 +65,22 @@ export default function TitipanJastip() {
       const dataIndex = data.findIndex((item) => item.id === targetitemId);
 
       if (dataIndex !== -1) {
-        // Buat salinan array data
+
         const updatedData = [...data];
 
-        // Perbarui properti status_id pada objek yang sesuai
-        updatedData[dataIndex].status_id = id_status;
 
-        // Panggil setData dengan array yang telah diperbarui
+        updatedData[dataIndex].status_id = id_status;
+        updatedData[dataIndex].verification = 'confirm';
+
+
         setData(updatedData);
 
         // Panggil fungsi untuk mengirim perubahan ke backend
         const result = await updateOrderStatus(updatedData[dataIndex]);
+        // const verify = await updateVerify(updatedData[dataIndex]);
 
         if (result.status == 200) {
           setRefresh(true)
-
         }
       }
     } catch (err) {
@@ -91,14 +91,14 @@ export default function TitipanJastip() {
 
   const handleItemPress = async (item, name) => {
     switch (name) {
-      case "Pembayaran":
-        SetActive(4)
-        break;
       case "Diterima":
         SetActive(3)
         break;
-      case "Pengantaran":
+      case "Pembayaran":
         SetActive(5)
+        break;
+      case "Pengantaran":
+        SetActive(7)
         break;
       case "Tolak":
         // Remove the card when "Tolak" is presses
@@ -129,6 +129,12 @@ export default function TitipanJastip() {
   const filteredData = Object.values(data).filter(item => {
     if (active === null) {
       return true;
+    } else if (active == 3) {
+      return item.status_id === 2 || item.status_id === 3;
+    } else if (active == 5) {
+      return item.status_id === 4 || item.status_id === 5;
+    } else if (active == 7) {
+      return item.status_id === 6 || item.status_id === 7;
     }
 
     return item.status_id === active;
@@ -241,6 +247,23 @@ export default function TitipanJastip() {
                   <Text className="text-sm font-normal">{new Date(item?.jastiper_post?.waktu_akhir).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: true })}</Text>
                 </View>
 
+                {item?.status_id == 2 && (
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Terima")} // Pass "Terima" as the name
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Terima</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
                 {item?.status_id == 3 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
@@ -265,6 +288,30 @@ export default function TitipanJastip() {
                   </View>
                 )}
 
+                {item?.status_id == 5 && (
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                    
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleItemPress(item, "Ubah Form")}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("ProsesJastip", { order_id: item?.id })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Proses</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
                 {item?.status_id == 4 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     
@@ -281,15 +328,31 @@ export default function TitipanJastip() {
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("Pembayaran Jastip", { order_id: item?.id })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
+                      <Text className="text-xl font-bold text-center   "
+                        style={{ paddingVertical: 5 }}>Menunggu Respon</Text>
                     </TouchableOpacity>
                   </View>
                 )}
 
-                {item?.status_id == 5 && (
+                {item?.status_id == 6 && (
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("ProsesJastip", { order_id: item?.id })}
+                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Proses</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {item?.status_id == 7 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
                       onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
@@ -305,25 +368,22 @@ export default function TitipanJastip() {
                     </TouchableOpacity>
                   </View>
                 )}
-
-                {item?.status_id == 2 && (
+                {item?.status_id == 8 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Tolak")} // Pass "Tolak" as the name
+                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Terima")} // Pass "Terima" as the name
+                      onPress={() => navigation.navigate("PengantaranJastip", { order_id: item?.id })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Terima</Text>
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pengantaran</Text>
                     </TouchableOpacity>
                   </View>
                 )}
-
-
               </View>
 
             </View>

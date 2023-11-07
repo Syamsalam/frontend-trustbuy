@@ -12,25 +12,25 @@ export default function LoginJastip() {
       password: ""
     })
 
-    useFocusEffect(useCallback(() => {
-      async function fetchData() {
-        try {
-          const user = await AsyncStorage.getItem('user')
-          const token = await AsyncStorage.getItem('token')
+    // useFocusEffect(useCallback(() => {
+    //   async function fetchData() {
+    //     try {
+    //       const user = await AsyncStorage.getItem('user')
+    //       const token = await AsyncStorage.getItem('token')
           
-          if(user != null && token != null) {
-            navigation.navigate('HomeJastip')
-          }
-        } catch (err) {
-          if(err.response) {
-            console.error(err.response.data)
-          } else {
-            console.error(err)
-          } 
-        }
-      }
-      fetchData()
-    },[]))
+    //       if(user != null && token != null) {
+            
+    //       }
+    //     } catch (err) {
+    //       if(err.response) {
+    //         console.error(err.response.data)
+    //       } else {
+    //         console.error(err)
+    //       } 
+    //     }
+    //   }
+    //   fetchData()
+    // },[]))
 
     const onSubmit = async () => {
       try {

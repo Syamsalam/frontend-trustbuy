@@ -1,10 +1,51 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { getDetailOrderUser, updateOrderStatus } from '../../api';
 
 export default function ProsesJastip() {
   const navigation = useNavigation()
+  const route = useRoute()
+  const id = route?.params?.order_id
+  const [data,setData] =useState()
+
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        const result = await getDetailOrderUser(id)
+        if(result.status == 200) {
+          setData(result?.data?.data)
+        }
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request.status)
+        } else {
+          console.log(err)
+        }
+      }
+    }
+  },[]))
+
+  const onDelivery = async () => {
+    try {
+      let dataUpdate = {
+        id: Number(id),
+        status_id: 7
+      }
+      const result = await updateOrderStatus(dataUpdate)
+      if(result.status == 200) {
+        navigation.navigate('PengantaranJastip',{order_id:id})
+      }
+    } catch(err) {
+      if(err.response) {
+        console.error(err.response.data)
+      } else {
+        console.error(err)
+      }
+    }
+  }
+
   return (
     <SafeAreaView
     style={{
@@ -66,6 +107,14 @@ export default function ProsesJastip() {
                   className="text-sm font-bold text-center text-white "
               >
                       Chat Customer
+              </Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={() => onDelivery()}
+            className="py-3 bg-blue-800 rounded-xl w-48 ">
+              <Text 
+                  className="text-sm font-bold text-center text-white "
+              >
+                      Antar
               </Text>
            </TouchableOpacity>
       </View>

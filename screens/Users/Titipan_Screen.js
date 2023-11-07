@@ -8,33 +8,12 @@ import { useState } from 'react';
 import { Image as Img } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
-
-const arr = [
-    {
-        image: require("../../assets/Mask.png"),
-        name: "Cek Titipan"
-    },
-    {
-        image: require("../../assets/Wallet1.png"),
-        name: "Pembayaran"
-    },
-    {
-        image: require("../../assets/shopping-bag.png"),
-        name: "Proses"
-    },
-    {
-        image: require("../../assets/car.png"),
-        name: "Pengantaran"
-    },
-]
-
 export default function TitipanScreen() {
     const navigation = useNavigation()
     const [profile, setProfile] = useState()
-    const [data, useData] = useState()
-    const [post, setPost] = useState();
+    const [data, setData] = useState()
+    const [post, setPost] = useState({});
+    const [active, setActive] = useState(null)
 
     useFocusEffect(useCallback(() => {
         async function fetchData() {
@@ -44,7 +23,7 @@ export default function TitipanScreen() {
 
                 const titipPost = await getOrderForUser();
                 if (request.status == 200 && request.status == 200) {
-                    console.info(titipPost?.data?.data[0])
+                    // console.info(titipPost?.data?.data[0])
                     setProfile(request.data)
                     setPost(titipPost?.data?.data)
                 }
@@ -60,24 +39,58 @@ export default function TitipanScreen() {
         fetchData()
     }, []))
 
+    const arr = [
+        {
+            image: require("../../assets/Mask.png"),
+            name: "Cek Titipan"
+        },
+        {
+            image: require("../../assets/Wallet1.png"),
+            name: "Pembayaran"
+        },
+        {
+            image: require("../../assets/shopping-bag.png"),
+            name: "Proses"
+        },
+        {
+            image: require("../../assets/car.png"),
+            name: "Pengantaran"
+        },
+    ]
+
     const handleItemPress = (name) => {
         switch (name) {
             case "Cek Titipan":
-
+                setActive(3)
                 break;
             case "Pembayaran":
-
+                setActive(4)
                 break;
             case "Proses":
-
+                setActive(6)
                 break;
             case "Pengantaran":
-
+                setActive(7)
                 break;
             default:
                 break;
         }
     }
+
+    const filteredData = Object.values(post).filter(item => {
+        if (active === null) {
+            return true;
+        } else if (active == 3) {
+            return item.status_id === 3 || item.status_id === 2;
+        } else if (active == 6) {
+            return item.status_id === 5 || item.status_id === 6;
+        } else if (active == 7) {
+            return item.status_id === 7 || item.status_id === 8;
+        }
+
+        // console.log(item)
+        return item.status_id === active;
+    });
 
     return (
         <SafeAreaView style={{
@@ -167,7 +180,7 @@ export default function TitipanScreen() {
                 </View>
             </View>
             <FlatList
-                data={post}
+                data={filteredData}
                 contentContainerStyle={{
                     paddingVertical: 20
                 }}
@@ -205,19 +218,36 @@ export default function TitipanScreen() {
                                     marginTop: 20,
 
                                 }}>
+
+                                    {item?.status_id == 2 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center "
+                                                    style={{ paddingVertical: 5 }}>Menunggu diterima</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+
                                     {item?.status_id == 3 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                                                onPress={() => navigation.navigate('Chat', { username: item.users.username })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('FormTitipan', { order_id: item.id })}
+                                                onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Buat Form</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Cek Titipan</Text>
                                             </TouchableOpacity>
 
                                         </View>
@@ -226,19 +256,19 @@ export default function TitipanScreen() {
                                     {item?.status_id == 4 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                onPress={() => handleItemPress(item, "Ubah Form")}
+                                                onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate("Pembayaran Jastip", { order_id: item?.id })}
+                                                onPress={() => navigation.navigate("Pembayaran", { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pembayaran</Text>
@@ -249,33 +279,84 @@ export default function TitipanScreen() {
                                     {item?.status_id == 5 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                onPress={() => handleItemPress(item, "Ubah Form")}
+                                                onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate("PengantaranJastip", { order_id: item?.id })}
+                                                onPress={() => navigation.navigate('Proses', { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Proses</Text>
+                                            </TouchableOpacity>
+
+                                        </View>
+                                    )}
+
+                                    {item?.status_id == 6 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate("Proses", { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Proses</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                    {item?.status_id == 7 && (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate("Pengantaran", { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pengantaran</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}
-
-                                    {item?.status_id == 2 && (
+                                    {item?.status_id == 8 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => handleItemPress(item, "Terima")} // Pass "Terima" as the name
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center"
+                                                    style={{ paddingVertical: 5}}>Menunggu Konfirmasi</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}

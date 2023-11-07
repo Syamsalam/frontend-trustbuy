@@ -127,6 +127,14 @@ export const getOrderForUser = (data) => {
     return apiClient.get('/user/get-confirm-order',data)
 }
 
+export const getDetailOrderUser = (data) => {
+    return apiClient.get(`/user/get-detail-order/${data}`)
+}
+
+export const updateVerify = (data) => {
+    return apiClient.put('/common/update-status',data)
+}
+
 export const postImage = async (data) => {
     const name = data.split("/").at(-1)
     const ext = name.split(".").at(-1)

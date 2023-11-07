@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus } from '../../api'
+import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus, detailProfileJastip } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 
@@ -14,13 +14,6 @@ export default function HomeJastip() {
     const [data, setData] = useState()
 
     const [post, setPost] = useState();
-
-    const handleDelete = (id) => {
-        // Filter item yang memiliki id yang tidak sama dengan id yang dihapus
-        const updatedData = post.filter(item => item.id !== id);
-        // Update daftar data
-        setPost(updatedData);
-    };
     
     useFocusEffect(useCallback(() => {
         async function fetchData() {
@@ -28,23 +21,32 @@ export default function HomeJastip() {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
                 const request = await getProfile(user)
                 const post = await getPostJastip()
-                const statusPost = await checkStatus()
                 // console.log(post.data.data)
-
-                if (request.status == 200 && post.status == 200 && statusPost.status == 200) {
+                
+                if (request.status == 200) {
                     // console.log(request?.data)
                     setData(request?.data)
-                    setPost(post.data.data)
-
-                    // console.log(statusPost?.data.data[0].aktif)
-                    if(statusPost?.data.data[0].aktif === "aktif") {
-                        setActive(true)
-                    }
-                    
+                
                 }
+                
+                if(post.status == 200) {
+                    setPost(post.data.data)
+                    const statusPost = await checkStatus()
+                    if(statusPost.status == 200){
+                        console.log(statusPost?.data.data[0].aktif)
+                        if(statusPost?.data.data[0].aktif === 'aktif') {
+                            setActive(true)
+                        }  
+                    }
+                }
+
+                if(post.status == 204) {
+                    console.log("tidak ada data")
+                }
+
             } catch (err) {
-                if (err.response) {
-                    console.log(err.response.data)
+                if (err.response) { 
+                    console.error(err.response.data) 
                 } else {
                     console.error(err)
                 }
@@ -52,6 +54,13 @@ export default function HomeJastip() {
         }
         fetchData()
     }, []))
+
+    const handleDelete = (id) => {
+        // Filter item yang memiliki id yang tidak sama dengan id yang dihapus
+        const updatedData = post.filter(item => item.id !== id);
+        // Update daftar data
+        setPost(updatedData);
+    };
 
     const toggleStatus = async () => {
         try {

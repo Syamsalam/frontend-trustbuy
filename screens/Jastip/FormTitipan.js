@@ -143,6 +143,8 @@ export default function FormTitipan() {
       order_items: orderItems,
       payment: formatBiaya
     };
+
+
     
     try {
       const response = await addOrderItems(order);
@@ -270,7 +272,7 @@ export default function FormTitipan() {
             <Text
               className="text-sm font-bold text-center text-white "
             >
-              Konfirmasi
+              Buat
             </Text>
           </TouchableOpacity>
         </View>

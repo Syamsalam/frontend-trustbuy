@@ -38,7 +38,7 @@ export default function PengantaranJastip() {
       // const id = route.params.order_id
       let updatedData = {
         id: Number(id),
-        status_id: 8
+        status_id: 9
       }
       const result = await updateOrderStatus(updatedData)
       

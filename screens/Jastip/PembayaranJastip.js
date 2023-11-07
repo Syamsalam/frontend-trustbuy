@@ -37,16 +37,17 @@ export default function PembayaranJastip() {
     fetchData()
   },[]))
 
-  //kalo dipake ini, card menghilang di titipanJastip.js
   const onBayar = async () => {
     try {
       
       let dataUpdate = {
         id: Number(id),
-        status_id: 6
+        status_id: 5
       }
       const result = await updateOrderStatus(dataUpdate)
-
+      if(result.status == 200) {
+        navigation.navigate('ProsesJastip',{order_id:id})
+      }
 
     } catch (err) {
       if(err.response) {
@@ -128,14 +129,15 @@ export default function PembayaranJastip() {
                       Chat Customer
               </Text>
            </TouchableOpacity>
-           <TouchableOpacity onPress={() => navigation.navigate('ProsesJastip',{order_id:id})}
+           <Text>Menunggu Konfirmasi Dari User</Text>
+           {/* <TouchableOpacity onPress={() => onBayar()}
             className="py-3 bg-blue-800 rounded-xl w-32 ">
               <Text 
                   className="text-sm font-bold text-center text-white "
               >
-                      Bayar
+                      Konfirmasi
               </Text>
-           </TouchableOpacity>
+           </TouchableOpacity> */}
       </View>
       </View>
       </View>

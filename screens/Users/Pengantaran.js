@@ -1,8 +1,59 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { getOrderForUser, updateVerify } from '../../api'
+import { useState } from 'react'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
+import { useCallback } from 'react'
 
 export default function Pengantaran() {
+  const navigation = useNavigation()
+  const [data,setData] = useState()
+  const route = useRoute()
+  const id = route.params.order_id
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        
+        const result = await getOrderForUser(id)
+        // console.log("id order " + id)
+        // console.log(result.data?.data[0]?.jastiper_post?.judul)
+        if(result.status == 200) {
+          // console.log(result?.data)
+          setData(result?.data?.data)
+        }
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request.status)
+        } else {
+          console.log(err)
+        }
+      }
+    }
+
+    fetchData()
+  },[]))
+
+  const receivebutton = async () => {
+    try {
+      // const id = route.params.order_id
+      let updatedData = {
+        id: Number(id),
+        status_id: 8
+      }
+      const result = await updateVerify(updatedData)
+      
+      if (result.status == 200){
+        navigation.navigate("TitipanJastip")
+      }
+    } catch (err) {
+      if(err.response) {
+        console.error(err.response.data)
+      } else {
+        console.error(err)
+      }
+    }
+  }
   return (
     <SafeAreaView
     style={{
@@ -25,7 +76,7 @@ export default function Pengantaran() {
           fontWeight: 'bold',
           textAlign: 'center',
           color: '#000',
-        }}>Titipanku</Text>
+        }}>{data[0]?.jastiper_post?.judul}</Text>
       </View>
       </View>
       <View style={{
@@ -66,7 +117,7 @@ export default function Pengantaran() {
                       Chat Jastiper
               </Text>
            </TouchableOpacity>
-           <TouchableOpacity 
+           <TouchableOpacity onPress={() => receivebutton()}
             className="py-3 bg-blue-800 rounded-xl w-40 ">
               <Text 
                   className="text-sm font-bold text-center text-white "
