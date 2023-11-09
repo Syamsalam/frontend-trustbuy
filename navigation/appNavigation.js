@@ -82,16 +82,16 @@ const MessageStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Pesan"
-      component={MessageScreen}
+      component={MessagesJastip}
       options={{
         headerTitleAlign: 'center',
       }}
     />
     <Stack.Screen
       name="Chat"
-      component={Chat}
+      component={ChatJastip}
       options={({ route }) => ({
-        title: route.params.userName,
+        title: route.params.username,
       })}
     />
   </Stack.Navigator>
@@ -107,10 +107,10 @@ const MessageStackJastip = ({ navigation }) => (
       }}
     />
     <Stack.Screen
-      name="ChatJastip"
+      name="Chat"
       component={ChatJastip}
       options={({ route }) => ({
-        title: route.params.userName,
+        title: route.params.username,
       })}
     />
   </Stack.Navigator>

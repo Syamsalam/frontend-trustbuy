@@ -70,7 +70,6 @@ export default function TitipanJastip() {
 
 
         updatedData[dataIndex].status_id = id_status;
-        updatedData[dataIndex].verification = 'confirm';
 
 
         setData(updatedData);
@@ -134,7 +133,7 @@ export default function TitipanJastip() {
     } else if (active == 5) {
       return item.status_id === 4 || item.status_id === 5;
     } else if (active == 7) {
-      return item.status_id === 6 || item.status_id === 7;
+      return item.status_id === 6 || item.status_id === 7 || item.status_id === 8;
     }
 
     return item.status_id === active;
@@ -377,10 +376,9 @@ export default function TitipanJastip() {
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("PengantaranJastip", { order_id: item?.id })}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pengantaran</Text>
+                      <Text className="text-xl font-bold text-center "
+                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Menunggu di Terima</Text>
                     </TouchableOpacity>
                   </View>
                 )}

@@ -4,6 +4,7 @@ import { themeColors } from '../../theme/index'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { loginApi } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { socket } from '../../tools/socket'
 
 export default function LoginJastip() {
     const navigation = useNavigation()
@@ -33,10 +34,18 @@ export default function LoginJastip() {
     // },[]))
 
     const onSubmit = async () => {
+      if(socket.connected == false) {
+        socket.connect()
+        return alert("Anda tidak terhubung ke Internet")
+      }
+      
       try {
         const result = await loginApi(data)
         if(result.status == 200 && result.data.data.user.role_id == 3) {
           const {user,token} =result?.data?.data
+          socket.emit("newUser", user.id, (msg) => {
+            console.log(msg)
+          })
           await AsyncStorage.setItem('user',JSON.stringify(user)).then(() => {
             AsyncStorage.setItem('token',token).then(() => {
               console.log('login')

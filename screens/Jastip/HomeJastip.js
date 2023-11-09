@@ -33,7 +33,7 @@ export default function HomeJastip() {
                     setPost(post.data.data)
                     const statusPost = await checkStatus()
                     if(statusPost.status == 200){
-                        console.log(statusPost?.data.data[0].aktif)
+                        // console.log(statusPost?.data.data[0].aktif)
                         if(statusPost?.data.data[0].aktif === 'aktif') {
                             setActive(true)
                         }  

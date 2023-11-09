@@ -33,6 +33,7 @@ const [messages, setMessages] = useState([]);
   }, []);
 
   const onSend = useCallback((messages = []) => {
+    
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages),
     );

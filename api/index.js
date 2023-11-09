@@ -1,10 +1,10 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const baseURL = "http://192.168.138.198:8000/api"
+export const baseURL = "http://192.168.0.101:8000/api"
 
 const apiClient = axios.create({
-    baseURL: `http://192.168.138.198:8000/api`,
+    baseURL: `http://192.168.0.101:8000/api`,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -133,6 +133,32 @@ export const getDetailOrderUser = (data) => {
 
 export const updateVerify = (data) => {
     return apiClient.put('/common/update-status',data)
+}
+
+export const createHistory = (data) => {
+    return apiClient.post('/jastip/create-history',data)
+}
+
+export const getHistoryJastip = (data) => {
+    return apiClient.get('/jastip/history-jastip',data)
+}
+
+export const getHistoryUser = (data) => {
+    return apiClient.get('/user/history-user',data)
+
+}
+
+export const getAllMessage = (data) => {
+    return apiClient.get('/common/get-chatt-all',data)
+}
+export const getMessage = (id) => {
+    return apiClient.get('/common/get-chatt/'+id)
+}
+export const sendMessage = (id, chat) => {
+    
+    return apiClient.post('/common/send-chatt/'+id, {
+        pesan : chat
+    })
 }
 
 export const postImage = async (data) => {

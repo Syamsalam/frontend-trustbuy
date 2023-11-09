@@ -5,9 +5,13 @@ import { useNavigation } from '@react-navigation/native'
 import { loginApi } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useState } from 'react'
+import { socket } from '../../tools/socket'
 
 export default function LoginScreen() {
   const navigation = useNavigation()
+
+
+
   const [data, setData] = useState({
     email: "",
     password: ""
@@ -15,18 +19,29 @@ export default function LoginScreen() {
 
 
   const onSubmit = async () => {
+    if(socket.connected == false) {
+      socket.connect()
+      return alert("Anda tidak terhubung ke Internet")
+    }
     try {
+
       if (data != null) {
         const result = await loginApi(data)
         if (result.status == 200 && result.data.data.user.role_id == 2) {
           const { user, token } = result?.data?.data;
 
           await AsyncStorage.setItem('user', JSON.stringify(user))
+          
+          socket.emit("newUser", user.id, (msg) => {
+            console.log(msg)
+          })
 
           await AsyncStorage.setItem('token', token).then(() => {
             console.log('login')
             navigation.navigate('Home')
           })
+
+          
         } else if (result.data.data.user.role_id == 3) {
           alert("Silahkan login sebagai jastip")
         }
@@ -39,6 +54,8 @@ export default function LoginScreen() {
       } 
     }
   }
+
+  
 
 
   return (

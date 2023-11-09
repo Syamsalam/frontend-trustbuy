@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
-import { updateOrderStatus, getOrderItems } from '../../api'
+import { updateOrderStatus, getOrderItems, createHistory } from '../../api'
 import { useState } from 'react'
 
 export default function PengantaranJastip() {
@@ -38,12 +38,15 @@ export default function PengantaranJastip() {
       // const id = route.params.order_id
       let updatedData = {
         id: Number(id),
-        status_id: 9
+        status_id: 8
       }
       const result = await updateOrderStatus(updatedData)
       
       if (result.status == 200){
-        navigation.navigate("TitipanJastip")
+        const create = await createHistory(id)
+        if (create.status == 200) {
+          navigation.navigate("TitipanJastip")
+        }
       }
     } catch (err) {
       if(err.response) {

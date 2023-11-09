@@ -197,7 +197,7 @@ export default function TitipanScreen() {
                                     style={{ width: 80, height: 80, borderRadius: 50, left: 5 }}
                                 />
                                 <View className="items-center">
-                                    <Text className="text-sm font-bold">{item?.users_orders_jastip_idTousers?.user_details?.nama}</Text>
+                                    <Text className="text-sm font-bold">{item?.users_orders_jastip_idTousers?.username}</Text>
                                     <Text className=" text-blue-500 text-xs font-light">{item?.users_orders_jastip_idTousers?.user_details?.nomor_telepon}</Text>
                                 </View>
                             </View>
@@ -222,7 +222,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 2 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users_orders_jastip_idTousers?.username,id: item?.users_orders_jastip_idTousers?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
@@ -347,16 +347,22 @@ export default function TitipanScreen() {
                                     {item?.status_id == 8 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username, id : item?.users?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                
+                                                onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                                                <Text className="text-xl font-bold text-center"
-                                                    style={{ paddingVertical: 5}}>Menunggu Konfirmasi</Text>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate("Pengantaran", { order_id: item?.id })}
+                                                style={{ alignSelf: "flex-end", marginRight: "5%" }}>
+                                                <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Pengantaran</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}

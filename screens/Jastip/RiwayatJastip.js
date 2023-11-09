@@ -1,28 +1,33 @@
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { View, Text, FlatList, SafeAreaView } from 'react-native';
+import { getHistoryJastip } from '../../api';
 
 export default function RiwayatJastip() {
-  const data = [
-    { key: '1', judulpost: 'Titip Segala Jenis buku', tanggal: '13 Maret 2023', biaya: 'Rp 100.000' },
-    { key: '2', judulpost: 'Titip Barang di Atk Agung', tanggal: '13 Maret 2023', biaya: 'Rp 80.000' },
-    { key: '3', judulpost: 'Titip Perkakas di Ace', tanggal: '13 Maret 2023', biaya: 'Rp 140.000' },
-  ];
+  const navigation = useNavigation()
+  const route = useRoute()
+  const [data,setData] = useState()
+  
+  useFocusEffect(useCallback(() => {
+    async function fetchData() {
+      try {
+        const history = await getHistoryJastip()
+        if(history.status == 200) {
+          console.log(history?.data)
+          setData(history?.data?.data)
+        }
 
-  // Initialize total to 0
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    // Calculate the total by iterating through the data
-    let calculatedTotal = 0;
-    data.forEach(item => {
-      // Extract the numerical part of the 'biaya' field and add it to the total
-      const biayaValue = parseInt(item.biaya.replace(/\D/g, ''), 10); // Remove non-digit characters
-      calculatedTotal += biayaValue;
-    });
-
-    // Set the calculated total to the state
-    setTotal(calculatedTotal);
-  }, []);
+      } catch (err) {
+        if(err.request) {
+          console.error(err.request.status)
+        } else {
+          console.log(err)
+        }
+      }
+    }
+    fetchData()
+  }))
 
   const renderItem = ({ item }) => (
     <View style={{

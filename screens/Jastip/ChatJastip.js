@@ -3,41 +3,78 @@ import {View, ScrollView, Text, Button, StyleSheet} from 'react-native';
 import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { getMessage, sendMessage } from '../../api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { socket } from '../../tools/socket';
 
 const ChatJastip = () => {
-const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [userId, setUserId] = useState(-1)
+  const rout = useRoute()
+  async function getChat() {
+    if(socket.connected == false) return console.log("Tidak Terkonek")
+    const user = JSON.parse(await AsyncStorage.getItem("user"))
+    setUserId(user.id)
+    
+    try {
+      const response = await getMessage(rout.params.id)
+      if(response.status == 200) {
+        setMessages(response.data?.data.map(el => {
+          return {
+            _id : el.id,
+            text : el.isi_pesan,
+            created_at : el.created_at,
+            user : {
+              _id : el.sender_id,
+              username : el.username,
+              avatar : ""
+            }
+          }
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hallo,, apa yang mau dititip?',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://picsum.photos/200/300',
-        },
-      },
-      {
-        _id: 2,
-        text: 'Hallo, saya mau titip barang',
-        createdAt: new Date(),
-        user: {
-          _id: 1,
-          name: 'React Native',
-          avatar: 'https://picsum.photos/200/300',
-        },
-      },
-    ]);
-  }, []);
+          
+        }))
+        
+      }
+    }catch(err) {
+      console.log(err)
+    }
+  }
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages),
-    );
-  }, []);
+  async function onSend(messages) {
+    if(messages.length == 0) {
+      return 
+    }
+    try {
+      const response = await sendMessage(rout.params.id, messages[0].text)
+        if(response.status == 200) {
+          getChat()
+        }
+        socket.emit("send-chat", rout.params.id)
+      }catch(err) {
+        console.log(err.response)
 
+      }
+  }
+
+
+  function receiveChats(ids) {
+    if(ids.id != rout.params.id) return 
+    getChat()
+    console.log("Hello")
+    
+  }
+
+
+  useFocusEffect(useCallback(() => {
+    getChat()
+    socket.on("receive-chat", receiveChats)
+
+    return () => {
+      socket.off("receive-chat", receiveChats)
+    }
+  }, []))
+  
   const renderSend = (props) => {
     return (
       <Send {...props}>
@@ -80,9 +117,9 @@ const [messages, setMessages] = useState([]);
   return (
     <GiftedChat
       messages={messages}
-      onSend={(messages) => onSend(messages)}
+      onSend={onSend}
       user={{
-        _id: 1,
+        _id: userId,
       }}
       renderBubble={renderBubble}
       alwaysShowSend

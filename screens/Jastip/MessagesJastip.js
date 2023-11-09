@@ -12,68 +12,66 @@ import {
   MessageText,
   TextSection,
 } from '../../styles/MessageStyles';
+import { useFocusEffect } from '@react-navigation/native';
+import { baseURL, getAllMessage } from '../../api';
+import { useState } from 'react';
+import { useCallback } from 'react';
+import { socket } from '../../tools/socket';
 
 export default function MessagesJastip({navigation}) {
-  const Messages =[
-    {
-      id: '1',
-      userName: 'Jenny Doe',
-      userImg: require('../../assets/profilpeople.jpg'),
-      messageTime: '4 mins ago',
-      messageText:
-        'Hey there, this is my test for a post of my social app in React Native.',
-    },
-    {
-      id: '2',
-      userName: 'John Doe',
-      userImg: require('../../assets/profilpeople.jpg'),
-      messageTime: '2 hours ago',
-      messageText:
-        'Hey there, this is my test for a post of my social app in React Native.',
-    },
-    {
-      id: '3',
-      userName: 'Ken William',
-      userImg: require('../../assets/profilpeople.jpg'),
-      messageTime: '1 hours ago',
-      messageText:
-        'Hey there, this is my test for a post of my social app in React Native.',
-    },
-    {
-      id: '4',
-      userName: 'Selina Paul',
-      userImg: require('../../assets/profilpeople.jpg'),
-      messageTime: '1 day ago',
-      messageText:
-        'Hey there, this is my test for a post of my social app in React Native.',
-    },
-    {
-      id: '5',
-      userName: 'Christy Alex',
-      userImg: require('../../assets/profilpeople.jpg'),
-      messageTime: '2 days ago',
-      messageText:
-        'Hey there, this is my test for a post of my social app in React Native.',
-    },
-  ];
+  const [data,setData] = useState()
+  async function getMessage() {
+    try {
+      console.log("Lol")
+      const response = await getAllMessage()
+      if(response.status == 200) {
+        console.log(response.data?.data)
+        setData(response.data?.data)
+        
+      }r
+    }catch(err) {
+      console.log(err)
+    }
+  }
+
+  function receiveChats(ids) {
+    getMessage()
+    console.log("Lol")
+  }
+
+  useFocusEffect(useCallback(() => {
+    getMessage()
+    socket.on("receive-chat", receiveChats)
+    return () => {
+      socket.off("receive-chat", receiveChats)
+    }
+  }, []))
+
 
   return (
     <Container>
         <FlatList 
-          data={Messages}
+          data={data}
           keyExtractor={item=>item.id}
           renderItem={({item}) => (
-            <Card onPress={() => navigation.navigate('ChatJastip', {userName: item.userName})}>
+            <Card onPress={() => navigation.navigate('Chat', {id: item.id, username : item.username})}>
               <UserInfo>
                 <UserImgWrapper>
-                  <UserImg source={item.userImg} />
+                  <UserImg source={baseURL + "/gambar/"+item.image?.image} placeholder={require('../../assets/profilpeople.jpg')}
+                                     />
                 </UserImgWrapper>
                 <TextSection>
                   <UserInfoText>
-                    <UserName>{item.userName}</UserName>
-                    <PostTime>{item.messageTime}</PostTime>
+                    <UserName>{item.username}</UserName>
+                    <PostTime>{new Date(item.chat.created_at).toLocaleString("id-ID", {
+                       day : "2-digit",
+                       month : "short",
+                       year : "2-digit",
+                       hour : "2-digit",
+                       minute :"2-digit"
+                    })}</PostTime>
                   </UserInfoText>
-                  <MessageText>{item.messageText}</MessageText>
+                  <MessageText>{item.chat.isi_pesan}</MessageText>
                 </TextSection>
               </UserInfo>
             </Card>
