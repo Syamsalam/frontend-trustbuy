@@ -140,7 +140,9 @@ export default function TitipanJastip() {
   });
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
+    <SafeAreaView style={{ 
+      backgroundColor: '#fff', 
+      flex: 1 }}>
       <View style={{
         backgroundColor: '#1138B7',
         height: 250,
