@@ -219,13 +219,6 @@ export default function FormTitipan() {
                 onChangeText={handleBiayaOngkirChange}
                 keyboardType="numeric"
               />
-              <Text className="mb-2">Biaya Jasa</Text>
-              <TextInput
-                className="border border-gray-400 p-2 bg-gray-50 rounded-full"
-                value={biayaJasa}
-                onChangeText={handleBiayaJasaChange}
-                keyboardType="numeric"
-              />
             </View>
           </View>
         </ScrollView>
@@ -240,8 +233,9 @@ export default function FormTitipan() {
         shadowOpacity: 1,
         elevation: 10,
       }}>
-        <View className="flex flex-row justify-between px-5 py-5">
+        <View style={{ flexDirection:'colomn'}}className="flex flex-row justify-between px-5 py-5">
           <Text className="font-bold text-lg">Jumlah yang harus dibayar : {formatCurrency(calculateTotal())}</Text>
+          <Text className="mb-2 font-thin italic " >Sudah termasuk ppn 2%</Text>
         </View>
         <View style={{
           flexDirection: 'row',
