@@ -108,7 +108,7 @@ export default function ProfilJastip() {
         <RenderItem label="Email" value={data?.email} />
         <RenderItemWithArrow
           label="Riwayat transaksi"
-          onPress={() => navigation.navigate('Riwayat')}
+          onPress={() => navigation.navigate('RiwayatJastip')}
         />
       </View>
       <TouchableOpacity

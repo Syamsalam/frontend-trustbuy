@@ -27,7 +27,7 @@ export default function RiwayatJastip() {
       }
     }
     fetchData()
-  }))
+  },[]))
 
   const renderItem = ({ item }) => (
     <View style={{
@@ -47,20 +47,26 @@ export default function RiwayatJastip() {
         color: '#000',
         marginLeft: 12,
         alignSelf: 'flex-start'
-      }}>{item.judulpost}</Text>
+      }}>{item?.orders?.jastiper_post?.judul}</Text>
       <Text style={{
         fontSize: 10,
         color: '#000',
         marginLeft: 10,
         alignSelf: 'flex-start'
-      }}>{item.tanggal}</Text>
+      }}>{new Date(item?.history_time).toLocaleString("id-ID",{
+        day: "2-digit",
+        month: "long",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      })}</Text>
       <Text style={{
         fontSize: 15,
         fontWeight: 'bold',
         color: '#000',
         marginRight: 10,
         alignSelf: 'flex-end'
-      }}>{item.biaya}</Text>
+      }}>{item?.payment?.total_pembayaran}</Text>
     </View>
   );
 
@@ -74,7 +80,7 @@ export default function RiwayatJastip() {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.id}
       />
       <View style={{
         backgroundColor: '#1138B7',
@@ -86,7 +92,7 @@ export default function RiwayatJastip() {
         padding: 20,
         marginBottom: 10,
       }}>
-      <Text style={{ alignSelf: 'center', fontSize: 18, fontWeight: 'bold', color: 'white' }}>Total: Rp {total}</Text>
+      <Text style={{ alignSelf: 'center', fontSize: 18, fontWeight: 'bold', color: 'white' }}>Total: Rp {data?.payment?.total_pembayaran}</Text>
       </View>
     
     </SafeAreaView>

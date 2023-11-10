@@ -9,14 +9,14 @@ export default function PengantaranJastip() {
   const navigation = useNavigation()
   const [data,setData] = useState()
   const route = useRoute()
-  const id = route.params.order_id
+  const id = route?.params?.order_id
   useFocusEffect(useCallback(() => {
     async function fetchData() {
       try {
         
         const result = await getOrderItems(id)
         console.log("id order " + id)
-        console.log(result.data)
+        // console.log(result.data)
         if(result.status == 200) {
           // console.log(result?.data)
           setData(result?.data?.data)
@@ -36,17 +36,17 @@ export default function PengantaranJastip() {
   const receivebutton = async () => {
     try {
       // const id = route.params.order_id
-      let updatedData = {
+      const updatedData = {
         id: Number(id),
         status_id: 8
       }
       const result = await updateOrderStatus(updatedData)
-      
-      if (result.status == 200){
-        const create = await createHistory(id)
-        if (create.status == 200) {
+      const history = await createHistory(updatedData)
+       
+      if (result.status == 200 && history.status == 200){
+        
           navigation.navigate("TitipanJastip")
-        }
+        
       }
     } catch (err) {
       if(err.response) {
