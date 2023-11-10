@@ -2,7 +2,7 @@ import { Image } from 'react-native';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import{ createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FirstScreen from '../screens/Users/FirstScreen';
 import HomeScreen from '../screens/Users/HomeScreen';
 import WelcomeScreen from '../screens/Users/WelcomeScreen';
@@ -72,49 +72,49 @@ export default function AppNavigation() {
         <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
         <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
         <Stack.Screen name="Pengajuan" options={{ headerShown: false }} component={Pengajuan} />
-
+        <Stack.Screen
+          name="Chat"
+          component={ChatJastip}
+          options={({ route }) => ({
+            title: route.params.username,
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const MessageStack = ({ navigation }) => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Pesan"
-      component={MessagesJastip}
-      options={{
-        headerTitleAlign: 'center',
-      }}
-    />
-    <Stack.Screen
-      name="Chat"
-      component={ChatJastip}
-      options={({ route }) => ({
-        title: route.params.username,
-      })}
-    />
-  </Stack.Navigator>
-);
+// const MessageStack = ({ navigation }) => (
+//   <>
+//     <Stack.Screen
+//       name="Pesan"
+//       component={MessagesJastip}
+//       options={{
+//         headerTitleAlign: 'center',
+//       }}
+//     />
+//     <Stack.Screen
+//       name="Chat"
+//       component={ChatJastip}
+//       options={({ route }) => ({
+//         title: route.params.username,
+//       })}
+//     />
+//   </>
+// );
 
-const MessageStackJastip = ({ navigation }) => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Pesan"
-      component={MessagesJastip}
-      options={{
-        headerTitleAlign: 'center',
-      }}
-    />
-    <Stack.Screen
-      name="Chat"
-      component={ChatJastip}
-      options={({ route }) => ({
-        title: route.params.username,
-      })}
-    />
-  </Stack.Navigator>
-);
+// const MessageStackJastip = ({ navigation }) => (
+//   <>
+//     <Stack.Screen
+//       name="Pesan"
+//       component={MessagesJastip}
+//       options={{
+//         headerTitleAlign: 'center',
+//       }}
+//     />
+
+//   </>
+// );
 
 
 const Tab = createBottomTabNavigator();
@@ -135,7 +135,7 @@ const BottomTabNavigator = () => {
         name="HomeScreen"
         component={HomeScreen}
         options={{
-        tabBarHideOnKeyboard: true,
+          tabBarHideOnKeyboard: true,
           headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
@@ -170,10 +170,9 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Messages"
-        component={MessageStack}
+        component={MessagesJastip}
         options={{
-        tabBarHideOnKeyboard: true,
-          headerShown: false,
+          tabBarHideOnKeyboard: true,
           tabBarIcon: ({ color, size }) => (
             <Image
               source={require('../assets/chat.png')}
@@ -225,7 +224,7 @@ const BottomTabNavigatorJastip = () => {
         name="Home_Jastip"
         component={HomeJastip}
         options={{
-        tabBarHideOnKeyboard: true,
+          tabBarHideOnKeyboard: true,
           headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
@@ -260,10 +259,9 @@ const BottomTabNavigatorJastip = () => {
       />
       <Tab.Screen
         name="Messages"
-        component={MessageStackJastip}
+        component={MessagesJastip}
         options={{
-        tabBarHideOnKeyboard: true,
-          headerShown: false,
+          tabBarHideOnKeyboard: true,
           headerTitleAlign: 'center',
           tabBarIcon: ({ color, size }) => (
             <Image

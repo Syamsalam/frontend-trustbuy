@@ -92,6 +92,11 @@ export default function TitipanScreen() {
         return item.status_id === active;
     });
 
+    const navToChat = (item) => {
+        // console.log(item?.users_orders_jastip_idTousers?.id)
+        navigation.navigate('Chat', { username: item?.users_orders_jastip_idTousers?.username,id: item?.users_orders_jastip_idTousers?.id })
+    }
+
     return (
         <SafeAreaView style={{
             backgroundColor: '#fff',
@@ -222,7 +227,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 2 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users_orders_jastip_idTousers?.username,id: item?.users_orders_jastip_idTousers?.id })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -238,7 +243,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 3 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item.users.username })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -256,7 +261,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 4 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -279,7 +284,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 5 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -303,7 +308,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 6 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -325,7 +330,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 7 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -347,7 +352,7 @@ export default function TitipanScreen() {
                                     {item?.status_id == 8 && (
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('Chat', { username: item?.users?.username, id : item?.users?.id })}
+                                                onPress={() => navToChat(item)}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
                                                     style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>

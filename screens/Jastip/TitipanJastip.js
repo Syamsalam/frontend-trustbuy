@@ -139,6 +139,11 @@ export default function TitipanJastip() {
     return item.status_id === active;
   });
 
+  const navToChat = (item) => {
+    // console.log(item?.users?.username) 
+    navigation.navigate('Chat', { username: item?.users?.username,id: item?.users?.id })
+  }
+
   return (
     <SafeAreaView style={{ 
       backgroundColor: '#fff', 
@@ -274,7 +279,7 @@ export default function TitipanJastip() {
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Tolak</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -293,16 +298,10 @@ export default function TitipanJastip() {
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Ubah Form")}
-                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => navigation.navigate("ProsesJastip", { order_id: item?.id })}
@@ -317,16 +316,10 @@ export default function TitipanJastip() {
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleItemPress(item, "Ubah Form")}
-                      style={{ alignSelf: "flex-end", marginRight: "5%" }}>
-                      <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                        style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
@@ -339,7 +332,7 @@ export default function TitipanJastip() {
                 {item?.status_id == 6 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -356,7 +349,7 @@ export default function TitipanJastip() {
                 {item?.status_id == 7 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
@@ -372,7 +365,7 @@ export default function TitipanJastip() {
                 {item?.status_id == 8 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ChatJastip', { username: item.users.userName })}
+                      onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                       <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
                         style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>

@@ -28,7 +28,7 @@ const ChatJastip = () => {
             user : {
               _id : el.sender_id,
               username : el.username,
-              avatar : ""
+              avatar : "" 
             }
           }
 

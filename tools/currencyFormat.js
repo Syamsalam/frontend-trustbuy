@@ -3,6 +3,7 @@ const formatCurrency = (value) => {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0,
+      
     }).format(value);
     return formattedValue;
   };

@@ -17,12 +17,13 @@ import { baseURL, getAllMessage } from '../../api';
 import { useState } from 'react';
 import { useCallback } from 'react';
 import { socket } from '../../tools/socket';
+import { Image as Img } from 'expo-image'
 
 export default function MessagesJastip({navigation}) {
   const [data,setData] = useState()
   async function getMessage() {
     try {
-      console.log("Lol")
+      // console.log("Lol")
       const response = await getAllMessage()
       if(response.status == 200) {
         console.log(response.data?.data)
@@ -30,13 +31,16 @@ export default function MessagesJastip({navigation}) {
         
       }r
     }catch(err) {
+      if(err.response) {
+        console.error(err.response.data)
+      }
       console.log(err)
     }
   }
 
   function receiveChats(ids) {
     getMessage()
-    console.log("Lol")
+    // console.log("Lol")
   }
 
   useFocusEffect(useCallback(() => {
@@ -57,8 +61,14 @@ export default function MessagesJastip({navigation}) {
             <Card onPress={() => navigation.navigate('Chat', {id: item.id, username : item.username})}>
               <UserInfo>
                 <UserImgWrapper>
-                  <UserImg source={baseURL + "/gambar/"+item.image?.image} placeholder={require('../../assets/profilpeople.jpg')}
-                                     />
+                  <Img source={baseURL + "/gambar/"+item.image?.image} 
+                  placeholder={require('../../assets/profilpeople.jpg')}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 50,
+                }}
+                  />
                 </UserImgWrapper>
                 <TextSection>
                   <UserInfoText>

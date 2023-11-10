@@ -6,6 +6,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus, detailProfileJastip } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
+import formatCurrency from '../../tools/currencyFormat'
 
 
 export default function HomeJastip() {
@@ -15,7 +16,7 @@ export default function HomeJastip() {
 
     const [post, setPost] = useState();
 
-    const [dana, setDana] = useState(200000);
+    const [dana, setDana] = useState(0);
     
     useFocusEffect(useCallback(() => {
         async function fetchData() {
@@ -23,11 +24,14 @@ export default function HomeJastip() {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
                 const request = await getProfile(user)
                 const post = await getPostJastip()
+                
                 // console.log(post.data.data)
                 
                 if (request.status == 200) {
-                    // console.log(request?.data)
-                    setData(request?.data)
+                    console.log(request?.data)
+                    await setData(request?.data)
+
+                    setDana()
                 
                 }
                 
@@ -66,7 +70,7 @@ export default function HomeJastip() {
 
     const toggleStatus = async () => {
         try {
-            const user = JSON.parse(await AsyncStorage.getItem('user'))        
+            const user = JSON.parse(await AsyncStorage.getItem('user'))
             const ActivationPost = await updateStatus(user)
             if(ActivationPost.status == 200) {
                 setActive(el => !el)
@@ -95,8 +99,7 @@ export default function HomeJastip() {
             }}>
                 <View style={{flexDirection : 'row'}}>
                 <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
-                <Text className="text-gray-300 text-end  ml-4 text-sm" style={{ left :'200%',top: 50, bottom: 40 }}>Rp</Text>
-                <Text className="text-white text-end font-bold ml-4 text-xl" style={{ left :'200%', top: 50, bottom: 40 }}>{dana.toLocaleString()}</Text>
+                <Text className="text-white text-end font-bold ml-4 text-xl" style={{ left :'200%', top: 50, bottom: 40 }}>{formatCurrency(dana)}</Text>
                 </View>
                 
                 <View style={{

@@ -3,31 +3,45 @@ import React, { useState, useEffect } from 'react';
 import { useCallback } from 'react';
 import { View, Text, FlatList, SafeAreaView } from 'react-native';
 import { getHistoryJastip } from '../../api';
+import formatCurrency from '../../tools/currencyFormat';
 
 export default function RiwayatJastip() {
   const navigation = useNavigation()
   const route = useRoute()
-  const [data,setData] = useState()
+  const [data,setData] = useState({})
+  const [dana,setDana] = useState({})
   
   useFocusEffect(useCallback(() => {
     async function fetchData() {
       try {
         const history = await getHistoryJastip()
-        if(history.status == 200) {
-          console.log(history?.data)
+        if(history.status == 200) { 
+          console.log(history?.data?.data[0]?.payment?.total_pembayaran)
           setData(history?.data?.data)
+          setDana(history?.data?.data[0]?.payment)
         }
 
       } catch (err) {
         if(err.request) {
           console.error(err.request.status)
         } else {
-          console.log(err)
+          console.error(err)
         }
       }
     }
     fetchData()
   },[]))
+
+  // const totalFromOrder = () => {
+  //   Object.entries(data).map(([id, total_pembayaran]) => {
+  //     let total = 0
+  //     console.info(total_pembayaran)
+  //     for(let i = 0; i< total_pembayaran.length; i++){
+  //       total+= total_pembayaran[i]
+  //     }
+  //     return total
+  //   })
+  // }
 
   const renderItem = ({ item }) => (
     <View style={{
@@ -66,7 +80,7 @@ export default function RiwayatJastip() {
         color: '#000',
         marginRight: 10,
         alignSelf: 'flex-end'
-      }}>{item?.payment?.total_pembayaran}</Text>
+      }}>{formatCurrency(item?.payment?.total_pembayaran) }</Text>
     </View>
   );
 
@@ -89,10 +103,10 @@ export default function RiwayatJastip() {
         alignSelf: 'center',
         alignItems: 'center',
         elevation: 5,
-        padding: 20,
+        padding: 20, 
         marginBottom: 10,
       }}>
-      <Text style={{ alignSelf: 'center', fontSize: 18, fontWeight: 'bold', color: 'white' }}>Total: Rp {data?.payment?.total_pembayaran}</Text>
+      <Text style={{ alignSelf: 'center', fontSize: 18, fontWeight: 'bold', color: 'white' }}>Total : {formatCurrency(dana?.total_pembayaran)} </Text>
       </View>
     
     </SafeAreaView>
