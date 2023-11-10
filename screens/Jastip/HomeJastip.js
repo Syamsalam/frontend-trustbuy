@@ -14,6 +14,8 @@ export default function HomeJastip() {
     const [data, setData] = useState()
 
     const [post, setPost] = useState();
+
+    const [dana, setDana] = useState(200000);
     
     useFocusEffect(useCallback(() => {
         async function fetchData() {
@@ -91,7 +93,12 @@ export default function HomeJastip() {
                 elevation: 10,
                 flexDirection: 'column',
             }}>
+                <View style={{flexDirection : 'row'}}>
                 <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
+                <Text className="text-gray-300 text-end  ml-4 text-sm" style={{ left :'200%',top: 50, bottom: 40 }}>Rp</Text>
+                <Text className="text-white text-end font-bold ml-4 text-xl" style={{ left :'200%', top: 50, bottom: 40 }}>{dana.toLocaleString()}</Text>
+                </View>
+                
                 <View style={{
                     flexDirection: 'row',
                 }}>

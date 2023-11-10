@@ -202,7 +202,7 @@ export default function TitipanScreen() {
                                 </View>
                             </View>
 
-                            <View style={{ paddingLeft: 20, width: "100%" }}>
+                            <View style={{ marginHorizontal: "9%", width: "61%" }}>
                                 <View>
 
                                     <Text ellipsizeMode='tail' className="text-sm font-bold pb-3 " style={{
@@ -225,7 +225,7 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('Chat', { username: item?.users_orders_jastip_idTousers?.username,id: item?.users_orders_jastip_idTousers?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
@@ -247,7 +247,7 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Cek Titipan</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Titipan</Text>
                                             </TouchableOpacity>
 
                                         </View>
@@ -265,7 +265,7 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate("Pembayaran", { order_id: item?.id })}
@@ -288,7 +288,7 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate('Proses', { order_id: item?.id })}
@@ -306,13 +306,13 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate("Proses", { order_id: item?.id })}
@@ -328,13 +328,13 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('Chat', { username: item?.users?.username })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate("Pengantaran", { order_id: item?.id })}
@@ -350,13 +350,13 @@ export default function TitipanScreen() {
                                                 onPress={() => navigation.navigate('Chat', { username: item?.users?.username, id : item?.users?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full "
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chatt Jastiper</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Chat</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate('CekTitipan', { order_id: item?.id })}
                                                 style={{ alignSelf: "flex-end", marginRight: "5%" }}>
                                                 <Text className="text-xl font-bold text-center text-white bg-blue-800 rounded-full"
-                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Liat Titipan</Text>
+                                                    style={{ paddingVertical: 5, paddingHorizontal: 10 }}>Titipan</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => navigation.navigate("Pengantaran", { order_id: item?.id })}
