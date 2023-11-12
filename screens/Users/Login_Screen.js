@@ -6,10 +6,12 @@ import { loginApi } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useState } from 'react'
 import { socket } from '../../tools/socket'
+import { Alert } from 'react-native'
+import { useUser } from '../../tools/userContext'
 
 export default function LoginScreen() {
   const navigation = useNavigation()
-
+  const {setUser} = useUser()
 
 
   const [data, setData] = useState({
@@ -31,7 +33,7 @@ export default function LoginScreen() {
           const { user, token } = result?.data?.data;
 
           await AsyncStorage.setItem('user', JSON.stringify(user))
-          
+          setUser(user)
           socket.emit("newUser", user.id, (msg) => {
             console.log(msg)
           })
@@ -43,7 +45,8 @@ export default function LoginScreen() {
 
           
         } else if (result.data.data.user.role_id == 3) {
-          alert("Silahkan login sebagai jastip")
+          Alert.alert("Login sebagai jastip","silahkan login sebagai jastip")
+          
         }
       }
     } catch (err) {

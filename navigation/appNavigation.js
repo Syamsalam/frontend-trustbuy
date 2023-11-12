@@ -36,49 +36,76 @@ import PembayaranJastip from '../screens/Jastip/PembayaranJastip';
 import ProsesJastip from '../screens/Jastip/ProsesJastip';
 import PengantaranJastip from '../screens/Jastip/PengantaranJastip';
 import Pengajuan from '../screens/Jastip/Pengajuan';
+import { useState } from 'react';
+import { useUser } from '../tools/userContext';
+import { useEffect } from 'react';
 
 
 const Stack = createNativeStackNavigator();
 
+const ScreenRole = {
+  3: () => <>
+
+    <Stack.Screen name="HomeJastip" options={{ headerShown: false }} component={BottomTabNavigatorJastip} />
+    <Stack.Screen name="MulaiJastip" options={{ headerShown: false }} component={MulaiJastip} />
+    <Stack.Screen name="UbahPost" options={{ headerShown: false }} component={UbahPost} />
+    <Stack.Screen name="EditJastip" options={{ headerShown: false }} component={EditProfilJastip} />
+    <Stack.Screen name="RiwayatJastip" options={{ headerShown: true }} component={RiwayatJastip} />
+    <Stack.Screen name="TitipanJastip" options={{ headerShown: false }} component={TitipanJastip} />
+    <Stack.Screen name="Pembayaran Jastip" options={{ headerShown: true }} component={PembayaranJastip} />
+    <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
+    <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
+  </>,
+  2: () => <>
+    <Stack.Screen name="Home" options={{ headerShown: false }} component={BottomTabNavigator} />
+    <Stack.Screen name="TitipanScreen" options={{ headerShown: false }} component={TitipanScreen} />
+    <Stack.Screen name="Profil" options={{ headerShown: false }} component={Profil} />
+    <Stack.Screen name="Edit" options={{ headerShown: false }} component={Edit} />
+    <Stack.Screen name="Riwayat" options={{ headerShown: true }} component={Riwayat} />
+    <Stack.Screen name="CekTitipan" options={{ headerShown: true }} component={CekTitipan} />
+    <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />
+    <Stack.Screen name="Proses" options={{ headerShown: true }} component={Proses} />
+    <Stack.Screen name="Pengantaran" options={{ headerShown: true }} component={Pengantaran} />
+    <Stack.Screen name="Pengajuan" options={{ headerShown: false }} component={Pengajuan} />
+    <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
+    <Stack.Screen name="FormTitipan" options={{ headerShown: true }} component={FormTitipan} />
+  </>
+}
+
 export default function AppNavigation() {
+  const { user } = useUser()
+  const ScreenRoles = ScreenRole[user?.role_id] == null ? () => <></> : ScreenRole[user?.role_id]
+  useEffect(() => {
+    console.log(user)
+  }, [user])
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{}}>
-        <Stack.Screen name="FirstScreen" options={{ headerShown: false }} component={FirstScreen} />
-        <Stack.Screen name="Home" options={{ headerShown: false }} component={BottomTabNavigator} />
-        <Stack.Screen name="Welcome" options={{ headerShown: false }} component={WelcomeScreen} />
-        <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
-        <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
-        <Stack.Screen name="TitipanScreen" options={{ headerShown: false }} component={TitipanScreen} />
-        <Stack.Screen name="Profil" options={{ headerShown: false }} component={Profil} />
-        <Stack.Screen name="Edit" options={{ headerShown: false }} component={Edit} />
-        <Stack.Screen name="EditJastip" options={{ headerShown: false }} component={EditProfilJastip} />
-        <Stack.Screen name="Riwayat" options={{ headerShown: true }} component={Riwayat} />
-        <Stack.Screen name="CekTitipan" options={{ headerShown: true }} component={CekTitipan} />
-        <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />
-        <Stack.Screen name="Proses" options={{ headerShown: true }} component={Proses} />
-        <Stack.Screen name="Pengantaran" options={{ headerShown: true }} component={Pengantaran} />
-        <Stack.Screen name="HomeJastip" options={{ headerShown: false }} component={BottomTabNavigatorJastip} />
-        <Stack.Screen name="MulaiJastip" options={{ headerShown: false }} component={MulaiJastip} />
-        <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
-        <Stack.Screen name="UbahPost" options={{ headerShown: false }} component={UbahPost} />
-        <Stack.Screen name="FormTitipan" options={{ headerShown: true }} component={FormTitipan} />
-        <Stack.Screen name="RiwayatJastip" options={{ headerShown: true }} component={RiwayatJastip} />
-        <Stack.Screen name="WelcomeJastip" options={{ headerShown: false }} component={WelcomeJastip} />
-        <Stack.Screen name="LoginJastip" options={{ headerShown: false }} component={LoginJastip} />
-        <Stack.Screen name="SignupJastip" options={{ headerShown: false }} component={SignupJastip} />
-        <Stack.Screen name="TitipanJastip" options={{ headerShown: false }} component={TitipanJastip} />
-        <Stack.Screen name="Pembayaran Jastip" options={{ headerShown: true }} component={PembayaranJastip} />
-        <Stack.Screen name="ProsesJastip" options={{ headerShown: true }} component={ProsesJastip} />
-        <Stack.Screen name="PengantaranJastip" options={{ headerShown: true }} component={PengantaranJastip} />
-        <Stack.Screen name="Pengajuan" options={{ headerShown: false }} component={Pengajuan} />
-        <Stack.Screen
-          name="Chat"
-          component={ChatJastip}
-          options={({ route }) => ({
-            title: route.params.username,
-          })}
-        />
+      {/* <Stack.Navigator initialRouteName="FirstScreen" screenOptions={{}}> */}
+      <Stack.Navigator screenOptions={{}}>
+        {
+          user == null ? <>
+            <Stack.Screen name="FirstScreen" options={{ headerShown: false }} component={FirstScreen} />
+            <Stack.Screen name="Welcome" options={{ headerShown: false }} component={WelcomeScreen} />
+            <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+            <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
+            <Stack.Screen name="WelcomeJastip" options={{ headerShown: false }} component={WelcomeJastip} />
+            <Stack.Screen name="LoginJastip" options={{ headerShown: false }} component={LoginJastip} />
+            <Stack.Screen name="SignupJastip" options={{ headerShown: false }} component={SignupJastip} />
+
+          </> :
+            <>
+              {ScreenRoles()}
+              <Stack.Screen
+                name="Chat"
+                component={ChatJastip}
+                options={({ route }) => ({
+                  title: route.params.username,
+                })}
+              />
+            </>
+
+        }
+
       </Stack.Navigator>
     </NavigationContainer>
   );

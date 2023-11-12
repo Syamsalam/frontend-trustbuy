@@ -4,11 +4,12 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseURL, detailProfileJastip } from '../../api';
 import {Image as Img} from "expo-image"
+import { useUser } from '../../tools/userContext';
 
 export default function ProfilJastip() {
   const navigation = useNavigation();
   const [data, setData] = useState();
-
+  const {setUser} = useUser()
   useFocusEffect(useCallback(() => {
     async function fetchData() {
       try {
@@ -35,7 +36,7 @@ export default function ProfilJastip() {
   const onLogout = () => {
     AsyncStorage.removeItem('token').then(() => {
       console.log("logout ")
-      navigation.navigate('WelcomeJastip');
+      setUser(null)
     });
   }
 

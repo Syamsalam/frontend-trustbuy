@@ -5,6 +5,7 @@ import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/nativ
 import { useCallback } from 'react';
 import { addOrderItems, getBiayaJastip, getOrderItems } from '../../api';
 import formatCurrency from '../../tools/currencyFormat';
+import { Alert } from 'react-native';
 
 export default function FormTitipan() {
   const navigation = useNavigation();
@@ -151,6 +152,9 @@ export default function FormTitipan() {
       console.log(response.data);
       if(response.status == 200) {
         await navigation.navigate('Pembayaran Jastip',{order_id: route.params.order_id})
+      } else if (response.status == 204) {
+        Alert.alert("Saldo Tidak Cukup!","Silahkan isi saldo terlebih dahulu!!!")
+        // navigation.navigate("TitipanJastip");
       }
     } catch (err) {
       if (err.response) {

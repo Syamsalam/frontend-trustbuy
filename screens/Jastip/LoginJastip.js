@@ -5,9 +5,12 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { loginApi } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { socket } from '../../tools/socket'
+import { Alert } from 'react-native'
+import { useUser } from '../../tools/userContext'
 
 export default function LoginJastip() {
     const navigation = useNavigation()
+    const {setUser} = useUser()
     const [data,setData] = useState({
       email: "",
       password: ""
@@ -16,12 +19,12 @@ export default function LoginJastip() {
     // useFocusEffect(useCallback(() => {
     //   async function fetchData() {
     //     try {
-    //       const user = await AsyncStorage.getItem('user')
     //       const token = await AsyncStorage.getItem('token')
+
           
-    //       if(user != null && token != null) {
+    //       // if(token != null) {
             
-    //       }
+    //       // }
     //     } catch (err) {
     //       if(err.response) {
     //         console.error(err.response.data)
@@ -41,19 +44,22 @@ export default function LoginJastip() {
       
       try {
         const result = await loginApi(data)
-        if(result.status == 200 && result.data.data.user.role_id == 3) {
+        if (result.data.data.user.role_id == 2) {
+          Alert.alert("Login Sebagai User","Silahkan Login sebagai user")
+        } else if (result.status == 204) {
+          console.log("Belum Teraktifasi Akun Anda belum diaktifasi oleh admin.")
+        } else if(result.status == 200 && result.data.data.user.role_id == 3) {
           const {user,token} =result?.data?.data
           socket.emit("newUser", user.id, (msg) => {
             console.log(msg)
           })
+          console.log(user)
           await AsyncStorage.setItem('user',JSON.stringify(user)).then(() => {
             AsyncStorage.setItem('token',token).then(() => {
               console.log('login')
-              navigation.navigate('HomeJastip')
             })
           })
-        } else if (result.data.data.user.role_id == 2) {
-          alert("Silahkan login sebagai user")
+          setUser(user)
         }
       } catch (err) {
         if (err.response) {

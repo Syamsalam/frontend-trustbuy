@@ -5,11 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback } from 'react';
 import { Image as Img } from 'expo-image';
 import { baseURL, detailProfile } from '../../api';
+import { useUser } from '../../tools/userContext';
 
 export default function Profil() {
   const navigation = useNavigation();
   const [data, setData] = useState();
-
+  const {setUser} = useUser()
   useFocusEffect(useCallback(() => {
     async function fetchData() {
       try {
@@ -31,7 +32,8 @@ export default function Profil() {
   const onLogout = () => {
     AsyncStorage.removeItem('token').then(() => {
       console.log("logout ")
-      navigation.navigate('Welcome');
+      setUser(null)
+    
     });
   }
 

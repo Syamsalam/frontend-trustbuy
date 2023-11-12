@@ -33,6 +33,10 @@ export const loginApi = (data) => {
     return apiClient.post('/login', data)
 }
 
+export const auth = (data) => {
+    return apiClient.get('/auth', data)
+}
+
 export const registerApi = (data) => {
     return apiClient.post('/register', data)
 }

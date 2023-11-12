@@ -1,9 +1,9 @@
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch } from 'react-native'
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch, Alert } from 'react-native'
 import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus, detailProfileJastip } from '../../api'
+import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 import formatCurrency from '../../tools/currencyFormat'
@@ -13,9 +13,7 @@ export default function HomeJastip() {
     const navigation = useNavigation()
     const [active, setActive] = useState(false)
     const [data, setData] = useState()
-
     const [post, setPost] = useState();
-
     const [dana, setDana] = useState(0);
     
     useFocusEffect(useCallback(() => {
@@ -28,12 +26,11 @@ export default function HomeJastip() {
                 // console.log(post.data.data)
                 
                 if (request.status == 200) {
-                    console.log(request?.data)
-                    await setData(request?.data)
-
-                    setDana()
+                    // console.log(request?.data)
+                    setData(request?.data)
+                    setDana(request?.data?.users?.saldo?.saldo)
                 
-                }
+                } 
                 
                 if(post.status == 200) {
                     setPost(post.data.data)
@@ -43,8 +40,10 @@ export default function HomeJastip() {
                         if(statusPost?.data.data[0].aktif === 'aktif') {
                             setActive(true)
                         }  
+                    } else if (statusPost.status == 204){
+                        setActive(false)
                     }
-                }
+                 }
 
                 if(post.status == 204) {
                     console.log("tidak ada data")
@@ -73,11 +72,15 @@ export default function HomeJastip() {
             const user = JSON.parse(await AsyncStorage.getItem('user'))
             const ActivationPost = await updateStatus(user)
             if(ActivationPost.status == 200) {
-                setActive(el => !el)
+                setActive(el => !el)  
+            } else if (ActivationPost.status == 204) {
+                // alert("Saldo Dibawah Rp.10.000 !!! \nSilahkan isi saldo terlebih dahulu")
+                Alert.alert("Saldo Tidak Cukup!","Silahkan isi saldo terlebih dahulu!!!")
+                
             }
         } catch (err) {
             if (err.response) {
-                console.log(err?.response?.data)
+                console.error(err?.response?.data)
             } else {
                 console.error(err)
             }
