@@ -112,43 +112,15 @@ export default function CekTitipan() {
         )}
       </ScrollView>
 
-      <View style={{ backgroundColor: '#C3D5EA', height: 120, borderTopLeftRadius: 35, borderTopRightRadius: 35 }}>
-        <View style={{ justifyContent: 'space-between', flexDirection: 'row', margin: 10 }}>
-          <Text style={{ fontSize: 18, color: '#000', marginLeft: 10 }}>Jumlah Yang harus dibayar</Text>
+      <View style={{ backgroundColor: '#C3D5EA', height: 120, borderTopLeftRadius: 35, borderTopRightRadius: 35, flexDirection:'column' }}>
+        <View style={{ justifyContent: 'space-between', flexDirection: 'row', margin: '5%', top:'5%', marginLeft:'10%' }}>
+          <Text style={{ fontSize: 18, color: '#000'}}>Jumlah Yang harus dibayar</Text>
           <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000', marginRight: 10 }}>
             Rp {data?.payment[0]?.total_pembayaran?.toLocaleString()}
           </Text>
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 10 }}>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              backgroundColor: '#C3D5EA',
-              margin: 5,
-              padding: 15,
-              borderRadius: 10,
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: '#00008b',
-            }}
-          >
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#00008b' }}>Batal</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ flex: 1, backgroundColor: '#00008b', margin: 5, padding: 15, borderRadius: 10, alignItems: 'center' }}
-          >
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>Chat Jastiper</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ flex: 1, backgroundColor: '#00008b', margin: 5, padding: 15, borderRadius: 10, alignItems: 'center' }}
-            onPress={() => navigation.navigate('Pembayaran', {order_id:data?.id})}
-          >
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>Konfirmasi</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+          <Text style={{ marginLeft:'10%', top : '10%'}} className="mb-2 font-thin italic " >Sudah termasuk ppn 2%</Text>
+        
       </View>
     </SafeAreaView>
   );
