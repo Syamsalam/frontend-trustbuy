@@ -8,6 +8,8 @@ const Dimension = Dimensions.get("window");
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
+
+  
   return (
     <SafeAreaView
       style={{
@@ -36,7 +38,7 @@ export default function WelcomeScreen() {
         className="text-white font-bold mb-10"
         style={{
           marginTop: 30,
-          fontSize: Dimension.fontScale * 30,
+          fontSize: Dimension.fontScale * 25,
           textAlign: "center",
         }}
       >
@@ -60,7 +62,7 @@ export default function WelcomeScreen() {
             barang dari toko-toko tertentu dan mengantarkan ke alamat anda
           </Text>
           <View className="form space-y-2" style={{
-            marginBottom : "20%"
+            marginBottom : Dimension.height * 0.5
           }}>
             <TouchableOpacity
               onPress={() => navigation.navigate("Login")}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Card from '../../components/card';
 import { baseURL, getOrderStatus, updateOrderStatus, deleteOrder, getProfile, updateVerify } from '../../api';
@@ -12,11 +12,13 @@ export default function TitipanJastip() {
   const [refresh, setRefresh] = useState(false);
   const [data, setData] = useState({});
   const [active, SetActive] = useState(null);
+  
 
   // showButtons: false 
 
   useFocusEffect(useCallback(() => {
     async function useEffect() {
+      if(!refresh) return
       try {
         const user = JSON.parse(await AsyncStorage.getItem('user'))
         const result = await getProfile(user)
@@ -38,9 +40,9 @@ export default function TitipanJastip() {
           console.log(err.message)
         }
       }
+      setRefresh(false)
     }
     useEffect()
-    setRefresh(false)
   }, [refresh]))
 
 
@@ -141,13 +143,14 @@ export default function TitipanJastip() {
 
   const navToChat = (item) => {
     // console.log(item?.users?.username) 
-    navigation.navigate('Chat', { username: item?.users?.username,id: item?.users?.id })
+    navigation.navigate('Chat', { username: item?.users?.username, id: item?.users?.id })
   }
 
   return (
-    <SafeAreaView style={{ 
-      backgroundColor: '#fff', 
-      flex: 1 }}>
+    <SafeAreaView style={{
+      backgroundColor: '#fff',
+      flex: 1
+    }}>
       <View style={{
         backgroundColor: '#1138B7',
         height: 250,
@@ -182,51 +185,57 @@ export default function TitipanJastip() {
           </View>
         </View>
       </View>
-      <View>
-        <View className="rounded-xl bg-white  mx-5 my-5 w-500 h-35" style={{
-          elevation: 10,
-          flexDirection: '',
-        }}>
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: "space-around",
-            columnGap: 20
-          }}>
-            <View style={{
-              marginHorizontal: 20,
-              marginVertical: 20
-            }}>
-              <View style={{
-                marginTop: 20,
-                flexDirection: "row"
-              }}>
-                {
-                  arr.map((el, ind) => (
-                    <TouchableOpacity
-                      key={el.name + "ind-" + ind}
-                      style={{
-                        alignItems: "center",
-                        marginHorizontal: 4,
-                        top: -7,
-                      }}
-                      onPress={() => handleItemPress(el, el.name)}
-                    >
-                      <Image source={el.image} />
-                      <Text className="text-blue-800 text-sm">{el.name}</Text>
-                    </TouchableOpacity>
-                  ))
-                }
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
+
 
 
 
       <FlatList
         data={filteredData}
         contentContainerStyle={{ paddingVertical: 20 }}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={() => {
+            setRefresh(true)
+          }} />
+        }
+        ListHeaderComponent={() => <View>
+          <View className="rounded-xl bg-white  mx-5 my-5 w-500 h-35" style={{
+            elevation: 10,
+            flexDirection: '',
+          }}>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: "space-around",
+              columnGap: 20
+            }}>
+              <View style={{
+                marginHorizontal: 20,
+                marginVertical: 20
+              }}>
+                <View style={{
+                  marginTop: 20,
+                  flexDirection: "row"
+                }}>
+                  {
+                    arr.map((el, ind) => (
+                      <TouchableOpacity
+                        key={el.name + "ind-" + ind}
+                        style={{
+                          alignItems: "center",
+                          marginHorizontal: 4,
+                          top: -7,
+                        }}
+                        onPress={() => handleItemPress(el, el.name)}
+                      >
+                        <Image source={el.image} />
+                        <Text className="text-blue-800 text-sm">{el.name}</Text>
+                      </TouchableOpacity>
+                    ))
+                  }
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>}
         renderItem={({ item }) => (
           <Card>
             <View style={{ bottom: 20, flexDirection: "row", width: "100%" }}>
@@ -296,7 +305,7 @@ export default function TitipanJastip() {
 
                 {item?.status_id == 5 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                    
+
                     <TouchableOpacity
                       onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>
@@ -314,7 +323,7 @@ export default function TitipanJastip() {
 
                 {item?.status_id == 4 && (
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                    
+
                     <TouchableOpacity
                       onPress={() => navToChat(item)}
                       style={{ alignSelf: "flex-end", marginRight: "5%" }}>

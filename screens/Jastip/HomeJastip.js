@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch, Alert } from 'react-native'
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Switch, Alert, Dimensions } from 'react-native'
 import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 import formatCurrency from '../../tools/currencyFormat'
 
+const Dimension = Dimensions.get("window")
 
 export default function HomeJastip() {
     const navigation = useNavigation()
@@ -15,43 +16,43 @@ export default function HomeJastip() {
     const [data, setData] = useState()
     const [post, setPost] = useState();
     const [dana, setDana] = useState(0);
-    
+
     useFocusEffect(useCallback(() => {
         async function fetchData() {
             try {
                 const user = JSON.parse(await AsyncStorage.getItem('user'))
                 const request = await getProfile(user)
                 const post = await getPostJastip()
-                
+
                 // console.log(post.data.data)
-                
+
                 if (request.status == 200) {
                     // console.log(request?.data)
                     setData(request?.data)
                     setDana(request?.data?.users?.saldo?.saldo)
-                
-                } 
-                
-                if(post.status == 200) {
+
+                }
+
+                if (post.status == 200) {
                     setPost(post.data.data)
                     const statusPost = await checkStatus()
-                    if(statusPost.status == 200){
+                    if (statusPost.status == 200) {
                         // console.log(statusPost?.data.data[0].aktif)
-                        if(statusPost?.data.data[0].aktif === 'aktif') {
+                        if (statusPost?.data.data[0].aktif === 'aktif') {
                             setActive(true)
-                        }  
-                    } else if (statusPost.status == 204){
+                        }
+                    } else if (statusPost.status == 204) {
                         setActive(false)
                     }
-                 }
+                }
 
-                if(post.status == 204) {
+                if (post.status == 204) {
                     console.log("tidak ada data")
                 }
 
             } catch (err) {
-                if (err.response) { 
-                    console.error(err.response.data) 
+                if (err.response) {
+                    console.error(err.response.data)
                 } else {
                     console.error(err)
                 }
@@ -71,12 +72,12 @@ export default function HomeJastip() {
         try {
             const user = JSON.parse(await AsyncStorage.getItem('user'))
             const ActivationPost = await updateStatus(user)
-            if(ActivationPost.status == 200) {
-                setActive(el => !el)  
+            if (ActivationPost.status == 200) {
+                setActive(el => !el)
             } else if (ActivationPost.status == 204) {
                 // alert("Saldo Dibawah Rp.10.000 !!! \nSilahkan isi saldo terlebih dahulu")
-                Alert.alert("Saldo Tidak Cukup!","Silahkan isi saldo terlebih dahulu!!!")
-                
+                Alert.alert("Saldo Tidak Cukup!", "Silahkan isi saldo terlebih dahulu!!!")
+
             }
         } catch (err) {
             if (err.response) {
@@ -100,13 +101,16 @@ export default function HomeJastip() {
                 elevation: 10,
                 flexDirection: 'column',
             }}>
-                <View style={{flexDirection : 'row'}}>
-                <Text className="text-white text-start font-bold ml-4 text-4xl" style={{ top: 50, bottom: 40 }}>TrustBuy</Text>
-                <Text className="text-white text-end font-bold ml-4 text-xl" style={{ left :'200%', top: 50, bottom: 40 }}>{formatCurrency(dana)}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: "space-around", marginTop: 50, alignItems: "center" }}>
+                    <Text className="text-white text-start font-bold ml-4 text-4xl" style={{}}>TrustBuy</Text>
+                    <Text className="text-white text-end font-bold ml-4 text-xl" style={{}}>{formatCurrency(dana)}</Text>
                 </View>
-                
+
                 <View style={{
                     flexDirection: 'row',
+                    marginHorizontal : 20,
+                    marginTop : 10,
+                    alignItems :"center",
                 }}>
 
                     <Img
@@ -116,26 +120,24 @@ export default function HomeJastip() {
                         style={{
                             width: 100,
                             height: 100,
-                            left: 20,
-                            top: 60,
                             borderRadius: 50,
                         }}
                     ></Img>
                     <View style={{
-                        flexDirection: 'column',
-                        top: 20,
-                        left: 30,
-                        width: 200,
+                        width : Dimension.width - 140,
+                        maxWidth : Dimension.width - 140
                     }}>
                         <View style={{
                             flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center"
+                            marginLeft :20,
+                            justifyContent :"space-between",
+                            
                         }}>
-                            <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{data?.nama}</Text>
+                            <Text  className="text-white text-start font-semibold text-lg" style={{ 
+                                flex  :1,
+                                flexWrap :"wrap"
+                             }}>{data?.nama}</Text>
                             <Switch style={{
-                                top: 70,
-                                left: 30,
                             }}
                                 trackColor={{ false: '#767577', true: '#81b0ff' }}
                                 thumbColor={active ? '#C3D5EA' : '#f4f3f4'}
@@ -147,13 +149,10 @@ export default function HomeJastip() {
                                 value={active}
                             />
                         </View>
-                        <Text className="text-white text-start font-light ml-4 text-lg" style={{ top: 50, bottom: 40 }}>{data?.nomor_telepon}</Text>
+                        <Text className="text-white text-start font-light ml-4 text-lg" style={{  }}>{data?.nomor_telepon}</Text>
                     </View>
                 </View>
                 <View style={{
-                    flexDirection: 'column',
-                    top: 10,
-                    left: 20,
                 }}>
                     <Text className="text-white text-start font-semibold ml-4 text-lg" style={{ top: 50, bottom: 40 }}>Jastiper</Text>
                 </View>
@@ -195,7 +194,7 @@ export default function HomeJastip() {
                                             Hapus
                                         </Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => navigation.navigate('UbahPost',{post_id: item.id})}
+                                    <TouchableOpacity onPress={() => navigation.navigate('UbahPost', { post_id: item.id })}
                                         className="py-3 bg-blue-800 rounded-xl w-32 ">
                                         <Text
                                             className="text-sm font-bold text-center text-white "

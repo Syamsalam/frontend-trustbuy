@@ -118,6 +118,9 @@ const ChatJastip = () => {
     <GiftedChat
       messages={messages}
       onSend={onSend}
+      messagesContainerStyle={{
+        backgroundColor:"#BFDBFF"
+      }}
       user={{
         _id: userId,
       }}

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect } from 'react'
 import { themeColors } from '../../theme/index'
 import { useNavigation } from '@react-navigation/native'
@@ -62,14 +62,20 @@ export default function LoginScreen() {
 
 
   return (
-    <View className="flex-1 bg-white " style={{ backgroundColor: themeColors.bg }}>
-      <SafeAreaView className="flex justify-around my-10 ">
+    <SafeAreaView className="flex-1 bg-white " style={{ backgroundColor: themeColors.bg }}>
+      <View className="flex justify-around my-10 ">
         <Text className="text-white text-center justify-center font-bold ml-4 text-7xl" style={{ top: 150 }}>TrustBuy</Text>
-      </SafeAreaView>
+      </View>
       <View
         style={{ top: 180, borderTopRightRadius: 100 }}
         className="flex-1 bg-white px-10 pt-10">
-        <View className="form space-y-2">
+
+        <ScrollView className=" space-y-2">
+          <KeyboardAvoidingView className="form space-y-2 pb-7" 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          
+          >
+
           <Text className="text-gray-700 ml-4">Email Address</Text>
           <TextInput
             className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
@@ -107,12 +113,14 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
           </View>
+          </KeyboardAvoidingView>
 
-        </View>
+
+        </ScrollView>
 
 
       </View>
-    </View>
+    </SafeAreaView>
 
   )
 }

@@ -4,6 +4,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import UserContext from "./tools/userContext";
 import { auth } from "./api";
+import { ActivityIndicator } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { themeColors } from "./theme";
 
 export default function App() {
 
@@ -21,6 +24,7 @@ useEffect(() => {
       } else {
         await AsyncStorage.removeItem("user")
       }
+
     } catch(err) {
       setUser(null)
       if(err.response) {
@@ -35,7 +39,14 @@ useEffect(() => {
   auths()
 }, [])
 
-if(loading) return (<></>)
+if(loading) return (<SafeAreaView style={{
+  flex  :1,
+  justifyContent :"center",
+  alignItems: "center",
+  backgroundColor : themeColors.bg
+}}>
+  <ActivityIndicator size={50} color={"white"} />
+</SafeAreaView>)
 
   return (
     <UserContext.Provider value={{user,setUser}}>

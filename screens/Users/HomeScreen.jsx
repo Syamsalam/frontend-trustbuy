@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, TextInput, Dimensions, ScrollView} from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, TextInput, Dimensions, ScrollView, RefreshControl} from 'react-native'
 import React, { useEffect } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
@@ -13,25 +13,31 @@ const Dimension = Dimensions.get("window")
 export default function HomeScreen() {
     const navigation = useNavigation()
     const [data, setData] = useState()
+    const [refresh, setRefresh] = useState(false)
     useFocusEffect(useCallback(() => {
-        async function fetchData() {
-            try {
-                const response = await postAktif()
-                // console.log(response.data)
-                // console.log(user)
-                if (response.status == 200) {
-                    // console.log(response?.data?.data[0].waktu_mulai)
-                    setData(response.data.data)
-                }
-            } catch (err) {
-                if (err.response) {
-                    console.error(err.response.data)
-                }
-            }
-        }
-
         fetchData()
     }, []))
+
+    async function fetchData() {
+        try {
+            const response = await postAktif()
+            // console.log(response.data)
+            // console.log(user)
+            if (response.status == 200) {
+                // console.log(response?.data?.data[0].waktu_mulai)
+                setData(response.data.data)
+            }
+        } catch (err) {
+            if (err.response) {
+                console.error(err.response.data)
+            }
+        }
+        setRefresh(false)
+    }
+    const onRefresh = useCallback(() => {
+        setRefresh(true);
+        fetchData()
+      }, []);
 
     const onTitip = async (id,id_jastip) => {
         try {
@@ -111,6 +117,9 @@ export default function HomeScreen() {
             
                 <FlatList
                     data={data}
+                    refreshControl={
+                        <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+                    }
                     contentContainerStyle={{
                         paddingVertical: 20
                     }}

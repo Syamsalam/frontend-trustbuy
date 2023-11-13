@@ -94,7 +94,7 @@ export default function TitipanScreen() {
 
     const navToChat = (item) => {
         // console.log(item?.users_orders_jastip_idTousers?.id)
-        navigation.navigate('Chat', { username: item?.users_orders_jastip_idTousers?.username,id: item?.users_orders_jastip_idTousers?.id })
+        navigation.navigate('Chat', { username: item?.users_orders_jastip_idTousers?.username, id: item?.users_orders_jastip_idTousers?.id })
     }
 
     return (
@@ -139,56 +139,60 @@ export default function TitipanScreen() {
 
                 </View>
             )}
-            <View>
 
-                <View className="rounded-xl bg-white  mx-5 my-2 w-500 h-44 " style={{
-                    elevation: 10,
-                    flexDirection: '',
-                }}>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: "space-around",
-                        columnGap: 20
-                    }}>
-                        <View style={{
-                            marginHorizontal: 20,
-                            marginVertical: 20
-                        }}>
-                            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                <Image placeholder={require('../../assets/cube.png')} />
-                                <Text className="text-lg font-semibold">Titipan Saya</Text>
-                            </View>
-                            <View style={{
-                                marginTop: 20,
-                                flexDirection: "row"
-                            }}>
-
-                                {
-                                    arr.map((el, ind) => <TouchableOpacity key={el.name + "ind-" + ind} style={{
-                                        alignItems: "center",
-                                        marginHorizontal: 4
-                                    }}
-                                        onPress={() => handleItemPress(el.name)}>
-                                        <Image source={el.image} />
-                                        <Text className="text-blue-800 text-sm">{el.name}</Text>
-                                    </TouchableOpacity>)
-                                }
-
-                            </View>
-
-
-                        </View>
-
-                    </View>
-
-
-                </View>
-            </View>
             <FlatList
                 data={filteredData}
                 contentContainerStyle={{
                     paddingVertical: 20
                 }}
+
+                ListHeaderComponent={() => <>
+                    <View>
+
+                        <View className="rounded-xl bg-white  mx-5 my-2 w-500 h-44 " style={{
+                            elevation: 10,
+                            flexDirection: '',
+                        }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: "space-around",
+                                columnGap: 20
+                            }}>
+                                <View style={{
+                                    marginHorizontal: 20,
+                                    marginVertical: 20
+                                }}>
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <Image placeholder={require('../../assets/cube.png')} />
+                                        <Text className="text-lg font-semibold">Titipan Saya</Text>
+                                    </View>
+                                    <View style={{
+                                        marginTop: 20,
+                                        flexDirection: "row"
+                                    }}>
+
+                                        {
+                                            arr.map((el, ind) => <TouchableOpacity key={el.name + "ind-" + ind} style={{
+                                                alignItems: "center",
+                                                marginHorizontal: 4
+                                            }}
+                                                onPress={() => handleItemPress(el.name)}>
+                                                <Image source={el.image} />
+                                                <Text className="text-blue-800 text-sm">{el.name}</Text>
+                                            </TouchableOpacity>)
+                                        }
+
+                                    </View>
+
+
+                                </View>
+
+                            </View>
+
+
+                        </View>
+                    </View>
+                </>}
 
                 renderItem={({ item }) => (
                     <Card>
@@ -209,9 +213,7 @@ export default function TitipanScreen() {
 
                             <View style={{ marginHorizontal: "9%", width: "61%" }}>
                                 <View>
-
                                     <Text ellipsizeMode='tail' className="text-sm font-bold pb-3 " style={{
-
                                     }} >{item?.jastiper_post?.judul}</Text>
                                     <Text className="text-xs font-semibold pb-3">{item?.jastiper_post?.deskripsi}</Text>
                                     <Text className="text-xs font-semibold">{item?.jastiper_post?.lokasi}</Text>

@@ -42,8 +42,8 @@ export default function FirstScreen() {
                 User
               </Text>
             </TouchableOpacity>
-            <Text className="text-white text-center font-bold ml-4 text-xl px-4 ">
-              Or
+            <Text className="text-white text-center font-bold text-xl ">
+              OR
             </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("WelcomeJastip")}
