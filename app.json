@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TrustBuy",
-    "slug": "trustbuy",
+    "slug": "TrustBuy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon1.png",
@@ -18,7 +18,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.trustbuy.jastipmo",
+      "package": "com.jastipmo.trustbuy",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon1.png",
         "backgroundColor": "#ffffff"
