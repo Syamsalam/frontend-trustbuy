@@ -66,7 +66,6 @@ const ScreenRole = {
     <Stack.Screen name="Pembayaran" options={{ headerShown: true }} component={Pembayaran} />
     <Stack.Screen name="Proses" options={{ headerShown: true }} component={Proses} />
     <Stack.Screen name="Pengantaran" options={{ headerShown: true }} component={Pengantaran} />
-    <Stack.Screen name="Pengajuan" options={{ headerShown: false }} component={Pengajuan} />
     <Stack.Screen name="JastipPost" options={{ headerShown: false }} component={JastipPost} />
     <Stack.Screen name="FormTitipan" options={{ headerShown: true }} component={FormTitipan} />
   </>
@@ -91,6 +90,7 @@ export default function AppNavigation() {
             <Stack.Screen name="WelcomeJastip" options={{ headerShown: false }} component={WelcomeJastip} />
             <Stack.Screen name="LoginJastip" options={{ headerShown: false }} component={LoginJastip} />
             <Stack.Screen name="SignupJastip" options={{ headerShown: false }} component={SignupJastip} />
+            <Stack.Screen name="Pengajuan" options={{ headerShown: false }} component={Pengajuan} />
 
           </> :
             <>

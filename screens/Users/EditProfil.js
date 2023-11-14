@@ -4,7 +4,7 @@ import { BottomSheet } from 'react-native-btr';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { baseURL, detailProfile, postImage, updateUser} from '../../api';
+import { baseURL, detailProfile, postImage, updateUser } from '../../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -12,29 +12,30 @@ const Edit = () => {
   const navigator = useNavigation()
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState();
-  const [image,setImage] = useState(null)
+  const [image, setImage] = useState(null)
   useFocusEffect(useCallback(() => {
 
     async function fetchData() {
       try {
+        
         const user = JSON.parse(await AsyncStorage.getItem('user'))
         const request = await detailProfile(user)
-       console.log(request?.data?.data?.image?.image) 
-       setImage(baseURL+"/gambar/"+request.data?.data?.image?.image)
-      
-      if(request.status == 200) {
-        console.log(request.data.data)
+        console.log(request?.data?.data?.image?.image)
+        setImage(baseURL + "/gambar/" + request.data?.data?.image?.image)
+
+        if (request.status == 200) {
+          console.log(request.data.data)
           setData(request.data.data)
         }
 
       } catch (err) {
-        if(err.request) {
+        if (err.request) {
           console.error(err.request)
         }
       }
     }
 
-    
+
     async function requestCam() {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -60,9 +61,9 @@ const Edit = () => {
       alert("silahkan pilih gambar terlebih dahulu")
       return;
     }
-    
+
     return setImage(result.assets[0].uri)
-    
+
   }
 
 
@@ -78,26 +79,26 @@ const Edit = () => {
       alert("silahkan ambil gambar terlebih dahulu")
       return
     }
-      return   setImage(result.assets[0].uri)
+    return setImage(result.assets[0].uri)
 
   }
 
 
   const onSave = async () => {
-    try{
+    try {
       const result = await updateUser(data)
 
       const resultImage = await postImage(image)
-      if(resultImage.status == false) {
+      if (resultImage.status == false) {
         alert("Error")
       }
 
-      if(result.status == 200 && resultImage.status == 200) {
+      if (result.status == 200 && resultImage.status == 200) {
         alert("berhasil update")
         navigator.navigate("Home")
       }
     } catch (err) {
-      if(err.response) {
+      if (err.response) {
         console.error(await err.response.data)
       } else {
         console.log(err.message)
@@ -121,7 +122,7 @@ const Edit = () => {
                 height: 100, width: 100, borderRadius: 15, justifyContent: 'center', alignItems: 'center',
                 borderColor: 'gray'
               }}>
-                {image != null&& <Image source={{uri : image}} style={{ width: 100, height: 100, borderRadius: 15 }} />}
+                {image != null && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 15 }} />}
                 {!image && (
                   <View
                     style={{
@@ -142,25 +143,25 @@ const Edit = () => {
       <View style={{ marginHorizontal: 20, top: 200 }}>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Nama</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} 
-          value={data?.user_details?.nama || ''}
-          onChangeText={(text) => setData({...data,user_details: {...data.user_details,nama:text}})}
-          
+          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }}
+            value={data?.user_details?.nama || ''}
+            onChangeText={(text) => setData({ ...data, user_details: { ...data.user_details, nama: text } })}
+
           />
         </View>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>No. HP</Text>
           <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }}
-           value={data?.user_details?.nomor_telepon || ''}
-           keyboardType='numeric'
-           onChangeText={(text) => setData({...data,user_details: {...data.user_details,nomor_telepon:text}})}
-           />
+            value={data?.user_details?.nomor_telepon || ''}
+            keyboardType='numeric'
+            onChangeText={(text) => setData({ ...data, user_details: { ...data.user_details, nomor_telepon: text } })}
+          />
         </View>
         <View style={{ marginTop: 32 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Alamat</Text>
-          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }} 
-          value={data?.user_details?.alamat || ''}
-          onChangeText={(text) => setData({...data,user_details: {...data.user_details,alamat:text}})}
+          <TextInput style={{ marginTop: 16, borderBottomColor: '#dddddd', borderBottomWidth: 1, paddingBottom: 8 }}
+            value={data?.user_details?.alamat || ''}
+            onChangeText={(text) => setData({ ...data, user_details: { ...data.user_details, alamat: text } })}
           />
         </View>
         <TouchableOpacity style={{
@@ -170,8 +171,8 @@ const Edit = () => {
           borderRadius: 10,
           alignItems: 'center',
           justifyContent: 'center'
-          }}
-          
+        }}
+
           onPress={onSave}
         >
           <Text style={{

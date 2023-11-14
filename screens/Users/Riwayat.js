@@ -12,7 +12,7 @@ export default function Riwayat() {
   useFocusEffect(useCallback(() => {
     async function fetchData() {
       try {
-        const history = await getHistoryUser()
+        const history = await getHistoryUser(route.params.id)
         if(history.status == 200) {
           console.log(history?.data)
           setData(history?.data?.data)

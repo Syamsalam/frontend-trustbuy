@@ -17,6 +17,7 @@ export default function Profil() {
         const user = JSON.parse(await AsyncStorage.getItem('user'))
         const request = await detailProfile(user)
         if(request.status == 200) {
+          // console.log(request.data.data)
           setData(request.data.data)
         }
       } catch (err) {
@@ -108,7 +109,7 @@ export default function Profil() {
         <RenderItem label="Email" value={data?.email} />
         <RenderItemWithArrow
           label="Riwayat transaksi"
-          onPress={() => navigation.navigate('Riwayat')}
+          onPress={() => navigation.navigate('Riwayat', {id:data?.id})}
         />
       </View>
       )}

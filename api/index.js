@@ -1,10 +1,10 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const baseURL = "https://tbjastipmo.com/api"
+export const baseURL = "http://192.168.205.198:8000/api"
 
 const apiClient = axios.create({
-    baseURL: `https://tbjastipmo.com/api`,
+    baseURL: `http://192.168.205.198:8000/api`,
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -148,7 +148,7 @@ export const getHistoryJastip = (data) => {
 }
 
 export const getHistoryUser = (data) => {
-    return apiClient.get('/user/history-user',data)
+    return apiClient.get('/user/history-user/'+data)
 
 }
 
