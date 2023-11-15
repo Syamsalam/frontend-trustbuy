@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native'
 import React, { useCallback } from 'react'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
@@ -27,6 +27,8 @@ export default function MulaiJastip() {
                 const response = await getCommonProfile(user)
                 if(response.status == 200) {
                     setJastip(response.data.data)
+                } else if (response.status == 204) {
+                    Alert.alert("Saldo Kurang!","Silahkan isi saldo terlebih dahulu.");
                 }
             }catch (err) {
                 if(err.response) {
