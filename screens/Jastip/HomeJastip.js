@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import Card from '../../components/card'
 import { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus } from '../../api'
+import { baseURL, getProfile, getPostJastip, updateStatus, checkStatus, deletePost } from '../../api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image as Img } from 'expo-image'
 import formatCurrency from '../../tools/currencyFormat'
@@ -61,9 +61,10 @@ export default function HomeJastip() {
         fetchData()
     }, []))
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         // Filter item yang memiliki id yang tidak sama dengan id yang dihapus
         const updatedData = post.filter(item => item.id !== id);
+        await deletePost(id);
         // Update daftar data
         setPost(updatedData);
     };
